@@ -12,9 +12,9 @@ PlayerTest >> testAPlayerCanRollACollectionOfDicesAndResultIsLessOrEqual11 [
 	player := Player name: 'hector'.
 	diceList := OrderedCollection new.
 	diceList
-		add: (Dice facesQuantity: 5);
-		add: (Dice facesQuantity: 6).
-	self assert: (player rollDices: diceList) <= 11
+		add: (Dice faces: 5);
+		add: (Dice faces: 6).
+	self assert: (player roll: diceList) <= 11
 ]
 
 { #category : #tests }

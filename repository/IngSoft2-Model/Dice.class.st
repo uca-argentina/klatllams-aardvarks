@@ -28,7 +28,7 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'facesQuantity',
-		'state'
+		'type'
 	],
 	#classInstVars : [
 		'facesQuantity'
@@ -36,28 +36,38 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'instance creation' }
-Dice class >> facesQuantity: aQuantity [
+{ #category : #asserting }
+Dice class >> assertIsValid: aType withFaces: aQuantity [
+	(aType isKindOf: DeterministicType)
+		ifTrue: [ aType assertValidSequence: aQuantity ]
+]
+
+{ #category : #asserting }
+Dice class >> assertValidFaces:aQuantity [
 	aQuantity > 24
 		ifTrue: [ AssertionFailure signal: 'Faces must be less than 25' ].
 	aQuantity < 4
 		ifTrue: [ AssertionFailure signal: 'Faces must be more than 3' ].
-	^ self new initializeWithFacesQuantity: aQuantity
 ]
 
 { #category : #'instance creation' }
-Dice class >> facesQuantity: aQuantity state: aState [
-	^ self new initializeWithFacesQuantity: aQuantity initializeWithState: aState
+Dice class >> faces: aQuantity [
+	"Set RandomType as Default if not specified"
+
+	^self faces: aQuantity ofType: RandomType new
+
+]
+
+{ #category : #'instance creation' }
+Dice class >> faces: aQuantity ofType: aType [ 
+	self assertValidFaces: aQuantity.
+	self assertIsValid: aType withFaces: aQuantity. 
+	^ self new initializeWithFaces: aQuantity initializeWithType: aType
 ]
 
 { #category : #action }
-Dice >> deterministicStateRoll [
-	^ 4
-]
-
-{ #category : #accesing }
-Dice >> faces [
-	^ 1 to: facesQuantity
+Dice >> deterministicRoll: aRollValue [
+	^ aRollValue
 ]
 
 { #category : #accesing }
@@ -66,28 +76,22 @@ Dice >> facesQuantity [
 ]
 
 { #category : #'instance initialization' }
-Dice >> initializeWithFacesQuantity: aQuantity [
+Dice >> initializeWithFaces: aQuantity initializeWithType: aType [
 	facesQuantity := aQuantity.
-	state := RandomDiceState new
-]
-
-{ #category : #'instance initialization' }
-Dice >> initializeWithFacesQuantity: aQuantity initializeWithState: aState [
-	facesQuantity := aQuantity.
-	state := aState
+	type := aType
 ]
 
 { #category : #action }
-Dice >> randomStateRoll [
+Dice >> randomRoll [
 	^ (1 to: facesQuantity) atRandom
 ]
 
 { #category : #accesing }
 Dice >> roll [
-	^ self state roll: self
+	^ type roll: self
 ]
 
-{ #category : #accesing }
-Dice >> state [
-	^ state
+{ #category : #accessing }
+Dice >> type [
+	^ type
 ]

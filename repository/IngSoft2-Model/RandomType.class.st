@@ -1,5 +1,5 @@
 Class {
-	#name : #RandomDiceState,
+	#name : #RandomType,
 	#superclass : #Object,
 	#instVars : [
 		'name'
@@ -8,16 +8,16 @@ Class {
 }
 
 { #category : #accessing }
-RandomDiceState >> initialize [
+RandomType >> initialize [
 	name := 'random'
 ]
 
 { #category : #accessing }
-RandomDiceState >> name [
+RandomType >> name [
 	^ name
 ]
 
 { #category : #action }
-RandomDiceState >> roll: aDice [
-	^ aDice randomStateRoll
+RandomType >> roll: aDice [
+	^ aDice randomRoll
 ]
