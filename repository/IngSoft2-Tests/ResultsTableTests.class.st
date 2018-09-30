@@ -5,57 +5,51 @@ Class {
 }
 
 { #category : #tests }
-ResultsTableTests >> testATableCannotBeInitializedWithZeroPlayers [
-	| table |
-	self should: [ table := ResultsTable players: LinkedList new ] raise: AssertionFailure
-]
-
-{ #category : #tests }
 ResultsTableTests >> testATableExistsAndHasSomePlayers [
-	| playerList table |
-	playerList := LinkedList new.
+	| playerList playersPosition |
+	playerList := CircularCollection  new.
 	playerList
 		add: (Player name: 'hector');
 		add: (Player name: 'ignacio').
-	table := ResultsTable players: playerList
+	playersPosition := PlayersPosition players: playerList
 ]
 
 { #category : #tests }
 ResultsTableTests >> testIsNotPosibleToChangeAPlayerPositionIfQuantityIsLessThanOne [
-	| playerOne playerList table |
+	| playerOne playerList playersPosition |
 	playerOne := Player name: 'hector'.
-	playerList := LinkedList new.
+	playerList := CircularCollection new.
 	playerList
 		add: playerOne;
 		add: (Player name: 'ignacio').
-	table := ResultsTable players: playerList.
-	self should: [ table updatePositionPlayer: playerOne name to: 0 ] raise: AssertionFailure
+	playersPosition := PlayersPosition players: playerList.
+	self should: [ playersPosition updatePositionOf: playerOne to: 0 ] raise: AssertionFailure
 ]
 
 { #category : #tests }
 ResultsTableTests >> testIsPosibleToChangeAPlayerPositionAndTheTableUpdatesAutomatically [
-	| playerOne playerTwo playerList table |
+	| playerOne playerTwo playerList playersPosition |
 	playerOne := Player name: 'hector'.
 	playerTwo := Player name: 'ignacio'.
-	playerList := LinkedList new.
+	playerList := CircularCollection new.
 	playerList
 		add: playerTwo;
 		add: playerOne.
-	table := ResultsTable players: playerList.
-	table updatePositionPlayer: playerOne name to: 5.
-	self assert: ((table playersAndPositions at: 1) at: 1) name == 'hector'
+	playersPosition := PlayersPosition players: playerList.
+	playersPosition updatePositionOf: playerOne to: 5.
+	self deny: (playersPosition topPlayer )  == playerTwo 
 ]
 
 { #category : #tests }
-ResultsTableTests >> testWhenCreatedAllPlayersMustHaveTheSamePosition [
-	| playerOne playerTwo playerList table |
+ResultsTableTests >> testWhenCreatedAllPlayersMustHavePositionEqualsToZero [
+	| playerOne playerTwo playerList playersPosition |
 	playerOne := Player name: 'hector'.
 	playerTwo := Player name: 'ignacio'.
-	playerList := LinkedList new.
+	playerList := CircularCollection new.
 	playerList
 		add: playerTwo;
 		add: playerOne.
-	table := ResultsTable players: playerList.
-	table sortByBoardPosition.
-	table sortByPlayerName
+	playersPosition := PlayersPosition players: playerList.
+	playersPosition playersAndPositions do: [ :each | self assert: (each at: 2) equals: 0 ]
+	
 ]

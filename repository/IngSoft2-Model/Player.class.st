@@ -14,11 +14,6 @@ Player class >> name: aName [
 	^ self new initializeWithName: aName
 ]
 
-{ #category : #comparing }
-Player >> <= aPlayer [
-	^ self name <= aPlayer name
-]
-
 { #category : #initialization }
 Player >> initializeWithName: aName [
 	name := aName
@@ -30,9 +25,12 @@ Player >> name [
 ]
 
 { #category : #update }
-Player >> rollDices: aDiceCollection [
+Player >> roll: aDiceCollection [
 	| sum |
 	sum := 0.
 	aDiceCollection do: [ :each | sum := sum + each roll ].
+		Transcript  show:(self name).
+	Transcript  show: sum.
+
 	^ sum
 ]
