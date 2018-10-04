@@ -2,34 +2,25 @@ Class {
 	#name : #DeterministicType,
 	#superclass : #Object,
 	#instVars : [
-		'name',
 		'rollSequence'
 	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'as yet unclassified' }
-DeterministicType class >> rollValues: aSequence [
-	^ self new initializeWithRollValues: aSequence
+DeterministicType class >> rolling: aNumberSequence [
+	^ self new initializeRolling: aNumberSequence
 ]
 
 { #category : #asserting }
 DeterministicType >> assertValidSequence: aQuantity [
-	(rollSequence list)
-		do: [ :each | 
-			each > aQuantity
-				ifTrue: [ AssertionFailure signal: 'Invalid Sequence' ] ]
+	rollSequence elements detect: [ :each | each > aQuantity ]
+		                   ifFound: [ AssertionFailure signal: 'Invalid Sequence' ]
 ]
 
 { #category : #initialization }
-DeterministicType >> initializeWithRollValues: aCircularCollection [
-	name := 'deterministic'.
-	rollSequence:= aCircularCollection
-]
-
-{ #category : #accessing }
-DeterministicType >> name [
-	^ name
+DeterministicType >> initializeRolling: aNumberSequence [
+	rollSequence:= aNumberSequence
 ]
 
 { #category : #action }
