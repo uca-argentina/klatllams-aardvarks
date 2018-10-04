@@ -5,29 +5,45 @@ Class {
 }
 
 { #category : #tests }
-GameUserStoryTest >> testTwoPlayerPlayAndTheFirstOneWins [
-	| game playersCollection dicesCollection playerOne playerTwo sequenceOne sequenceTwo players |
-	sequenceOne := CircularCollection contains: #(3 6 1 10).
-	sequenceTwo := CircularCollection contains: #(2 5 9 12).
-	players := OrderedCollection new.
+GameUserStoryTest >> testAPlayerCannotPlayTwoTimesInARow [
+	| game playerOne playerTwo diceOne diceTwo |
 	playerOne := Player named: 'Hector'.
 	playerTwo := Player named: 'Ignacio'.
-	players
-		add: playerOne;
-		add: playerTwo.
-	playersCollection := CircularCollection contains: (OrderedCollection withAll: players).
-	dicesCollection := OrderedCollection new.
-	dicesCollection
-		add: (Dice faces: 10 ofType: (DeterministicType rolling: sequenceOne));
-		add: (Dice faces: 12 ofType: (DeterministicType rolling: sequenceTwo)).
-	game := Game playedBy: playersCollection throwing: dicesCollection spaces: 50.
-	game move: playerOne by: (playerOne roll: dicesCollection).
-	game move: playerTwo by: (playerTwo roll: dicesCollection).
-	game move: playerOne by: (playerOne roll: dicesCollection).
-	game move: playerTwo by: (playerTwo roll: dicesCollection).
-	game move: playerOne by: (playerOne roll: dicesCollection).
-	game move: playerTwo by: (playerTwo roll: dicesCollection).
-	game move: playerOne by: (playerOne roll: dicesCollection).
-	game move: playerTwo by: (playerTwo roll: dicesCollection).
+	diceOne := Dice faces: 10.
+	diceTwo := Dice faces: 12.
+	game := Game playedBy: {playerOne.playerTwo} throwing:{diceOne.diceTwo} spaces: 50.
+	self assert: (game hasTheTurn: playerOne).
+	game move: playerOne by: 6.
+	self should: [ game move: playerOne by: 3 ] 
+	     raise: AssertionFailure 
+	     withExceptionDo: [ :signal | self assert: signal messageText equals: 'You cannot play now!' ]
+]
+
+{ #category : #tests }
+GameUserStoryTest >> testTwoPlayerPlayAndTheFirstOneWins [
+	| game playerOne playerTwo sequenceOne sequenceTwo diceOne diceTwo |
+	sequenceOne := CircularCollection contains: #(6 3 10 1).
+	sequenceTwo := CircularCollection contains: #(5 2 12 9).
+	diceOne:= (Dice faces: 10 ofType: (DeterministicType rolling: sequenceOne)).
+	diceTwo:= (Dice faces: 12 ofType: (DeterministicType rolling: sequenceTwo)).
+	playerOne := Player named: 'Hector'.
+	playerTwo := Player named: 'Ignacio'.
+	game := Game playedBy: { playerOne . playerTwo } throwing: { diceOne . diceTwo } spaces: 50.
+	"The game starts"
+	self assert: (game hasTheTurn: playerOne).
+	game move: playerOne by: (playerOne roll: { diceOne . diceTwo }).
+	self assert: (game hasTheTurn: playerTwo).
+	game move: playerTwo by: (playerTwo roll: { diceOne . diceTwo }).
+	self assert: (game hasTheTurn: playerOne).
+	game move: playerOne by: (playerOne roll: { diceOne . diceTwo }).
+	self assert: (game hasTheTurn: playerTwo).
+	game move: playerTwo by: (playerTwo roll: { diceOne . diceTwo }).
+	self assert: (game hasTheTurn: playerOne).
+	game move: playerOne by: (playerOne roll: { diceOne . diceTwo }).
+	self assert: (game hasTheTurn: playerTwo).
+	game move: playerTwo by: (playerTwo roll: { diceOne . diceTwo }).
+	self assert: (game hasTheTurn: playerOne).
+	game move: playerOne by: (playerOne roll: { diceOne . diceTwo }).
 	self assert: game hasFinished .
+	self assert: game playerPositions topPlayer equals: playerOne 
 ]

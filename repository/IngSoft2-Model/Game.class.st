@@ -33,8 +33,8 @@ Class {
 		'dices',
 		'hasFinished',
 		'spaces',
-		'playersPosition',
-		'currentPlayer'
+		'currentPlayer',
+		'playerPositions'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -47,7 +47,7 @@ Game class >> assertMinimumDiceQuantity:aDicesCollection [
 
 { #category : #asserting }
 Game class >> assertMinimumPlayersQuantity:aPlayersCollection [
-	aPlayersCollection elements size < 2
+	aPlayersCollection size < 2
 		ifTrue: [ AssertionFailure signal: 'Players quantity must be 2 or more' ].
 ]
 
@@ -88,8 +88,8 @@ Game >> finishGame [
 { #category : #accesing }
 Game >> hasFinished [
 	| theTopPlayer |
-	theTopPlayer:= playersPosition topPlayer.
-	hasFinished := (playersPosition positionOf: theTopPlayer)  >= spaces.
+	theTopPlayer:= playerPositions topPlayer.
+	hasFinished := (playerPositions positionOf: theTopPlayer)  >= spaces.
 	^ hasFinished
 ]
 
@@ -100,21 +100,24 @@ Game >> hasTheTurn: aPlayer [
 
 { #category : #'instance initialization' }
 Game >> initializePlayedBy: aPlayersCollection initializeThrowing: aDicesCollection initializeWithSpaces: aQuantity [
-	players := aPlayersCollection.
-	dices := aDicesCollection.
+	players := CircularCollection contains:aPlayersCollection.
+	dices := CircularCollection contains:aDicesCollection.
 	spaces := aQuantity.
 	hasFinished := false.
-	playersPosition := PlayersPosition players: aPlayersCollection.
+	playerPositions := PlayerPositions players: aPlayersCollection.
 	currentPlayer := players next.
 ]
 
 { #category : #actions }
 Game >> move: aPlayer by: positionsQuantity [
-	self
-		assertPlayersTurn: aPlayer;
-		assertGameHasNotFinished.
-	playersPosition updatePositionOf: aPlayer to: positionsQuantity.
+	self assertPlayersTurn: aPlayer;
+	     assertGameHasNotFinished.
+	playerPositions updatePositionOf: aPlayer by: positionsQuantity.
 	currentPlayer := players next.
-	self hasFinished
-		ifTrue: [ self finishGame ]
+	self hasFinished ifTrue: [ self finishGame ]
+]
+
+{ #category : #accesing }
+Game >> playerPositions [
+	^playerPositions 
 ]

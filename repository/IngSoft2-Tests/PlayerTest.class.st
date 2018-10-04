@@ -6,21 +6,17 @@ Class {
 
 { #category : #tests }
 PlayerTest >> testAPlayerCanRollACollectionOfDicesAndResultIsLessOrEqual11 [
-	"test if a player can roll a collection of dices"
-
-	| player diceList |
+	| player dicesCollection |
 	player := Player named: 'hector'.
-	diceList := OrderedCollection new.
-	diceList
+	dicesCollection := OrderedCollection new.
+	dicesCollection
 		add: (Dice faces: 5);
 		add: (Dice faces: 6).
-	self assert: (player roll: diceList) <= 11
+	self assert: (player roll: dicesCollection) <= 11
 ]
 
 { #category : #tests }
 PlayerTest >> testPlayerExistsAndHasAName [
-	"just a player creation test"
-
 	| player |
 	player := Player named: 'Hector'.
 	self assert: player name equals: 'Hector'
@@ -28,8 +24,8 @@ PlayerTest >> testPlayerExistsAndHasAName [
 
 { #category : #tests }
 PlayerTest >> testPlayerNameCannotHaveLessThan2Characters [
-	"Test to check player name must be 2 characters or more"
-
 	| player |
-	self should: [ player := Player named: '' ] raise: AssertionFailure
+	self should: [ player := Player named: '' ]
+		  raise: AssertionFailure
+		  withExceptionDo: [ :signal | self assert: signal messageText equals: 'Name must have 2 characters or more' ]
 ]

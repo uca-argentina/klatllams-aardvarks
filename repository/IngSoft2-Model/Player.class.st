@@ -16,11 +16,11 @@ Player class >> assertLengthOf: aName [
 { #category : #'instance creation' }
 Player class >> named: aName [
 	self assertLengthOf: aName.
-	^ self new initializeWithName: aName
+	^ self new initializeNamed: aName
 ]
 
 { #category : #initialization }
-Player >> initializeWithName: aName [
+Player >> initializeNamed: aName [
 	name := aName
 ]
 
@@ -31,5 +31,5 @@ Player >> name [
 
 { #category : #update }
 Player >> roll: aDiceCollection [
-	^ aDiceCollection inject: 0 into:[ :sum :each | sum + each roll ]
+	^ aDiceCollection sumNumbers:[ :each | each roll ]
 ]

@@ -6,7 +6,10 @@ Class {
 
 { #category : #tests }
 CircularCollectionTests >> testAnEmptyCircularCollectionShouldRaiseAnException [
-	self should: [ CircularCollection contains: #() ] raise: AssertionFailure withExceptionDo: [ :signal | self assert: signal messageText equals: 'The collection is empty' ]
+	self
+		should: [ CircularCollection contains: #() ]
+		raise: AssertionFailure
+		withExceptionDo: [ :signal | self assert: signal messageText equals: 'The collection is empty' ]
 ]
 
 { #category : #tests }

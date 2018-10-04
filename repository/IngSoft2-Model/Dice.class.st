@@ -81,12 +81,7 @@ Dice >> randomRoll [
 	^ (1 to: facesQuantity) atRandom
 ]
 
-{ #category : #accesing }
+{ #category : #accessing }
 Dice >> roll [
 	^ type roll: self
-]
-
-{ #category : #accessing }
-Dice >> type [
-	^ type
 ]
