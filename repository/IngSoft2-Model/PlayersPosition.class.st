@@ -16,7 +16,7 @@ PlayersPosition class >> players: playersCollection [
 PlayersPosition >> initializeWithPlayers: playersCollection [
 	| tableRow |
 	players := OrderedCollection new.
-	playersCollection list
+	playersCollection elements
 		do: [ :each | 
 			tableRow := OrderedCollection new.
 			tableRow

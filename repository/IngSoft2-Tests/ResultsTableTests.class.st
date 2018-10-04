@@ -9,19 +9,19 @@ ResultsTableTests >> testATableExistsAndHasSomePlayers [
 	| playerList playersPosition |
 	playerList := CircularCollection  new.
 	playerList
-		add: (Player name: 'hector');
-		add: (Player name: 'ignacio').
+		add: (Player named: 'hector');
+		add: (Player named: 'ignacio').
 	playersPosition := PlayersPosition players: playerList
 ]
 
 { #category : #tests }
 ResultsTableTests >> testIsNotPosibleToChangeAPlayerPositionIfQuantityIsLessThanOne [
 	| playerOne playerList playersPosition |
-	playerOne := Player name: 'hector'.
+	playerOne := Player named: 'hector'.
 	playerList := CircularCollection new.
 	playerList
 		add: playerOne;
-		add: (Player name: 'ignacio').
+		add: (Player named: 'ignacio').
 	playersPosition := PlayersPosition players: playerList.
 	self should: [ playersPosition updatePositionOf: playerOne to: 0 ] raise: AssertionFailure
 ]
@@ -29,8 +29,8 @@ ResultsTableTests >> testIsNotPosibleToChangeAPlayerPositionIfQuantityIsLessThan
 { #category : #tests }
 ResultsTableTests >> testIsPosibleToChangeAPlayerPositionAndTheTableUpdatesAutomatically [
 	| playerOne playerTwo playerList playersPosition |
-	playerOne := Player name: 'hector'.
-	playerTwo := Player name: 'ignacio'.
+	playerOne := Player named: 'hector'.
+	playerTwo := Player named: 'ignacio'.
 	playerList := CircularCollection new.
 	playerList
 		add: playerTwo;
@@ -43,8 +43,8 @@ ResultsTableTests >> testIsPosibleToChangeAPlayerPositionAndTheTableUpdatesAutom
 { #category : #tests }
 ResultsTableTests >> testWhenCreatedAllPlayersMustHavePositionEqualsToZero [
 	| playerOne playerTwo playerList playersPosition |
-	playerOne := Player name: 'hector'.
-	playerTwo := Player name: 'ignacio'.
+	playerOne := Player named: 'hector'.
+	playerTwo := Player named: 'ignacio'.
 	playerList := CircularCollection new.
 	playerList
 		add: playerTwo;

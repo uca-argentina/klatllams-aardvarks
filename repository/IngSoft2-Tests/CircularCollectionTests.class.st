@@ -6,45 +6,16 @@ Class {
 
 { #category : #tests }
 CircularCollectionTests >> testAnEmptyCircularCollectionShouldRaiseAnException [
-	| players |
-	players := CircularCollection new.
-	self should: [ players next ] raise: AssertionFailure
-]
-
-{ #category : #tests }
-CircularCollectionTests >> testCanCreateACircularCollectionWithPlayers [
-	| players |
-	players := CircularCollection new.
-	players
-		add: (Player name: 'John');
-		add: (Player name: 'Peter').
-	self
-		assert: players next name equals: 'John';
-		assert: players next name equals: 'Peter'
-]
-
-{ #category : #tests }
-CircularCollectionTests >> testCanRemoveAPlayerInACircularCollectionWithPlayers [
-	| players playerJohn |
-	players := CircularCollection new.
-	playerJohn := Player name: 'John'.
-	players
-		add: playerJohn;
-		add: (Player name: 'Peter').
-	self assert: players size equals: 2.
-	players remove: playerJohn.
-	self assert: players size equals: 1
+	self should: [ CircularCollection contains: #() ] raise: AssertionFailure withExceptionDo: [ :signal | self assert: signal messageText equals: 'The collection is empty' ]
 ]
 
 { #category : #tests }
 CircularCollectionTests >> testCircularCollectionGoesBackToTheFirstPosition [
-	| players |
-	players := CircularCollection new.
-	players
-		add: (Player name: 'John');
-		add: (Player name: 'Peter').
+	| numbers |
+	numbers := CircularCollection contains: #(1 2 3).
 	self
-		assert: players next name equals: 'John';
-		assert: players next name equals: 'Peter';
-		assert: players next name equals: 'John'
+		assert: numbers next equals: 1;
+		assert: numbers next equals: 2;
+		assert: numbers next equals: 3;
+		assert: numbers next equals: 1
 ]
