@@ -18,7 +18,7 @@ DiceTests >> testDiceExistsAndHas4Faces [
 
 	| dice |
 	dice := Dice faces: 4.
-	self assert: dice facesQuantity equals: 4
+	
 ]
 
 { #category : #tests }
@@ -27,5 +27,5 @@ DiceTests >> testRandomDiceCanRollAndTheResultIsBetween1AndFacesQuantity [
 
 	| dice |
 	dice := Dice faces: 6.
-	self assert: ((1 to: dice facesQuantity) includes: dice roll)
+	self assert: ((1 to: 6) includes: dice roll)
 ]

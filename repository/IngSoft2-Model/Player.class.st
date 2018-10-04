@@ -8,9 +8,14 @@ Class {
 }
 
 { #category : #'instance creation' }
-Player class >> name: aName [
+Player class >> assertLengthOf: aName [
 	aName size < 2
-		ifTrue: [ AssertionFailure signal: 'Name must have 2 characters or more' ].
+		ifTrue: [ AssertionFailure signal: 'Name must have 2 characters or more' ]
+]
+
+{ #category : #'instance creation' }
+Player class >> named: aName [
+	self assertLengthOf: aName.
 	^ self new initializeWithName: aName
 ]
 
@@ -26,11 +31,5 @@ Player >> name [
 
 { #category : #update }
 Player >> roll: aDiceCollection [
-	| sum |
-	sum := 0.
-	aDiceCollection do: [ :each | sum := sum + each roll ].
-		Transcript  show:(self name).
-	Transcript  show: sum.
-
-	^ sum
+	^ aDiceCollection inject: 0 into:[ :sum :each | sum + each roll ]
 ]

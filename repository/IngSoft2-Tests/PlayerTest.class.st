@@ -9,7 +9,7 @@ PlayerTest >> testAPlayerCanRollACollectionOfDicesAndResultIsLessOrEqual11 [
 	"test if a player can roll a collection of dices"
 
 	| player diceList |
-	player := Player name: 'hector'.
+	player := Player named: 'hector'.
 	diceList := OrderedCollection new.
 	diceList
 		add: (Dice faces: 5);
@@ -22,7 +22,7 @@ PlayerTest >> testPlayerExistsAndHasAName [
 	"just a player creation test"
 
 	| player |
-	player := Player name: 'Hector'.
+	player := Player named: 'Hector'.
 	self assert: player name equals: 'Hector'
 ]
 
@@ -31,5 +31,5 @@ PlayerTest >> testPlayerNameCannotHaveLessThan2Characters [
 	"Test to check player name must be 2 characters or more"
 
 	| player |
-	self should: [ player := Player name: '' ] raise: AssertionFailure
+	self should: [ player := Player named: '' ] raise: AssertionFailure
 ]

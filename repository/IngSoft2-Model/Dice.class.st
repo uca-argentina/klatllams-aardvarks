@@ -70,11 +70,6 @@ Dice >> deterministicRoll: aRollValue [
 	^ aRollValue
 ]
 
-{ #category : #accesing }
-Dice >> facesQuantity [
-	^ facesQuantity
-]
-
 { #category : #'instance initialization' }
 Dice >> initializeWithFaces: aQuantity initializeWithType: aType [
 	facesQuantity := aQuantity.

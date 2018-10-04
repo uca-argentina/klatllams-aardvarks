@@ -9,8 +9,8 @@ GameTest >> testAPlayerCannotPlayTwoTimesInARow [
 	| game playersList dicesList playerOne playerTwo |
 	playersList := CircularCollection new.
 	dicesList := OrderedCollection new.
-	playerOne := Player name: 'Hector'.
-	playerTwo := Player name: 'Ignacio'.
+	playerOne := Player named: 'Hector'.
+	playerTwo := Player named: 'Ignacio'.
 	playersList
 		add: playerOne;
 		add: playerTwo.
@@ -30,9 +30,9 @@ GameTest >> testCannotHaveLessThan2PlayersOrlessThan1Dice [
 	| game playersList dicesList player |
 	playersList := CircularCollection new.
 	dicesList := OrderedCollection new.
-	player := (Player name: 'Ignacio').
+	player := (Player named: 'Ignacio').
 	playersList add: player.
-	playersList add: (Player name: 'Hector').
+	playersList add: (Player named: 'Hector').
 	self should: [ game := Game playedBy: playersList throwing: dicesList spaces: 50 ] raise: AssertionFailure.
 	dicesList add: (Dice faces: 5).
 	self should: [ game := Game playedBy: playersList throwing: dicesList spaces:49] raise: AssertionFailure.
@@ -41,25 +41,12 @@ GameTest >> testCannotHaveLessThan2PlayersOrlessThan1Dice [
 ]
 
 { #category : #tests }
-GameTest >> testGameExistsAndHasTwoDicesAndTwoPlayers [
-	"The test for game creation"
-	|game playersList dicesList|
-	playersList:= CircularCollection new.
-	dicesList := OrderedCollection new.
-	playersList add: (Player name: 'Hector') ; add: (Player name: 'Ignacio').
-	dicesList add: (Dice faces:10) ; add: (Dice faces:12).
-	game:= Game playedBy:playersList throwing:dicesList spaces: 50.
-	 
-	
-]
-
-{ #category : #tests }
 GameTest >> testGameIsNotFinishedIfNobodyHasPlayed [
 	"Test for checking if a game just started it's not finished. hasFinished is an instance variable for checking if a movement is posible and if anyone has winned the game"
 	|game playersList dicesList|
 	playersList:= CircularCollection new.
 	dicesList := OrderedCollection new.
-	playersList add: (Player name: 'Hector') ; add: (Player name: 'Ignacio').
+	playersList add: (Player named: 'Hector') ; add: (Player named: 'Ignacio').
 	dicesList add: (Dice faces:10) ; add: (Dice faces:12).
 	game:= Game playedBy:playersList throwing:dicesList spaces:50. 
 	self deny: game hasFinished.

@@ -47,7 +47,7 @@ Game class >> assertMinimumDiceQuantity:aDicesCollection [
 
 { #category : #asserting }
 Game class >> assertMinimumPlayersQuantity:aPlayersCollection [
-	aPlayersCollection size < 2
+	aPlayersCollection elements size < 2
 		ifTrue: [ AssertionFailure signal: 'Players quantity must be 2 or more' ].
 ]
 

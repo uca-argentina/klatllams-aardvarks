@@ -9,7 +9,7 @@ DiceTypeTests >> testDiceIsDetereministic [
 	| dice sequence |
 	sequence := CircularCollection new.
 	sequence addAll: #(1 3 5).
-	dice := Dice faces: 6 ofType: (DeterministicType rollValues: sequence).
+	dice := Dice faces: 6 ofType: (DeterministicType rolling: sequence).
 	self assert: dice type name equals: 'deterministic'.
 	self assert: 1 equals: dice roll;
 		assert: 3 equals: dice roll;
@@ -21,6 +21,5 @@ DiceTypeTests >> testDiceIsDetereministic [
 DiceTypeTests >> testDiceIsRandom [
 	| dice |
 	dice := Dice faces: 6 ofType: RandomType new.
-	self assert: dice type name equals: 'random'.
-	self assert: ((1 to: dice facesQuantity) includes: dice roll)
+	self assert: ((1 to: 6) includes: dice roll)
 ]

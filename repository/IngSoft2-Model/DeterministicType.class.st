@@ -9,13 +9,13 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-DeterministicType class >> rollValues: aSequence [
+DeterministicType class >> rolling: aSequence [
 	^ self new initializeWithRollValues: aSequence
 ]
 
 { #category : #asserting }
 DeterministicType >> assertValidSequence: aQuantity [
-	(rollSequence list)
+	(rollSequence elements)
 		do: [ :each | 
 			each > aQuantity
 				ifTrue: [ AssertionFailure signal: 'Invalid Sequence' ] ]
