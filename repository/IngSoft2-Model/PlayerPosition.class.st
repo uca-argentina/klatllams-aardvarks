@@ -8,7 +8,7 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #accessing }
+{ #category : #'instance creation' }
 PlayerPosition class >> player: aPlayer [
 	^self new initializeWithPlayer: aPlayer
 ]

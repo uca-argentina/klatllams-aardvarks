@@ -37,12 +37,6 @@ Class {
 }
 
 { #category : #asserting }
-Dice class >> assertIsValid: aType withFaces: aQuantity [
-	(aType isKindOf: DeterministicType)
-		ifTrue: [ aType assertValidSequence: aQuantity ]
-]
-
-{ #category : #asserting }
 Dice class >> assertValidFaces:aQuantity [
 	aQuantity > 24
 		ifTrue: [ AssertionFailure signal: 'Faces must be less than 25' ].
@@ -52,22 +46,13 @@ Dice class >> assertValidFaces:aQuantity [
 
 { #category : #'instance creation' }
 Dice class >> faces: aQuantity [
-	"Set RandomType as Default if not specified"
-
-	^self faces: aQuantity ofType: RandomType new
-
+	^ self faces: aQuantity ofType: (RandomType rollingUntil: aQuantity)
 ]
 
 { #category : #'instance creation' }
 Dice class >> faces: aQuantity ofType: aType [ 
 	self assertValidFaces: aQuantity.
-	self assertIsValid: aType withFaces: aQuantity. 
 	^ self new initializeWithFaces: aQuantity initializeWithType: aType
-]
-
-{ #category : #action }
-Dice >> deterministicRoll: aRollValue [
-	^ aRollValue
 ]
 
 { #category : #'instance initialization' }
@@ -77,11 +62,6 @@ Dice >> initializeWithFaces: aQuantity initializeWithType: aType [
 ]
 
 { #category : #action }
-Dice >> randomRoll [
-	^ (1 to: facesQuantity) atRandom
-]
-
-{ #category : #accessing }
 Dice >> roll [
-	^ type roll: self
+	^ type roll
 ]
