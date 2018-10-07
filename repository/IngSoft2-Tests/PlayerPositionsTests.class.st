@@ -12,8 +12,7 @@ PlayerPositionsTests >> testIsNotPosibleToChangeAPlayerPositionIfQuantityIsLessT
 	self
 		should: [ playersPosition updatePositionOf: 'hector' by: 0 ]
 		raise: AssertionFailure
-		withExceptionDo:
-			[ :signal | self assert: signal messageText equals: 'You cannot move a player a negative quantity' ]
+		withExceptionDo: [ :signal | self assert: signal messageText equals: 'You cannot move a player a negative quantity' ]
 ]
 
 { #category : #tests }

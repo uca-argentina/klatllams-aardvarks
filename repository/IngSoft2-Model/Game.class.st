@@ -80,6 +80,11 @@ Game >> assertPlayersTurn: aPlayer [
 		ifFalse: [ AssertionFailure signal: 'You cannot play now!' ]
 ]
 
+{ #category : #accessing }
+Game >> dices [
+	^ dices
+]
+
 { #category : #actions }
 Game >> finishGame [
 	hasFinished := true
@@ -101,7 +106,7 @@ Game >> hasTheTurn: aPlayer [
 { #category : #'instance initialization' }
 Game >> initializePlayedBy: aPlayersCollection initializeThrowing: aDicesCollection initializeWithSpaces: aQuantity [
 	players := CircularCollection contains:aPlayersCollection.
-	dices := CircularCollection contains:aDicesCollection.
+	dices := aDicesCollection.
 	spaces := aQuantity.
 	hasFinished := false.
 	playerPositions := PlayerPositions players: aPlayersCollection.

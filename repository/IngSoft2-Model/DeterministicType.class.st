@@ -7,15 +7,17 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'as yet unclassified' }
-DeterministicType class >> rolling: aNumberSequence [
-	^ self new initializeRolling: aNumberSequence
+{ #category : #asserting }
+DeterministicType class >> assertIsValid: aNumberSequence withDiceFaces: aQuantity [
+		aNumberSequence elements detect: [ :each | each > aQuantity ]
+		                   ifFound: [ AssertionFailure signal: 'Invalid Sequence' ]
+	
 ]
 
-{ #category : #asserting }
-DeterministicType >> assertValidSequence: aQuantity [
-	rollSequence elements detect: [ :each | each > aQuantity ]
-		                   ifFound: [ AssertionFailure signal: 'Invalid Sequence' ]
+{ #category : #'instance creation' }
+DeterministicType class >> rolling: aNumberSequence faces: aQuantity [
+     self assertIsValid: aNumberSequence withDiceFaces: aQuantity .
+	^ self new initializeRolling: aNumberSequence
 ]
 
 { #category : #initialization }
@@ -24,6 +26,6 @@ DeterministicType >> initializeRolling: aNumberSequence [
 ]
 
 { #category : #action }
-DeterministicType >> roll: aDice [
-	^ aDice deterministicRoll: rollSequence next
+DeterministicType >> roll [
+	^ rollSequence next
 ]

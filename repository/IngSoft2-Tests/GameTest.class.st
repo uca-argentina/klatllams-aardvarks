@@ -5,6 +5,21 @@ Class {
 }
 
 { #category : #tests }
+GameTest >> testAPlayerCannotPlayTwoTimesInARow [
+	| game playerOne playerTwo diceOne diceTwo |
+	playerOne := Player named: 'Hector'.
+	playerTwo := Player named: 'Ignacio'.
+	diceOne := Dice faces: 10.
+	diceTwo := Dice faces: 12.
+	game := Game playedBy: {playerOne.playerTwo} throwing:{diceOne.diceTwo} spaces: 50.
+	self assert: (game hasTheTurn: playerOne).
+	game move: playerOne by: 6.
+	self should: [ game move: playerOne by: 3 ] 
+	     raise: AssertionFailure 
+	     withExceptionDo: [ :signal | self assert: signal messageText equals: 'You cannot play now!' ]
+]
+
+{ #category : #tests }
 GameTest >> testCannotHaveLessThan2PlayersOrlessThan1Dice [
 	| game playerOne playerTwo diceOne diceTwo |
 	playerOne := Player named: 'Hector'.
