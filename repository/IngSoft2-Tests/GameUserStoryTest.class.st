@@ -16,19 +16,19 @@ GameUserStoryTest >> testTwoPlayerPlayAndTheFirstOneWins [
 	game := Game playedBy: { playerOne . playerTwo } throwing: { diceOne . diceTwo } spaces: 50.
 	"The game starts"
 	self assert: (game hasTheTurn: playerOne).
-	game move: playerOne by: (playerOne roll: game dices).
+	game move: playerOne.
 	self assert: (game hasTheTurn: playerTwo).
-	game move: playerTwo by: (playerTwo roll: game dices).
+	game move: playerTwo.
 	self assert: (game hasTheTurn: playerOne).
-	game move: playerOne by: (playerOne roll: game dices).
+	game move: playerOne.
 	self assert: (game hasTheTurn: playerTwo).
-	game move: playerTwo by: (playerTwo roll: game dices).
+	game move: playerTwo.
 	self assert: (game hasTheTurn: playerOne).
-	game move: playerOne by: (playerOne roll: game dices).
+	game move: playerOne.
 	self assert: (game hasTheTurn: playerTwo).
-	game move: playerTwo by: (playerTwo roll: game dices).
+	game move: playerTwo.
 	self assert: (game hasTheTurn: playerOne).
-	game move: playerOne by: (playerOne roll: game dices).
+	game move: playerOne.
 	self assert: game hasFinished .
 	self assert: game playerPositions topPlayer equals: playerOne 
 ]

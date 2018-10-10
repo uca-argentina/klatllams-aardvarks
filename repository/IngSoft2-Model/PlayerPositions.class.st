@@ -18,7 +18,7 @@ PlayerPositions >> assertIsValid: aQuantity [
 		ifTrue: [ AssertionFailure signal: 'You cannot move a player a negative quantity' ]
 ]
 
-{ #category : #'instance initialization' }
+{ #category : #initialization }
 PlayerPositions >> initializeWithPlayers: playersCollection [
 	playersAndPositions := (playersCollection collect: [ :each | PlayerPosition player:each ])
 		asOrderedCollection.

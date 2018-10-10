@@ -80,17 +80,12 @@ Game >> assertPlayersTurn: aPlayer [
 		ifFalse: [ AssertionFailure signal: 'You cannot play now!' ]
 ]
 
-{ #category : #accessing }
-Game >> dices [
-	^ dices
-]
-
 { #category : #actions }
 Game >> finishGame [
 	hasFinished := true
 ]
 
-{ #category : #accesing }
+{ #category : #accessing }
 Game >> hasFinished [
 	| theTopPlayer |
 	theTopPlayer:= playerPositions topPlayer.
@@ -98,12 +93,12 @@ Game >> hasFinished [
 	^ hasFinished
 ]
 
-{ #category : #accesing }
+{ #category : #accessing }
 Game >> hasTheTurn: aPlayer [
 	^ currentPlayer = aPlayer
 ]
 
-{ #category : #'instance initialization' }
+{ #category : #initialization }
 Game >> initializePlayedBy: aPlayersCollection initializeThrowing: aDicesCollection initializeWithSpaces: aQuantity [
 	players := CircularCollection contains:aPlayersCollection.
 	dices := aDicesCollection.
@@ -114,15 +109,17 @@ Game >> initializePlayedBy: aPlayersCollection initializeThrowing: aDicesCollect
 ]
 
 { #category : #actions }
-Game >> move: aPlayer by: positionsQuantity [
+Game >> move: aPlayer [
 	self assertPlayersTurn: aPlayer;
 	     assertGameHasNotFinished.
-	playerPositions updatePositionOf: aPlayer by: positionsQuantity.
+	
+	playerPositions updatePositionOf: aPlayer by: (aPlayer roll: dices).
+	
 	currentPlayer := players next.
 	self hasFinished ifTrue: [ self finishGame ]
 ]
 
-{ #category : #accesing }
+{ #category : #accessing }
 Game >> playerPositions [
 	^playerPositions 
 ]
