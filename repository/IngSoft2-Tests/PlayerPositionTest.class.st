@@ -7,9 +7,9 @@ Class {
 { #category : #tests }
 PlayerPositionTest >> testAPlayerPositionExistsAndIsPossibleToUpdateThePosition [
 	|playerPosition|
-	playerPosition := PlayerPosition player:'hector'.
+	playerPosition := PlayerPositionLap player:'hector'.
 	self assert: playerPosition position equals: 0.
 	self assert: playerPosition player equals: 'hector'.
-	playerPosition updateThePositionBy: 5.
+	playerPosition updateThePositionTo: 5.
 	self assert: playerPosition position equals: 5.
 ]

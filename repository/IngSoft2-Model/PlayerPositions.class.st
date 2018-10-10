@@ -20,8 +20,13 @@ PlayerPositions >> assertIsValid: aQuantity [
 
 { #category : #initialization }
 PlayerPositions >> initializeWithPlayers: playersCollection [
-	playersAndPositions := (playersCollection collect: [ :each | PlayerPosition player:each ])
+	playersAndPositions := (playersCollection collect: [ :each | PlayerPositionLap player:each ])
 		asOrderedCollection.
+]
+
+{ #category : #accesing }
+PlayerPositions >> lapsOf: aPlayer [
+	^ (playersAndPositions detect: [ :each | each player = aPlayer ]) lap
 ]
 
 { #category : #accesing }
@@ -36,7 +41,17 @@ PlayerPositions >> topPlayer [
 ]
 
 { #category : #updating }
+PlayerPositions >> updateAllPlayersBy: aQuantity [
+	playersAndPositions do: [ :each | each player updateThePositionTo:aQuantity  ]
+]
+
+{ #category : #updating }
+PlayerPositions >> updateAllPlayersToInitialPosition [
+	playersAndPositions do: [ :each | each player updateToInitialPosition ]
+]
+
+{ #category : #updating }
 PlayerPositions >> updatePositionOf: aPlayer by: aQuantity [
 	self assertIsValid: aQuantity.
-	(playersAndPositions detect: [ :each | each player = aPlayer]) updateThePositionBy:aQuantity
+	(playersAndPositions detect: [ :each | each player = aPlayer]) updateThePositionTo:aQuantity
 ]

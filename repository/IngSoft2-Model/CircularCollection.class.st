@@ -1,6 +1,6 @@
 Class {
 	#name : #CircularCollection,
-	#superclass : #TestCase,
+	#superclass : #Object,
 	#instVars : [
 		'currentPosition',
 		'elements'

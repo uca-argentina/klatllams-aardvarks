@@ -34,7 +34,9 @@ Class {
 		'hasFinished',
 		'spaces',
 		'currentPlayer',
-		'playerPositions'
+		'playerPositions',
+		'board',
+		'laps'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -88,8 +90,8 @@ Game >> finishGame [
 { #category : #accessing }
 Game >> hasFinished [
 	| theTopPlayer |
-	theTopPlayer:= playerPositions topPlayer.
-	hasFinished := (playerPositions positionOf: theTopPlayer)  >= spaces.
+	theTopPlayer:= board playerPositions topPlayer.
+	hasFinished := (board playerPositions lapsOf: theTopPlayer)  >= laps.
 	^ hasFinished
 ]
 
@@ -99,27 +101,21 @@ Game >> hasTheTurn: aPlayer [
 ]
 
 { #category : #initialization }
-Game >> initializePlayedBy: aPlayersCollection initializeThrowing: aDicesCollection initializeWithSpaces: aQuantity [
-	players := CircularCollection contains:aPlayersCollection.
+Game >> initializePlayedBy: aPlayersCollection initializeThrowing: aDicesCollection initializeWithSpaces: aQuantity initializeWithTotalLaps: aLapsQuantity [
+	players := CircularCollection contains: aPlayersCollection.
 	dices := aDicesCollection.
-	spaces := aQuantity.
+	board := Board spaces: aQuantity.
 	hasFinished := false.
-	playerPositions := PlayerPositions players: aPlayersCollection.
 	currentPlayer := players next.
+	laps := aLapsQuantity
 ]
 
 { #category : #actions }
 Game >> move: aPlayer [
 	self assertPlayersTurn: aPlayer;
 	     assertGameHasNotFinished.
-	
-	playerPositions updatePositionOf: aPlayer by: (aPlayer roll: dices).
-	
+	board move: aPlayer by: (aPlayer roll: dices).
+
 	currentPlayer := players next.
 	self hasFinished ifTrue: [ self finishGame ]
-]
-
-{ #category : #accessing }
-Game >> playerPositions [
-	^playerPositions 
 ]
