@@ -25,7 +25,7 @@ CircularCollection >> elements [
 	^ elements
 ]
 
-{ #category : #'instance initalization' }
+{ #category : #initialization }
 CircularCollection >> initializeContaining: aCollection [
 	elements := aCollection.
 	currentPosition := 0

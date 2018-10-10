@@ -55,7 +55,7 @@ Dice class >> faces: aQuantity ofType: aType [
 	^ self new initializeWithFaces: aQuantity initializeWithType: aType
 ]
 
-{ #category : #'instance initialization' }
+{ #category : #initialization }
 Dice >> initializeWithFaces: aQuantity initializeWithType: aType [
 	facesQuantity := aQuantity.
 	type := aType

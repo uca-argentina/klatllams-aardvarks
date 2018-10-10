@@ -13,8 +13,8 @@ GameTest >> testAPlayerCannotPlayTwoTimesInARow [
 	diceTwo := Dice faces: 12.
 	game := Game playedBy: {playerOne.playerTwo} throwing:{diceOne.diceTwo} spaces: 50.
 	self assert: (game hasTheTurn: playerOne).
-	game move: playerOne by: 6.
-	self should: [ game move: playerOne by: 3 ] 
+	game move: playerOne.
+	self should: [ game move: playerOne ] 
 	     raise: AssertionFailure 
 	     withExceptionDo: [ :signal | self assert: signal messageText equals: 'You cannot play now!' ]
 ]
