@@ -17,7 +17,7 @@ PlayerPositionLap class >> player: aPlayer [
 { #category : #initialization }
 PlayerPositionLap >> initializeWithPlayer: aPlayer [
 	player := aPlayer.
-	position := 0.
+	position := 1.
 	lap := 0
 ]
 
@@ -43,8 +43,8 @@ PlayerPositionLap >> updateLapBy: aQuantity [
 ]
 
 { #category : #updating }
-PlayerPositionLap >> updateThePositionTo: aPosition [
-	position := aPosition
+PlayerPositionLap >> updateThePositionTo: aValue [
+	position := aValue
 ]
 
 { #category : #updating }

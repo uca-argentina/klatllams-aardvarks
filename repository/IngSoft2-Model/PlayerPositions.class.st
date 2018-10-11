@@ -12,10 +12,12 @@ PlayerPositions class >> players: playersCollection [
 	^ self new initializeWithPlayers: playersCollection
 ]
 
-{ #category : #asserting }
-PlayerPositions >> assertIsValid: aQuantity [
-	aQuantity < 1
-		ifTrue: [ AssertionFailure signal: 'You cannot move a player a negative quantity' ]
+{ #category : #accesing }
+PlayerPositions >> gamePositionOf: aPlayer [
+	| requestedPlayer |
+	self sortAllThePlayers.
+	requestedPlayer := playersAndPositions detect: [ :each | each player = aPlayer ].
+	^ playersAndPositions indexOf: requestedPlayer
 ]
 
 { #category : #initialization }
@@ -35,23 +37,27 @@ PlayerPositions >> positionOf: aPlayer [
 ]
 
 { #category : #accesing }
+PlayerPositions >> sortAllThePlayers [
+     playersAndPositions sort: [ :a :b | a lap > b lap | (a position > b position & (a lap = b lap)) ]
+]
+
+{ #category : #accesing }
 PlayerPositions >> topPlayer [
-	playersAndPositions sort:[:a :b | a position > b position].
+	self sortAllThePlayers.
 	^ playersAndPositions first player
 ]
 
 { #category : #updating }
 PlayerPositions >> updateAllPlayersBy: aQuantity [
-	playersAndPositions do: [ :each | each player updateThePositionTo:aQuantity  ]
+	playersAndPositions do: [ :each | each updateThePositionTo:aQuantity  ]
 ]
 
 { #category : #updating }
 PlayerPositions >> updateAllPlayersToInitialPosition [
-	playersAndPositions do: [ :each | each player updateToInitialPosition ]
+	playersAndPositions do: [ :each | each updateToInitialPosition ]
 ]
 
 { #category : #updating }
-PlayerPositions >> updatePositionOf: aPlayer by: aQuantity [
-	self assertIsValid: aQuantity.
-	(playersAndPositions detect: [ :each | each player = aPlayer]) updateThePositionTo:aQuantity
+PlayerPositions >> updatePositionOf: aPlayer to: aValue [
+	(playersAndPositions detect: [ :each | each player = aPlayer]) updateThePositionTo:aValue
 ]

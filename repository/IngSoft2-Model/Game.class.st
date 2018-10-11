@@ -32,9 +32,7 @@ Class {
 		'players',
 		'dices',
 		'hasFinished',
-		'spaces',
 		'currentPlayer',
-		'playerPositions',
 		'board',
 		'laps'
 	],
@@ -48,26 +46,34 @@ Game class >> assertMinimumDiceQuantity:aDicesCollection [
 ]
 
 { #category : #asserting }
+Game class >> assertMinimumLapsQuantity: aLapsQuantity. [ 
+	aLapsQuantity < 1
+		ifTrue: [ AssertionFailure signal: 'Laps must be 1 or more' ].
+]
+
+{ #category : #asserting }
 Game class >> assertMinimumPlayersQuantity:aPlayersCollection [
 	aPlayersCollection size < 2
 		ifTrue: [ AssertionFailure signal: 'Players quantity must be 2 or more' ].
 ]
 
 { #category : #asserting }
-Game class >> assertMinimumSpacesQuantity: aQuantity [
-	aQuantity < 50
-		ifTrue: [ AssertionFailure signal: 'Must have more than 49 spaces' ]
+Game class >> assertMinimumSpacesQuantity: aSpacesQuantity [
+	(aSpacesQuantity rem: 100) = 0
+		ifFalse: [ AssertionFailure signal: 'Spaces Quantity must be a multiple of 100 ' ]
 ]
 
 { #category : #'instance creation' }
-Game class >> playedBy: aPlayersCollection throwing: aDicesCollection spaces: aQuantity [
+Game class >> playedBy: aPlayersCollection throwing: aDicesCollection spaces: aSpacesQuantity totalLaps: aLapsQuantity [
 	self assertMinimumDiceQuantity: aDicesCollection.
 	self assertMinimumPlayersQuantity: aPlayersCollection.
-	self assertMinimumSpacesQuantity: aQuantity.
+	self assertMinimumSpacesQuantity: aSpacesQuantity.
+	self assertMinimumLapsQuantity: aLapsQuantity. 
 	^ self new
 		initializePlayedBy: aPlayersCollection
 		initializeThrowing: aDicesCollection
-		initializeWithSpaces: aQuantity
+		initializeWithSpaces: aSpacesQuantity
+		initializeWithTotalLaps: aLapsQuantity
 ]
 
 { #category : #asserting }
@@ -114,6 +120,7 @@ Game >> initializePlayedBy: aPlayersCollection initializeThrowing: aDicesCollect
 Game >> move: aPlayer [
 	self assertPlayersTurn: aPlayer;
 	     assertGameHasNotFinished.
+	
 	board move: aPlayer by: (aPlayer roll: dices).
 
 	currentPlayer := players next.

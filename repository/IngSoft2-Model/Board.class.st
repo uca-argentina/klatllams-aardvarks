@@ -10,8 +10,5 @@ Class {
 
 { #category : #updating }
 Board >> move: aPlayer by: aQuantity [
-	| newPosition |
-	newPosition := playerPositions positionOf: aPlayer + aQuantity.
-	"spaces at:newPosition effect:aPlayer"
 	
 ]
