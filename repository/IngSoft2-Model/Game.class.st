@@ -118,11 +118,11 @@ Game >> initializePlayedBy: aPlayersCollection initializeThrowing: aDicesCollect
 
 { #category : #actions }
 Game >> move: aPlayer [
-	self assertPlayersTurn: aPlayer;
-	     assertGameHasNotFinished.
-	
-	board move: aPlayer by: (aPlayer roll: dices).
-
+	self
+		assertPlayersTurn: aPlayer;
+		assertGameHasNotFinished.
+	board moveAndAffect: aPlayer by: (aPlayer roll: dices).
 	currentPlayer := players next.
-	self hasFinished ifTrue: [ self finishGame ]
+	self hasFinished
+		ifTrue: [ self finishGame ]
 ]

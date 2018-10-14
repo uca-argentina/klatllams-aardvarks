@@ -1,22 +1,11 @@
 Class {
-	#name : #PlayerPositionTest,
+	#name : #PlayerPositionLapTest,
 	#superclass : #TestCase,
 	#category : #'IngSoft2-Tests'
 }
 
 { #category : #tests }
-PlayerPositionTest >> testAPlayerLapCannotBeLessThanZero [
-	|playerPosition|
-	playerPosition := PlayerPositionLap player:'hector'.
-	playerPosition updateLapBy: 4.
-	self assert: playerPosition lap equals: 4.
-	playerPosition updateLapBy: -6.
-	self assert: playerPosition lap equals: 0.
-	
-]
-
-{ #category : #tests }
-PlayerPositionTest >> testAPlayerPositionCanBeSetToTheFirstPosition [
+PlayerPositionLapTest >> testAPlayerPositionCanBeSetToTheFirstPosition [
 	|playerPosition|
 	playerPosition := PlayerPositionLap player:'hector'.
 	self assert: playerPosition position equals: 1.
@@ -27,7 +16,7 @@ PlayerPositionTest >> testAPlayerPositionCanBeSetToTheFirstPosition [
 ]
 
 { #category : #tests }
-PlayerPositionTest >> testAPlayerPositionExistsAndIsPossibleToUpdateThePosition [
+PlayerPositionLapTest >> testAPlayerPositionLapExistsAndIsPossibleToUpdateThePositionAndLap [
 	|playerPosition|
 	playerPosition := PlayerPositionLap player:'hector'.
 	self assert: playerPosition position equals: 1.

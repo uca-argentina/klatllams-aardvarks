@@ -58,6 +58,9 @@ PlayerPositions >> updateAllPlayersToInitialPosition [
 ]
 
 { #category : #updating }
-PlayerPositions >> updatePositionOf: aPlayer to: aValue [
-	(playersAndPositions detect: [ :each | each player = aPlayer]) updateThePositionTo:aValue
+PlayerPositions >> updatePositionAndLapsOf: aPlayer to: aPosition adding: laps [
+	| player |
+	player := playersAndPositions detect: [ :each | each player = aPlayer ].
+	player updateThePositionTo: aPosition.
+	player updateLapBy: laps
 ]

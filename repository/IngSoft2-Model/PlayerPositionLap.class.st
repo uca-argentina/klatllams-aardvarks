@@ -39,12 +39,12 @@ PlayerPositionLap >> position [
 { #category : #updating }
 PlayerPositionLap >> updateLapBy: aQuantity [
 	lap := lap + aQuantity.
-	lap := lap max: 0
+
 ]
 
 { #category : #updating }
 PlayerPositionLap >> updateThePositionTo: aValue [
-	position := aValue
+	position := aValue.
 ]
 
 { #category : #updating }
