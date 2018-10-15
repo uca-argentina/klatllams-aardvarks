@@ -110,7 +110,7 @@ Game >> hasTheTurn: aPlayer [
 Game >> initializePlayedBy: aPlayersCollection initializeThrowing: aDicesCollection initializeWithSpaces: aQuantity initializeWithTotalLaps: aLapsQuantity [
 	players := CircularCollection contains: aPlayersCollection.
 	dices := aDicesCollection.
-	board := Board spaces: aQuantity.
+	board := Board playedBy:aPlayersCollection spaces: aQuantity.
 	hasFinished := false.
 	currentPlayer := players next.
 	laps := aLapsQuantity

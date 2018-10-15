@@ -11,7 +11,7 @@ GameTest >> testAPlayerCannotPlayTwoTimesInARow [
 	playerTwo := Player named: 'Ignacio'.
 	diceOne := Dice faces: 10.
 	diceTwo := Dice faces: 12.
-	game := Game playedBy: {playerOne.playerTwo} throwing:{diceOne.diceTwo} spaces: 50.
+	game := Game playedBy: {playerOne.playerTwo} throwing:{diceOne.diceTwo} spaces: 100 totalLaps:2.
 	self assert: (game hasTheTurn: playerOne).
 	game move: playerOne.
 	self should: [ game move: playerOne ] 
