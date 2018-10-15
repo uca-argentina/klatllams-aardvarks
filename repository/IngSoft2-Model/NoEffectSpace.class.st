@@ -1,10 +1,6 @@
 Class {
 	#name : #NoEffectSpace,
-	#superclass : #Object,
-	#instVars : [
-		'boardPosition',
-		'board'
-	],
+	#superclass : #Space,
 	#category : #'IngSoft2-Model'
 }
 
@@ -13,14 +9,7 @@ NoEffectSpace class >> with: aBoardPosition [
 	^self new initializeAtABoardPosition: aBoardPosition.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #action }
 NoEffectSpace >> affect: aPlayer [
-	board move: aPlayer by: 0.
-]
-
-{ #category : #initialization }
-NoEffectSpace >> initializeAt: aPosition in: aBoard [
-	boardPosition := aPosition.
-	board := aBoard.
-
+	board move: aPlayer by: 0
 ]

@@ -126,3 +126,8 @@ Game >> move: aPlayer [
 	self hasFinished
 		ifTrue: [ self finishGame ]
 ]
+
+{ #category : #accessing }
+Game >> playerPositions [
+	^ board playerPositions.
+]

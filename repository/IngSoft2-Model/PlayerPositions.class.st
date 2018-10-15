@@ -15,7 +15,7 @@ PlayerPositions class >> players: playersCollection [
 { #category : #accesing }
 PlayerPositions >> gamePositionOf: aPlayer [
 	| requestedPlayer |
-	self sortAllThePlayers.
+	self sortThePlayersInDescendingOrder.
 	requestedPlayer := playersAndPositions detect: [ :each | each player = aPlayer ].
 	^ playersAndPositions indexOf: requestedPlayer
 ]
@@ -36,20 +36,15 @@ PlayerPositions >> positionOf: aPlayer [
 	^ (playersAndPositions detect: [ :each | each player = aPlayer ]) position
 ]
 
-{ #category : #accesing }
-PlayerPositions >> sortAllThePlayers [
+{ #category : #sorting }
+PlayerPositions >> sortThePlayersInDescendingOrder [
      playersAndPositions sort: [ :a :b | a lap > b lap | (a position > b position & (a lap = b lap)) ]
 ]
 
 { #category : #accesing }
 PlayerPositions >> topPlayer [
-	self sortAllThePlayers.
+	self sortThePlayersInDescendingOrder.
 	^ playersAndPositions first player
-]
-
-{ #category : #updating }
-PlayerPositions >> updateAllPlayersBy: aQuantity [
-	playersAndPositions do: [ :each | each updateThePositionTo:aQuantity  ]
 ]
 
 { #category : #updating }
