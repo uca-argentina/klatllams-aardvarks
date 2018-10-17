@@ -16,12 +16,12 @@ CircularCollectionTests >> testAnEmptyCircularCollectionShouldRaiseAnException [
 CircularCollectionTests >> testCircularCollectionCanBeInitializedAtASpecificPosition [
 	| numbers |
 	numbers := CircularCollection contains: #(1 2 3) startingAt:2.
-	self assert: numbers previous equals: 1;
-		  assert: numbers next equals: 2;
+	self assert: (numbers nextBy: -1) equals: 1;
+		  assert: (numbers nextBy:1) equals: 2;
 		  assert: (numbers nextBy:3) equals:2 ;
-		  assert: (numbers previousBy:3) equals: 2;
-		  assert: numbers previous equals: 1;
-		  assert: numbers next equals: 2
+		  assert: (numbers nextBy:-3) equals: 2;
+		  assert: (numbers nextBy:-1) equals: 1;
+		  assert: (numbers nextBy:1) equals: 2
 ]
 
 { #category : #tests }
@@ -33,13 +33,13 @@ CircularCollectionTests >> testCircularCollectionCanReturnHowManyTurnsToTheColle
 		  assert: numbers turns equals:1;
 		  assert: (numbers nextBy:5) equals: 1;
 		  assert: numbers turns equals:2;
-		  assert: (numbers previousBy:5) equals: 1;
+		  assert: (numbers nextBy:-5) equals: 1;
 		  assert: numbers turns equals:1;
-     	  assert: (numbers previousBy:5) equals: 1;
+     	  assert: (numbers nextBy:-5) equals: 1;
 		  assert: numbers turns equals:0;
- 		  assert: (numbers previousBy:5) equals: 1;
+ 		  assert: (numbers nextBy:-5) equals: 1;
 		  assert: numbers turns equals:-1;
-		  assert: (numbers previousBy:5) equals: 1;
+		  assert: (numbers nextBy:-5) equals: 1;
 		  assert: numbers turns equals:-2;
 		  assert: (numbers nextBy:20) equals: 1;
 		  assert: numbers turns equals:2
@@ -49,10 +49,10 @@ CircularCollectionTests >> testCircularCollectionCanReturnHowManyTurnsToTheColle
 CircularCollectionTests >> testCircularCollectionCanReturnThePreviousElement [
 	| numbers |
 	numbers := CircularCollection contains: #(1 2 3).
-	self assert: numbers previous equals: 3;
-		  assert: numbers previous equals: 2;
-		  assert: numbers previous equals: 1;
-		  assert: numbers previous equals: 3.	
+	self assert: (numbers nextBy:-1) equals: 3;
+		  assert: (numbers nextBy:-1) equals: 2;
+		  assert: (numbers nextBy:-1) equals: 1;
+		  assert: (numbers nextBy:-1) equals: 3.	
 ]
 
 { #category : #tests }
@@ -60,10 +60,10 @@ CircularCollectionTests >> testCircularCollectionGoesBackToTheFirstPosition [
 	| numbers |
 	numbers := CircularCollection contains: #(1 2 3).
 	self
-		assert: numbers next equals: 1;
-		assert: numbers next equals: 2;
-		assert: numbers next equals: 3;
-		assert: numbers next equals: 1
+		assert: (numbers nextBy:1) equals: 1;
+		assert: (numbers nextBy:1) equals: 2;
+		assert: (numbers nextBy:1) equals: 3;
+		assert: (numbers nextBy:1) equals: 1
 ]
 
 { #category : #tests }
@@ -72,10 +72,10 @@ CircularCollectionTests >> testCircularCollectionGoesForwardAndbackwardsMoreThan
 	numbers := CircularCollection contains: #(1 2 3 4 5).
 	self
 		assert: (numbers nextBy:2) equals: 2;
-		assert: (numbers previousBy:3) equals: 4;
+		assert: (numbers nextBy:-3) equals: 4;
 		assert: (numbers nextBy:2) equals: 1;
 		assert: (numbers nextBy:4) equals: 5;
-		assert: (numbers previousBy:5) equals: 5;
-		assert: (numbers previousBy:0) equals: 5;
+		assert: (numbers nextBy:-5) equals: 5;
+		assert: (numbers nextBy:0) equals: 5;
 		assert: (numbers nextBy:0) equals: 5
 ]

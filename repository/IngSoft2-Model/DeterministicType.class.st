@@ -51,5 +51,5 @@ DeterministicType >> initializeRolling: aNumberSequence [
 
 { #category : #action }
 DeterministicType >> roll [
-	^ rollSequence next
+	^ rollSequence nextBy:1
 ]

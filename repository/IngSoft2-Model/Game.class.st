@@ -112,7 +112,7 @@ Game >> initializePlayedBy: aPlayersCollection initializeThrowing: aDicesCollect
 	dices := aDicesCollection.
 	board := Board playedBy:aPlayersCollection spaces: aQuantity.
 	hasFinished := false.
-	currentPlayer := players next.
+	currentPlayer := players nextBy:1.
 	laps := aLapsQuantity
 ]
 
@@ -122,7 +122,7 @@ Game >> move: aPlayer [
 		assertPlayersTurn: aPlayer;
 		assertGameHasNotFinished.
 	board moveAndAffect: aPlayer by: (aPlayer roll: dices).
-	currentPlayer := players next.
+	currentPlayer := players nextBy:1.
 	self hasFinished
 		ifTrue: [ self finishGame ]
 ]

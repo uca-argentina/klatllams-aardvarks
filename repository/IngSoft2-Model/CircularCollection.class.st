@@ -64,24 +64,10 @@ CircularCollection >> initializeContaining: aCollection initializeStartingAt: aP
 ]
 
 { #category : #accessing }
-CircularCollection >> next [
-	^self nextBy: 1
-]
-
-{ #category : #accessing }
 CircularCollection >> nextBy: aQuantity [
-	(aQuantity abs) timesRepeat:[ self updateCurrentPositionForward ].
-	^ elements at: currentPosition
-]
-
-{ #category : #accessing }
-CircularCollection >> previous [
-	^ self previousBy: 1
-]
-
-{ #category : #accessing }
-CircularCollection >> previousBy: aQuantity [
-	(aQuantity abs) timesRepeat:[ self updateCurrentPositionBackwards].
+	aQuantity < 0
+		ifTrue: [ aQuantity abs timesRepeat: [ self updateCurrentPositionBackwards ] ]
+		ifFalse: [ aQuantity abs timesRepeat: [ self updateCurrentPositionForward ] ].
 	^ elements at: currentPosition
 ]
 

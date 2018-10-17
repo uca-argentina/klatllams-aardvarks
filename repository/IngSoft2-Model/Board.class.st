@@ -55,17 +55,14 @@ Board class >> playedBy: aPlayersCollection spaces: aQuantity [
 
 { #category : #determine }
 Board >> determinePositionAndLapsToAddOf: aPlayer withARollOf: aQuantity [
-	| spacesCollection playerPositionLap |
-	
-	playerPositionLap := PlayerPositionLap player:aPlayer.
-	spacesCollection := CircularCollection contains:((1 to: spaces size) asOrderedCollection) startingAt:  (playerPositions positionOf: aPlayer).
-	
-	aQuantity < 0
-	 ifTrue: [ playerPositionLap updateThePositionTo: (spacesCollection previousBy: aQuantity) ]
-	 ifFalse: [ playerPositionLap updateThePositionTo: (spacesCollection nextBy: aQuantity) ].
-	
-	playerPositionLap updateLapBy: spacesCollection turns.
-	
+	| positionsCircularCollection playerPositionLap |
+	playerPositionLap := PlayerPositionLap player: aPlayer.
+	positionsCircularCollection := CircularCollection
+		contains: (1 to: spaces size) asOrderedCollection
+		startingAt: (playerPositions positionOf: aPlayer).
+		
+	playerPositionLap updateThePositionTo: (positionsCircularCollection nextBy: aQuantity).
+	playerPositionLap updateLapBy: positionsCircularCollection turns.
 	^ playerPositionLap
 ]
 
@@ -78,9 +75,7 @@ Board >> initializePlayedBy: aPlayersCollection initializeComposedBy: aSpacesCol
 { #category : #action }
 Board >> move: aPlayer by: aQuantity [
 	| playerPositionLapToAdd |
-	
 	playerPositionLapToAdd := self determinePositionAndLapsToAddOf: aPlayer withARollOf: aQuantity.
-
 	playerPositions
 		updatePositionAndLapsOf: aPlayer
 		to: playerPositionLapToAdd position
