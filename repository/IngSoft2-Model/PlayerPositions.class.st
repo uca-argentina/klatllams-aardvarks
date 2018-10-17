@@ -57,13 +57,18 @@ PlayerPositions >> lapsOf: aPlayer [
 ]
 
 { #category : #accesing }
+PlayerPositions >> players [
+	^ playersAndPositions collect: [ :each | each player ]
+]
+
+{ #category : #accesing }
 PlayerPositions >> positionOf: aPlayer [
 	^ (playersAndPositions detect: [ :each | each player = aPlayer ]) position
 ]
 
 { #category : #sorting }
 PlayerPositions >> sortThePlayersInDescendingOrder [
-     playersAndPositions sort: [ :a :b | a lap > b lap | (a position > b position & (a lap = b lap)) ]
+     playersAndPositions sort: [ :a :b | a lap > b lap | ((a position > b position) & (a lap = b lap)) ]
 ]
 
 { #category : #accesing }
@@ -74,7 +79,7 @@ PlayerPositions >> topPlayer [
 
 { #category : #updating }
 PlayerPositions >> updateAllPlayersToInitialPosition [
-	playersAndPositions do: [ :each | each updateToInitialPosition ]
+	playersAndPositions do: [ :each | self updatePositionAndLapsOf: each player to: 1 adding: 0 ]
 ]
 
 { #category : #updating }

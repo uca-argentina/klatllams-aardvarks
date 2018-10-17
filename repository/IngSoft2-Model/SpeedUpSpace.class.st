@@ -21,7 +21,7 @@ Internal Representation and Key Implementation Points.
 "
 Class {
 	#name : #SpeedUpSpace,
-	#superclass : #Space,
+	#superclass : #Object,
 	#category : #'IngSoft2-Model'
 }
 

@@ -24,7 +24,7 @@ Internal Representation and Key Implementation Points.
 "
 Class {
 	#name : #MoonWalkSpace,
-	#superclass : #Space,
+	#superclass : #Object,
 	#instVars : [
 		'backwardsValue'
 	],

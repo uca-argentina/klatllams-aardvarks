@@ -21,7 +21,7 @@ Internal Representation and Key Implementation Points.
 "
 Class {
 	#name : #AtomicBombSpace,
-	#superclass : #Space,
+	#superclass : #Object,
 	#category : #'IngSoft2-Model'
 }
 

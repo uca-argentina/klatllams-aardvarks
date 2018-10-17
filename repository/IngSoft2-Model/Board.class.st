@@ -54,29 +54,19 @@ Board class >> playedBy: aPlayersCollection spaces: aQuantity [
 ]
 
 { #category : #determine }
-Board >> determineLapsOf: aPlayer withARollOf: aQuantity [
-	| apparentPosition lapsCount |
-	apparentPosition := playerPositions positionOf: aPlayer + aQuantity.
-	lapsCount := (apparentPosition / spaces elements size) abs.
-	apparentPosition > spaces elements size
-		ifTrue: [ ^ lapsCount ].
-	apparentPosition < 1
-		ifTrue: [ ^ lapsCount negated - 1 ].
-	(apparentPosition < spaces elements size & apparentPosition) >= 1
-		ifTrue: [ ^ 0 ]
-]
-
-{ #category : #determine }
-Board >> determinePositionOf: aPlayer withARollOf: aQuantity [
-	| apparentPosition |
-	apparentPosition := playerPositions positionOf: aPlayer + aQuantity.
-	apparentPosition > spaces elements size
-		ifTrue: [ ^ apparentPosition rem: spaces elements size ].
-	apparentPosition < 1
-		ifTrue: [ ^ spaces elements size + apparentPosition ].
-	(apparentPosition < spaces elements size & apparentPosition) >= 1
-		ifTrue: [ ^apparentPosition ].
+Board >> determinePositionAndLapsToAddOf: aPlayer withARollOf: aQuantity [
+	| spacesCollection playerPositionLap |
 	
+	playerPositionLap := PlayerPositionLap player:aPlayer.
+	spacesCollection := CircularCollection contains:((1 to: spaces size) asOrderedCollection) startingAt:  (playerPositions positionOf: aPlayer).
+	
+	aQuantity < 0
+	 ifTrue: [ playerPositionLap updateThePositionTo: (spacesCollection previousBy: aQuantity) ]
+	 ifFalse: [ playerPositionLap updateThePositionTo: (spacesCollection nextBy: aQuantity) ].
+	
+	playerPositionLap updateLapBy: spacesCollection turns.
+	
+	^ playerPositionLap
 ]
 
 { #category : #initialization }
@@ -87,18 +77,20 @@ Board >> initializePlayedBy: aPlayersCollection initializeComposedBy: aSpacesCol
 
 { #category : #action }
 Board >> move: aPlayer by: aQuantity [
-	| lapsToAdd newPosition |
-	newPosition := self determinePositionOf: aPlayer withARollOf: aQuantity.
-	lapsToAdd := self determineLapsOf: aPlayer withARollOf: aQuantity.
+	| playerPositionLapToAdd |
 	
-	playerPositions updatePositionAndLapsOf: aPlayer to: newPosition adding: lapsToAdd.
-	
+	playerPositionLapToAdd := self determinePositionAndLapsToAddOf: aPlayer withARollOf: aQuantity.
+
+	playerPositions
+		updatePositionAndLapsOf: aPlayer
+		to: playerPositionLapToAdd position
+		adding: playerPositionLapToAdd lap
 ]
 
 { #category : #action }
 Board >> moveAllExcept: aPlayer by: aValue [
 	| otherPlayers |
-	otherPlayers := playerPositions collect: [ :each | (each player ~= aPlayer) player ].
+	otherPlayers := playerPositions players select: [ :each | (each ~= aPlayer) ].
 	otherPlayers do: [ :each | self move: each by: aValue ]
 ]
 

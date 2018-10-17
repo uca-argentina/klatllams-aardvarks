@@ -73,8 +73,3 @@ PlayerPositionLap >> updateLapBy: aQuantity [
 PlayerPositionLap >> updateThePositionTo: aValue [
 	position := aValue.
 ]
-
-{ #category : #updating }
-PlayerPositionLap >> updateToInitialPosition [
-	position := 1
-]

@@ -21,14 +21,9 @@ Internal Representation and Key Implementation Points.
 "
 Class {
 	#name : #NoEffectSpace,
-	#superclass : #Space,
+	#superclass : #Object,
 	#category : #'IngSoft2-Model'
 }
-
-{ #category : #'instance creation' }
-NoEffectSpace class >> with: aBoardPosition [
-	^self new initializeAtABoardPosition: aBoardPosition.
-]
 
 { #category : #action }
 NoEffectSpace >> affect: aPlayer on: board [ 

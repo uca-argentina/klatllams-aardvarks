@@ -28,7 +28,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'currentPosition',
-		'elements'
+		'elements',
+		'turns'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -42,7 +43,12 @@ CircularCollection class >> assertNotEmpty: aCollection [
 { #category : #'instance creation' }
 CircularCollection class >> contains: aCollection [
 	self assertNotEmpty: aCollection.
-	^ self new initializeContaining: aCollection
+	^ self new initializeContaining: aCollection initializeStartingAt: 0
+]
+
+{ #category : #'instance creation' }
+CircularCollection class >> contains: aCollection startingAt: aPosition [ 
+	^self new initializeContaining: aCollection initializeStartingAt: aPosition
 ]
 
 { #category : #accessing }
@@ -51,20 +57,51 @@ CircularCollection >> elements [
 ]
 
 { #category : #initialization }
-CircularCollection >> initializeContaining: aCollection [
+CircularCollection >> initializeContaining: aCollection initializeStartingAt: aPosition [
 	elements := aCollection.
-	currentPosition := 0
+	currentPosition := aPosition.
+	turns := 0
 ]
 
 { #category : #accessing }
 CircularCollection >> next [
-	self updateCurrentPosition.
+	^self nextBy: 1
+]
+
+{ #category : #accessing }
+CircularCollection >> nextBy: aQuantity [
+	(aQuantity abs) timesRepeat:[ self updateCurrentPositionForward ].
 	^ elements at: currentPosition
 ]
 
+{ #category : #accessing }
+CircularCollection >> previous [
+	^ self previousBy: 1
+]
+
+{ #category : #accessing }
+CircularCollection >> previousBy: aQuantity [
+	(aQuantity abs) timesRepeat:[ self updateCurrentPositionBackwards].
+	^ elements at: currentPosition
+]
+
+{ #category : #accessing }
+CircularCollection >> turns [
+	^ turns
+]
+
 { #category : #updating }
-CircularCollection >> updateCurrentPosition [
+CircularCollection >> updateCurrentPositionBackwards [
+	currentPosition - 1 < 1
+		ifTrue: [ currentPosition := elements size .
+					 turns := turns - 1 ]
+		ifFalse: [ currentPosition := currentPosition - 1 ]
+]
+
+{ #category : #updating }
+CircularCollection >> updateCurrentPositionForward [
 	currentPosition + 1 > elements size
-		ifTrue: [ currentPosition := 1 ]
+		ifTrue: [ currentPosition := 1 .
+					 turns := turns + 1 ]
 		ifFalse: [ currentPosition := currentPosition + 1 ]
 ]
