@@ -32,32 +32,32 @@ Class {
 }
 
 { #category : #asserting }
-MoonWalkSpace class >> assertValidBackwardsValue: aQuantity withMax: aValue [ 
-	(aQuantity < 1 & aQuantity < aValue)
-		ifTrue:[ AssertionFailure signal: 'Bad MoonWalk backwards value' ]
+MoonWalkSpace class >> assertValidBackwardsValue: aQuantity [
+	((aQuantity < 1)| (aQuantity > 10))
+		ifTrue: [ AssertionFailure signal: 'Bad MoonWalk backwards value' ]
 ]
 
 { #category : #'instance creation' }
-MoonWalkSpace class >> backwardsRandomWith: aMaxValue [
+MoonWalkSpace class >> backwardsRandom [
 	| aQuantity |
-	aQuantity := self generateValidBackwardsValue:aMaxValue .
+	aQuantity := self generateValidBackwardsValue.
 	^ self new initializeWithBackwardsValue: aQuantity
 ]
 
 { #category : #'instance creation' }
-MoonWalkSpace class >> backwardsValue: aQuantity spaces: aValue [
-	self assertValidBackwardsValue: aQuantity withMax:aValue.
+MoonWalkSpace class >> backwardsValue: aQuantity [ 
+	self assertValidBackwardsValue: aQuantity.
 	^ self new initializeWithBackwardsValue: aQuantity
 ]
 
 { #category : #generators }
-MoonWalkSpace class >> generateValidBackwardsValue: aMaxValue [
-	^ (1 to: aMaxValue) atRandom
+MoonWalkSpace class >> generateValidBackwardsValue [
+	^ (1 to: 10) atRandom
 ]
 
 { #category : #action }
 MoonWalkSpace >> affect: aPlayer on: board [ 
-   board	moveAllExcept: aPlayer by: backwardsValue.
+   board	moveAllExcept: aPlayer by: backwardsValue negated.
 ]
 
 { #category : #initialization }
