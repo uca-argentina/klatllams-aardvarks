@@ -64,16 +64,26 @@ Game class >> assertMinimumSpacesQuantity: aSpacesQuantity [
 ]
 
 { #category : #'instance creation' }
+Game class >> playedBy: aPlayersCollection throwing: aDicesCollection boardComposedBy: aSpacesCollection totalLaps: aLapsQuantity [
+	| board |
+	self assertMinimumDiceQuantity: aDicesCollection.
+	self assertMinimumPlayersQuantity: aPlayersCollection.
+	self assertMinimumLapsQuantity: aLapsQuantity. 
+	board := Board playedBy:aPlayersCollection composedBy: aSpacesCollection.
+	
+	^ self new initializePlayedBy: aPlayersCollection initializeThrowing: aDicesCollection initializePlayedOn: board initializeWithTotalLaps: aLapsQuantity
+]
+
+{ #category : #'instance creation' }
 Game class >> playedBy: aPlayersCollection throwing: aDicesCollection spaces: aSpacesQuantity totalLaps: aLapsQuantity [
+	| board |
 	self assertMinimumDiceQuantity: aDicesCollection.
 	self assertMinimumPlayersQuantity: aPlayersCollection.
 	self assertMinimumSpacesQuantity: aSpacesQuantity.
 	self assertMinimumLapsQuantity: aLapsQuantity. 
-	^ self new
-		initializePlayedBy: aPlayersCollection
-		initializeThrowing: aDicesCollection
-		initializeWithSpaces: aSpacesQuantity
-		initializeWithTotalLaps: aLapsQuantity
+	board := Board playedBy:aPlayersCollection spaces: aSpacesQuantity.
+	
+	^ self new initializePlayedBy: aPlayersCollection initializeThrowing: aDicesCollection initializePlayedOn: board initializeWithTotalLaps: aLapsQuantity
 ]
 
 { #category : #asserting }
@@ -107,13 +117,13 @@ Game >> hasTheTurn: aPlayer [
 ]
 
 { #category : #initialization }
-Game >> initializePlayedBy: aPlayersCollection initializeThrowing: aDicesCollection initializeWithSpaces: aQuantity initializeWithTotalLaps: aLapsQuantity [
+Game >> initializePlayedBy: aPlayersCollection initializeThrowing: aDicesCollection initializePlayedOn: aBoard initializeWithTotalLaps: aQuantity [
 	players := CircularCollection contains: aPlayersCollection.
 	dices := aDicesCollection.
-	board := Board playedBy:aPlayersCollection spaces: aQuantity.
+	board :=  aBoard.
 	hasFinished := false.
 	currentPlayer := players nextBy:1.
-	laps := aLapsQuantity
+	laps := aQuantity
 ]
 
 { #category : #actions }
