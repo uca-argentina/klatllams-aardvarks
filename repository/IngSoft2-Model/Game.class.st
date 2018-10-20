@@ -81,7 +81,7 @@ Game class >> playedBy: aPlayersCollection throwing: aDicesCollection spaces: aS
 	self assertMinimumPlayersQuantity: aPlayersCollection.
 	self assertMinimumSpacesQuantity: aSpacesQuantity.
 	self assertMinimumLapsQuantity: aLapsQuantity. 
-	board := Board playedBy:aPlayersCollection spaces: aSpacesQuantity.
+	board := Board playedBy:aPlayersCollection withSpacesQuantity: aSpacesQuantity.
 	
 	^ self new initializePlayedBy: aPlayersCollection initializeThrowing: aDicesCollection initializePlayedOn: board initializeWithTotalLaps: aLapsQuantity
 ]

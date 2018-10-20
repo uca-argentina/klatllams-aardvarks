@@ -35,9 +35,9 @@ Class {
 }
 
 { #category : #generators }
-Board class >> generateRandomSpaceDistributionWithSpaces:aQuantity [
+Board class >> generateRandomSpaceDistributionWithSpacesQuantity:aQuantity [
 	| generator |
-	generator := SpacesGenerator spaces: aQuantity.
+	generator := SpacesGenerator spacesQuantity: aQuantity.
 	^ generator generateSpaceDistribution
 ]
 
@@ -47,9 +47,9 @@ Board class >> playedBy: aPlayersCollection composedBy: aSpacesCollection [
 ]
 
 { #category : #'instance creation' }
-Board class >> playedBy: aPlayersCollection spaces: aQuantity [
+Board class >> playedBy: aPlayersCollection withSpacesQuantity: aQuantity [
 	| spacesCollection |
-	spacesCollection := self generateRandomSpaceDistributionWithSpaces: aQuantity.
+	spacesCollection := self generateRandomSpaceDistributionWithSpacesQuantity: aQuantity.
 	^ self new initializePlayedBy: aPlayersCollection initializeComposedBy: spacesCollection
 ]
 

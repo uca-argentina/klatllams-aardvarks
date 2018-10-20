@@ -26,23 +26,86 @@ Class {
 	#name : #SpacesGenerator,
 	#superclass : #Object,
 	#instVars : [
+		'spacesQuantity',
 		'spaces'
 	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'instance creation' }
-SpacesGenerator class >> spaces: aQuantity [
+SpacesGenerator class >> spacesQuantity: aQuantity [
 	^ self new initializeWithSpaces: aQuantity
 ]
 
 { #category : #generators }
+SpacesGenerator >> generateAtomicBombSpaces [
+	| spaces quantity |
+	spaces := OrderedCollection new.
+	quantity := spacesQuantity * 0.02 floor.
+	(1 to: quantity) do: [ :i | spaces add: AtomicBombSpace new ].
+	^ spaces
+]
+
+{ #category : #generators }
+SpacesGenerator >> generateMoonWalkSpaces [
+	| spaces quantity |
+	spaces := OrderedCollection new.
+	quantity := spacesQuantity * 0.1 floor.
+	(1 to: quantity) do: [ :i | spaces add: (MoonWalkSpace backwardsRandom ) ].
+	^ spaces
+]
+
+{ #category : #generators }
+SpacesGenerator >> generateNoEffectSpacesWith: spacesRemaining [
+	| spaces |
+	spaces := OrderedCollection new.
+	(1 to: spacesRemaining) do: [ :i | spaces add: NoEffectSpace new ].
+	^ spaces
+]
+
+{ #category : #generators }
+SpacesGenerator >> generateRandomDistributionWith: allSpaces. [
+	
+]
+
+{ #category : #generators }
 SpacesGenerator >> generateSpaceDistribution [
+	| noEffectSpaces moonWalkSpaces atomicBombSpaces speedUpSpaces wormHoleSpaces spacesRemaining allSpaces |
+	wormHoleSpaces := self generateWormHoleSpaces.
+	atomicBombSpaces := self generateAtomicBombSpaces.
+	moonWalkSpaces := self generateMoonWalkSpaces.
+	speedUpSpaces := self generateSpeedUpSpaces.
+	spacesRemaining := spacesQuantity - wormHoleSpaces size - atomicBombSpaces size
+		- moonWalkSpaces size - speedUpSpaces size.
+	noEffectSpaces := self generateNoEffectSpacesWith: spacesRemaining.
+	allSpaces := {wormHoleSpaces.
+	atomicBombSpaces.
+	moonWalkSpaces.
+	speedUpSpaces.
+	noEffectSpaces}.
 	
+	spaces := self generateRandomDistributionWith: allSpaces.
 	
+]
+
+{ #category : #generators }
+SpacesGenerator >> generateSpeedUpSpaces [
+	| spaces quantity |
+	spaces := OrderedCollection new.
+	quantity := spacesQuantity * 0.2 floor.
+	(1 to: quantity) do: [ :i | spaces add: SpeedUpSpace new ].
+	^ spaces
+]
+
+{ #category : #generators }
+SpacesGenerator >> generateWormHoleSpaces [
+	| spaces quantity |
+	spaces := OrderedCollection new.
+	quantity := spacesQuantity * 0.2 floor.
+	(1 to: quantity) do: [ :i | spaces add: WormHoleSpace new ]
 ]
 
 { #category : #initialization }
 SpacesGenerator >> initializeWithSpaces: aQuantity [
-	spaces := aQuantity
+	spacesQuantity := aQuantity
 ]
