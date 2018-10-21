@@ -64,8 +64,15 @@ SpacesGenerator >> generateNoEffectSpacesWith: spacesRemaining [
 ]
 
 { #category : #generators }
-SpacesGenerator >> generateRandomDistributionWith: allSpaces. [
-	
+SpacesGenerator >> generateRandomDistributionWith: allSpaces [
+	| randomNumber |
+	spaces := OrderedCollection new.
+	[ spaces size < spacesQuantity ]
+		whileTrue: [ randomNumber := (1 to: allSpaces size) atRandom.
+			(allSpaces at: randomNumber) notEmpty
+				ifTrue: [ spaces add: (allSpaces at: randomNumber) first.
+					allSpaces remove: (allSpaces at: randomNumber) first ] ].
+	^ spaces
 ]
 
 { #category : #generators }
@@ -84,7 +91,7 @@ SpacesGenerator >> generateSpaceDistribution [
 	speedUpSpaces.
 	noEffectSpaces}.
 	
-	spaces := self generateRandomDistributionWith: allSpaces.
+	spaces := self generateRandomDistributionWith: allSpaces asOrderedCollection.
 	
 ]
 
