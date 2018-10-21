@@ -57,12 +57,6 @@ Game class >> assertMinimumPlayersQuantity:aPlayersCollection [
 		ifTrue: [ AssertionFailure signal: 'Players quantity must be 2 or more' ].
 ]
 
-{ #category : #asserting }
-Game class >> assertMinimumSpacesQuantity: aSpacesQuantity [
-	(aSpacesQuantity rem: 100) = 0
-		ifFalse: [ AssertionFailure signal: 'Spaces Quantity must be a multiple of 100 ' ]
-]
-
 { #category : #'instance creation' }
 Game class >> playedBy: aPlayersCollection throwing: aDicesCollection boardComposedBy: aSpacesCollection totalLaps: aLapsQuantity [
 	| board |
@@ -79,9 +73,8 @@ Game class >> playedBy: aPlayersCollection throwing: aDicesCollection spaces: aS
 	| board |
 	self assertMinimumDiceQuantity: aDicesCollection.
 	self assertMinimumPlayersQuantity: aPlayersCollection.
-	self assertMinimumSpacesQuantity: aSpacesQuantity.
 	self assertMinimumLapsQuantity: aLapsQuantity. 
-	board := Board playedBy:aPlayersCollection withSpacesQuantity: aSpacesQuantity.
+	board := Board playedBy:aPlayersCollection spaces: aSpacesQuantity.
 	
 	^ self new initializePlayedBy: aPlayersCollection initializeThrowing: aDicesCollection initializePlayedOn: board initializeWithTotalLaps: aLapsQuantity
 ]

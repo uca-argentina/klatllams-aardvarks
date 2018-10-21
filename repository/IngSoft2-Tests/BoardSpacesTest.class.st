@@ -5,6 +5,20 @@ Class {
 }
 
 { #category : #tests }
+BoardSpacesTest >> testAMoonWalkSpaceCanHaveABackwardsValueRandom [
+	| space |
+	self assert: ((1 to: 10) includes: MoonWalkSpace generateValidBackwardsValue).
+	space := MoonWalkSpace backwardsRandom.
+]
+
+{ #category : #tests }
+BoardSpacesTest >> testAMoonWalkSpaceCannotHaveABackwardsValueLessThan1OrMoreThan10 [
+	self
+		should: [ MoonWalkSpace backwardsValue: 0 ] raise: AssertionFailure;
+		should: [ MoonWalkSpace backwardsValue: 11 ] raise: AssertionFailure
+]
+
+{ #category : #tests }
 BoardSpacesTest >> testAMoonWalkSpaceWithBackwardsValue4MovesPlayerBackwardsBy4 [
 	| board spaces |
 	spaces := {NoEffectSpace new.

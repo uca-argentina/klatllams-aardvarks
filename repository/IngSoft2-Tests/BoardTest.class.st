@@ -11,6 +11,31 @@ BoardTest class >> createNoEffectSpacesCollection [
 ]
 
 { #category : #tests }
+BoardTest >> testABoardCannotBeComposedByLessThanSixSpaces [
+	| board spaces |
+	spaces := { NoEffectSpace new.
+	NoEffectSpace new.
+	NoEffectSpace new.
+	NoEffectSpace new.
+	NoEffectSpace new }.
+	self
+		should: [ board := Board playedBy: #('hector' 'ignacio') composedBy: spaces ]
+		raise: AssertionFailure
+		withExceptionDo:[ :signal | self assert: signal messageText equals: 'Add more spaces!' ]
+	
+]
+
+{ #category : #tests }
+BoardTest >> testABoardCannotBeCreatedWithAnInvalidQuantityOfSpaces [
+	| board |
+	self
+		should: [ board := Board playedBy: #('hector' 'ignacio') spaces: 101 ]
+		raise: AssertionFailure
+		withExceptionDo:[ :signal | self assert: signal messageText equals: 'Spaces Quantity must be a multiple of 100' ]
+	
+]
+
+{ #category : #tests }
 BoardTest >> testAPlayerCanMoveOnTheBoardAndIsTheTopPlayer [
 	| board spaces |
 	spaces := BoardTest createNoEffectSpacesCollection.	

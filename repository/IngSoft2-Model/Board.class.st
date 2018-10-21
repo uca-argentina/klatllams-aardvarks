@@ -34,6 +34,18 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #'instance creation' }
+Board class >> assertMinimumQuantityOf: aSpacesCollection [
+	aSpacesCollection size < 6
+		ifTrue:[AssertionFailure signal:'Add more spaces!']
+]
+
+{ #category : #'instance creation' }
+Board class >> assertValidSpacesQuantity: aQuantity [
+	(aQuantity rem: 100) = 0
+		ifFalse: [ AssertionFailure signal: 'Spaces Quantity must be a multiple of 100' ]
+]
+
 { #category : #generators }
 Board class >> generateRandomSpaceDistributionWithSpacesQuantity:aQuantity [
 	| generator |
@@ -43,12 +55,14 @@ Board class >> generateRandomSpaceDistributionWithSpacesQuantity:aQuantity [
 
 { #category : #'instance creation' }
 Board class >> playedBy: aPlayersCollection composedBy: aSpacesCollection [
+	self assertMinimumQuantityOf: aSpacesCollection .
 	^ self new initializePlayedBy: aPlayersCollection initializeComposedBy: aSpacesCollection
 ]
 
 { #category : #'instance creation' }
-Board class >> playedBy: aPlayersCollection withSpacesQuantity: aQuantity [
+Board class >> playedBy: aPlayersCollection spaces: aQuantity [
 	| spacesCollection |
+	self assertValidSpacesQuantity: aQuantity.
 	spacesCollection := self generateRandomSpaceDistributionWithSpacesQuantity: aQuantity.
 	^ self new initializePlayedBy: aPlayersCollection initializeComposedBy: spacesCollection
 ]
