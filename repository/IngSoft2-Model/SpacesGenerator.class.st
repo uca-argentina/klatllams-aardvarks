@@ -26,8 +26,7 @@ Class {
 	#name : #SpacesGenerator,
 	#superclass : #Object,
 	#instVars : [
-		'spacesQuantity',
-		'spaces'
+		'spacesQuantity'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -39,77 +38,73 @@ SpacesGenerator class >> spacesQuantity: aQuantity [
 
 { #category : #generators }
 SpacesGenerator >> generateAtomicBombSpaces [
-	| spaces quantity |
-	spaces := OrderedCollection new.
-	quantity := spacesQuantity * 0.02 floor.
-	(1 to: quantity) do: [ :i | spaces add: AtomicBombSpace new ].
-	^ spaces
+	| atomicBombSpaces quantity |
+	atomicBombSpaces := OrderedCollection new.
+	quantity := (spacesQuantity * 0.02) asFloat floor.
+	quantity timesRepeat: [ atomicBombSpaces add: AtomicBombSpace new ].
+	^ atomicBombSpaces
 ]
 
 { #category : #generators }
 SpacesGenerator >> generateMoonWalkSpaces [
-	| spaces quantity |
-	spaces := OrderedCollection new.
-	quantity := spacesQuantity * 0.1 floor.
-	(1 to: quantity) do: [ :i | spaces add: (MoonWalkSpace backwardsRandom ) ].
-	^ spaces
+	| moonWalkSpaces quantity |
+	moonWalkSpaces := OrderedCollection new.
+	quantity := (spacesQuantity * 0.1) asFloat floor.
+	quantity timesRepeat: [ moonWalkSpaces add: (MoonWalkSpace backwardsRandom ) ].
+	^ moonWalkSpaces
 ]
 
 { #category : #generators }
 SpacesGenerator >> generateNoEffectSpacesWith: spacesRemaining [
-	| spaces |
-	spaces := OrderedCollection new.
-	(1 to: spacesRemaining) do: [ :i | spaces add: NoEffectSpace new ].
-	^ spaces
+	| noEffectSpaces |
+	noEffectSpaces := OrderedCollection new.
+	spacesRemaining timesRepeat: [ noEffectSpaces add: NoEffectSpace new ].
+	^ noEffectSpaces
 ]
 
 { #category : #generators }
 SpacesGenerator >> generateRandomDistributionWith: allSpaces [
-	| randomNumber |
-	spaces := OrderedCollection new.
-	[ spaces size < spacesQuantity ]
+	| randomNumber mixedSpaces |
+	mixedSpaces := OrderedCollection new.
+	[ mixedSpaces size < spacesQuantity ]
 		whileTrue: [ randomNumber := (1 to: allSpaces size) atRandom.
 			(allSpaces at: randomNumber) notEmpty
-				ifTrue: [ spaces add: (allSpaces at: randomNumber) first.
-					allSpaces remove: (allSpaces at: randomNumber) first ] ].
-	^ spaces
+				ifTrue: [ mixedSpaces add: (allSpaces at: randomNumber) first.
+					(allSpaces at: randomNumber) removeFirst ] ].
+	^ mixedSpaces
 ]
 
 { #category : #generators }
 SpacesGenerator >> generateSpaceDistribution [
-	| noEffectSpaces moonWalkSpaces atomicBombSpaces speedUpSpaces wormHoleSpaces spacesRemaining allSpaces |
+	| spacesMixed noEffectSpaces moonWalkSpaces atomicBombSpaces speedUpSpaces wormHoleSpaces spacesRemaining allSpaces |
 	wormHoleSpaces := self generateWormHoleSpaces.
 	atomicBombSpaces := self generateAtomicBombSpaces.
 	moonWalkSpaces := self generateMoonWalkSpaces.
 	speedUpSpaces := self generateSpeedUpSpaces.
-	spacesRemaining := spacesQuantity - wormHoleSpaces size - atomicBombSpaces size
-		- moonWalkSpaces size - speedUpSpaces size.
+	spacesRemaining := spacesQuantity - wormHoleSpaces size - atomicBombSpaces size - 
+	moonWalkSpaces size - speedUpSpaces size.
 	noEffectSpaces := self generateNoEffectSpacesWith: spacesRemaining.
-	allSpaces := {wormHoleSpaces.
-	atomicBombSpaces.
-	moonWalkSpaces.
-	speedUpSpaces.
-	noEffectSpaces}.
-	
-	spaces := self generateRandomDistributionWith: allSpaces asOrderedCollection.
-	
+	allSpaces := {wormHoleSpaces.atomicBombSpaces.moonWalkSpaces.speedUpSpaces.noEffectSpaces}.
+	spacesMixed := self generateRandomDistributionWith: allSpaces asOrderedCollection.
+	^ spacesMixed
 ]
 
 { #category : #generators }
 SpacesGenerator >> generateSpeedUpSpaces [
-	| spaces quantity |
-	spaces := OrderedCollection new.
-	quantity := spacesQuantity * 0.2 floor.
-	(1 to: quantity) do: [ :i | spaces add: SpeedUpSpace new ].
-	^ spaces
+	| speedUpSpaces quantity |
+	speedUpSpaces := OrderedCollection new.
+	quantity := (spacesQuantity * 0.2) asFloat floor.
+	quantity timesRepeat: [ speedUpSpaces add: SpeedUpSpace new ].
+	^ speedUpSpaces
 ]
 
 { #category : #generators }
 SpacesGenerator >> generateWormHoleSpaces [
-	| spaces quantity |
-	spaces := OrderedCollection new.
-	quantity := spacesQuantity * 0.2 floor.
-	(1 to: quantity) do: [ :i | spaces add: WormHoleSpace new ]
+	| wormHoleSpaces quantity |
+	wormHoleSpaces := OrderedCollection new.
+	quantity := (spacesQuantity * 0.2) asFloat floor.
+	quantity timesRepeat: [ wormHoleSpaces add: WormHoleSpace new ].
+	^ wormHoleSpaces
 ]
 
 { #category : #initialization }
