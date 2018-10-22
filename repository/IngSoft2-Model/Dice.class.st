@@ -27,11 +27,7 @@ Class {
 	#name : #Dice,
 	#superclass : #Object,
 	#instVars : [
-		'facesQuantity',
 		'type'
-	],
-	#classInstVars : [
-		'facesQuantity'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -52,12 +48,11 @@ Dice class >> faces: aQuantity [
 { #category : #'instance creation' }
 Dice class >> faces: aQuantity ofType: aType [ 
 	self assertValidFaces: aQuantity.
-	^ self new initializeWithFaces: aQuantity initializeWithType: aType
+	^ self new initializeWithType: aType
 ]
 
 { #category : #initialization }
-Dice >> initializeWithFaces: aQuantity initializeWithType: aType [
-	facesQuantity := aQuantity.
+Dice >> initializeWithType: aType [
 	type := aType
 ]
 

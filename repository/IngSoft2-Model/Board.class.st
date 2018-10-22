@@ -91,16 +91,14 @@ Board >> move: aPlayer by: aQuantity [
 	| playerPositionLapToAdd |
 	playerPositionLapToAdd := self determinePositionAndLapsToAddOf: aPlayer withARollOf: aQuantity.
 	playerPositions
-		updatePositionAndLapsOf: aPlayer
+		updatePositionAndLapsOf: playerPositionLapToAdd player
 		to: playerPositionLapToAdd position
 		adding: playerPositionLapToAdd lap
 ]
 
 { #category : #action }
 Board >> moveAllExcept: aPlayer by: aValue [
-	| otherPlayers |
-	otherPlayers := playerPositions players select: [ :each | (each ~= aPlayer) ].
-	otherPlayers do: [ :each | self move: each by: aValue ]
+	playerPositions players do:[ :each | self move: each by: aValue ] without:aPlayer
 ]
 
 { #category : #action }

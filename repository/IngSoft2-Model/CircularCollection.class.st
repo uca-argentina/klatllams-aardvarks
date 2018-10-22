@@ -67,7 +67,7 @@ CircularCollection >> initializeContaining: aCollection initializeStartingAt: aP
 CircularCollection >> nextBy: aQuantity [
 	aQuantity < 0
 		ifTrue: [ aQuantity abs timesRepeat: [ self updateCurrentPositionBackwards ] ]
-		ifFalse: [ aQuantity abs timesRepeat: [ self updateCurrentPositionForward ] ].
+		ifFalse: [ aQuantity timesRepeat: [ self updateCurrentPositionForward ] ].
 	^ elements at: currentPosition
 ]
 

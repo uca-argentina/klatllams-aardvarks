@@ -6,9 +6,7 @@ Class {
 
 { #category : #tests }
 BoardSpacesTest >> testAMoonWalkSpaceCanHaveABackwardsValueRandom [
-	| space |
 	self assert: ((1 to: 10) includes: MoonWalkSpace generateValidBackwardsValue).
-	space := MoonWalkSpace backwardsRandom.
 ]
 
 { #category : #tests }

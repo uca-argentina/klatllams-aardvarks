@@ -34,7 +34,6 @@ GameUserStoryTest >> testTwoPlayersPlayAndTheFirstOneWins [
 		boardComposedBy: spaces
 		totalLaps: 2.
 	"The game starts"
-	Transcript show: (spaces at: 7).
 	self assert: (game playerPositions positionOf: playerOne) equals: 1.
 	self assert: (game playerPositions positionOf: playerOne) equals: 1.
 	self assert: (game hasTheTurn: playerOne).
@@ -61,6 +60,8 @@ GameUserStoryTest >> testTwoPlayersPlayAndTheFirstOneWins [
 	self assert: (game playerPositions positionOf: playerTwo) equals: 8.
 	game move: playerOne.
 	self assert: (game playerPositions positionOf: playerOne) equals: 1.
-	self assert: game hasFinished .
 	
+	self assert: game hasFinished ;
+		  assert: (game playerPositions gamePositionOf: playerOne) equals:1;
+		  assert: (game playerPositions gamePositionOf: playerTwo) equals:2.
 ]

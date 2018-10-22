@@ -6,8 +6,10 @@ Class {
 
 { #category : #creator }
 BoardTest class >> createNoEffectSpacesCollection [
-	"Size:8"
-	^{ (NoEffectSpace new) .  (NoEffectSpace new) . (NoEffectSpace new) . (NoEffectSpace new) . (NoEffectSpace new) . (NoEffectSpace new) . 		(NoEffectSpace new) . (NoEffectSpace new)}.
+	| spaces |
+	spaces:=OrderedCollection new.
+	spaces add: (NoEffectSpace new) withOccurrences: 8.
+	^spaces
 ]
 
 { #category : #tests }

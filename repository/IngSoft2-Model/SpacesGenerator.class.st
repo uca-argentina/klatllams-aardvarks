@@ -38,19 +38,17 @@ SpacesGenerator class >> spacesQuantity: aQuantity [
 
 { #category : #generators }
 SpacesGenerator >> generateAtomicBombSpaces [
-	| atomicBombSpaces quantity |
+	| atomicBombSpaces |
 	atomicBombSpaces := OrderedCollection new.
-	quantity := (spacesQuantity * 0.02) asFloat floor.
-	quantity timesRepeat: [ atomicBombSpaces add: AtomicBombSpace new ].
+	atomicBombSpaces add: AtomicBombSpace new withOccurrences: (spacesQuantity * 0.02) asFloat floor.
 	^ atomicBombSpaces
 ]
 
 { #category : #generators }
 SpacesGenerator >> generateMoonWalkSpaces [
-	| moonWalkSpaces quantity |
-	moonWalkSpaces := OrderedCollection new.
-	quantity := (spacesQuantity * 0.1) asFloat floor.
-	quantity timesRepeat: [ moonWalkSpaces add: (MoonWalkSpace backwardsRandom ) ].
+ | moonWalkSpaces |
+ moonWalkSpaces := OrderedCollection new.
+ moonWalkSpaces add:MoonWalkSpace backwardsRandom withOccurrences:(spacesQuantity * 0.1) asFloat floor.
 	^ moonWalkSpaces
 ]
 
@@ -58,7 +56,7 @@ SpacesGenerator >> generateMoonWalkSpaces [
 SpacesGenerator >> generateNoEffectSpacesWith: spacesRemaining [
 	| noEffectSpaces |
 	noEffectSpaces := OrderedCollection new.
-	spacesRemaining timesRepeat: [ noEffectSpaces add: NoEffectSpace new ].
+	noEffectSpaces add: NoEffectSpace new withOccurrences: spacesRemaining.
 	^ noEffectSpaces
 ]
 
@@ -76,34 +74,36 @@ SpacesGenerator >> generateRandomDistributionWith: allSpaces [
 
 { #category : #generators }
 SpacesGenerator >> generateSpaceDistribution [
-	| spacesMixed noEffectSpaces moonWalkSpaces atomicBombSpaces speedUpSpaces wormHoleSpaces spacesRemaining allSpaces |
+   | noEffectSpaces moonWalkSpaces atomicBombSpaces speedUpSpaces wormHoleSpaces spacesRemaining       	allSpaces |
+	
 	wormHoleSpaces := self generateWormHoleSpaces.
 	atomicBombSpaces := self generateAtomicBombSpaces.
 	moonWalkSpaces := self generateMoonWalkSpaces.
 	speedUpSpaces := self generateSpeedUpSpaces.
+	
 	spacesRemaining := spacesQuantity - wormHoleSpaces size - atomicBombSpaces size - 
 	moonWalkSpaces size - speedUpSpaces size.
+	
 	noEffectSpaces := self generateNoEffectSpacesWith: spacesRemaining.
+	
 	allSpaces := {wormHoleSpaces.atomicBombSpaces.moonWalkSpaces.speedUpSpaces.noEffectSpaces}.
-	spacesMixed := self generateRandomDistributionWith: allSpaces asOrderedCollection.
-	^ spacesMixed
+	
+	^ self generateRandomDistributionWith: allSpaces asOrderedCollection
 ]
 
 { #category : #generators }
 SpacesGenerator >> generateSpeedUpSpaces [
-	| speedUpSpaces quantity |
+	| speedUpSpaces |
 	speedUpSpaces := OrderedCollection new.
-	quantity := (spacesQuantity * 0.2) asFloat floor.
-	quantity timesRepeat: [ speedUpSpaces add: SpeedUpSpace new ].
+	speedUpSpaces add: SpeedUpSpace new withOccurrences: (spacesQuantity * 0.2) asFloat floor.
 	^ speedUpSpaces
 ]
 
 { #category : #generators }
 SpacesGenerator >> generateWormHoleSpaces [
-	| wormHoleSpaces quantity |
+	| wormHoleSpaces |
 	wormHoleSpaces := OrderedCollection new.
-	quantity := (spacesQuantity * 0.2) asFloat floor.
-	quantity timesRepeat: [ wormHoleSpaces add: WormHoleSpace new ].
+	wormHoleSpaces add: WormHoleSpace new withOccurrences: (spacesQuantity * 0.2) asFloat floor.
 	^ wormHoleSpaces
 ]
 
