@@ -5,6 +5,16 @@ Class {
 }
 
 { #category : #tests }
+GameTest >> testAGameCanHaveABoardWithRandomDistributesSpaces [
+| game playerOne playerTwo diceOne diceTwo |
+	playerOne := Player named: 'Hector'.
+	playerTwo := Player named: 'Ignacio'.
+	diceOne := Dice faces: 10.
+	diceTwo := Dice faces: 12.
+	game := Game playedBy: {playerOne.playerTwo} throwing:{diceOne.diceTwo} spaces: 100 totalLaps:2.
+]
+
+{ #category : #tests }
 GameTest >> testAPlayerCannotPlayTwoTimesInARow [
 	| game playerOne playerTwo diceOne diceTwo spacesCollection |
 	playerOne := Player named: 'Hector'.
