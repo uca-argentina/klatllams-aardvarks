@@ -32,9 +32,9 @@ Class {
 		'players',
 		'dices',
 		'hasFinished',
-		'spaces',
 		'currentPlayer',
-		'playerPositions'
+		'board',
+		'laps'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -46,26 +46,37 @@ Game class >> assertMinimumDiceQuantity:aDicesCollection [
 ]
 
 { #category : #asserting }
+Game class >> assertMinimumLapsQuantity: aLapsQuantity. [ 
+	aLapsQuantity < 1
+		ifTrue: [ AssertionFailure signal: 'Laps must be 1 or more' ].
+]
+
+{ #category : #asserting }
 Game class >> assertMinimumPlayersQuantity:aPlayersCollection [
 	aPlayersCollection size < 2
 		ifTrue: [ AssertionFailure signal: 'Players quantity must be 2 or more' ].
 ]
 
-{ #category : #asserting }
-Game class >> assertMinimumSpacesQuantity: aQuantity [
-	aQuantity < 50
-		ifTrue: [ AssertionFailure signal: 'Must have more than 49 spaces' ]
+{ #category : #'instance creation' }
+Game class >> playedBy: aPlayersCollection throwing: aDicesCollection boardComposedBy: aSpacesCollection totalLaps: aLapsQuantity [
+	| board |
+	self assertMinimumDiceQuantity: aDicesCollection.
+	self assertMinimumPlayersQuantity: aPlayersCollection.
+	self assertMinimumLapsQuantity: aLapsQuantity. 
+	board := Board playedBy:aPlayersCollection composedBy: aSpacesCollection.
+	
+	^ self new initializePlayedBy: aPlayersCollection initializeThrowing: aDicesCollection initializePlayedOn: board initializeWithTotalLaps: aLapsQuantity
 ]
 
 { #category : #'instance creation' }
-Game class >> playedBy: aPlayersCollection throwing: aDicesCollection spaces: aQuantity [
+Game class >> playedBy: aPlayersCollection throwing: aDicesCollection spaces: aSpacesQuantity totalLaps: aLapsQuantity [
+	| board |
 	self assertMinimumDiceQuantity: aDicesCollection.
 	self assertMinimumPlayersQuantity: aPlayersCollection.
-	self assertMinimumSpacesQuantity: aQuantity.
-	^ self new
-		initializePlayedBy: aPlayersCollection
-		initializeThrowing: aDicesCollection
-		initializeWithSpaces: aQuantity
+	self assertMinimumLapsQuantity: aLapsQuantity. 
+	board := Board playedBy:aPlayersCollection spaces: aSpacesQuantity.
+	
+	^ self new initializePlayedBy: aPlayersCollection initializeThrowing: aDicesCollection initializePlayedOn: board initializeWithTotalLaps: aLapsQuantity
 ]
 
 { #category : #asserting }
@@ -88,8 +99,8 @@ Game >> finishGame [
 { #category : #accessing }
 Game >> hasFinished [
 	| theTopPlayer |
-	theTopPlayer:= playerPositions topPlayer.
-	hasFinished := (playerPositions positionOf: theTopPlayer)  >= spaces.
+	theTopPlayer:= board playerPositions topPlayer.
+	hasFinished := (board playerPositions lapsOf: theTopPlayer)  >= laps.
 	^ hasFinished
 ]
 
@@ -99,27 +110,27 @@ Game >> hasTheTurn: aPlayer [
 ]
 
 { #category : #initialization }
-Game >> initializePlayedBy: aPlayersCollection initializeThrowing: aDicesCollection initializeWithSpaces: aQuantity [
-	players := CircularCollection contains:aPlayersCollection.
+Game >> initializePlayedBy: aPlayersCollection initializeThrowing: aDicesCollection initializePlayedOn: aBoard initializeWithTotalLaps: aQuantity [
+	players := CircularCollection contains: aPlayersCollection.
 	dices := aDicesCollection.
-	spaces := aQuantity.
+	board :=  aBoard.
 	hasFinished := false.
-	playerPositions := PlayerPositions players: aPlayersCollection.
-	currentPlayer := players next.
+	currentPlayer := players nextBy:1.
+	laps := aQuantity
 ]
 
 { #category : #actions }
 Game >> move: aPlayer [
-	self assertPlayersTurn: aPlayer;
-	     assertGameHasNotFinished.
-	
-	playerPositions updatePositionOf: aPlayer by: (aPlayer roll: dices).
-	
-	currentPlayer := players next.
-	self hasFinished ifTrue: [ self finishGame ]
+	self
+		assertPlayersTurn: aPlayer;
+		assertGameHasNotFinished.
+	board moveAndAffect: aPlayer by: (aPlayer roll: dices).
+	currentPlayer := players nextBy:1.
+	self hasFinished
+		ifTrue: [ self finishGame ]
 ]
 
 { #category : #accessing }
 Game >> playerPositions [
-	^playerPositions 
+	^ board playerPositions.
 ]

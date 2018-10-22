@@ -1,3 +1,28 @@
+"
+Please comment me using the following template inspired by Class Responsibility Collaborator (CRC) design:
+
+For the Class part:  State a one line summary. For example, ""I represent a paragraph of text"".
+
+For the Responsibility part: Three sentences about my main responsibilities - what I do, what I know.
+
+For the Collaborators Part: State my main collaborators and one line about how I interact with them. 
+
+Public API and Key Messages
+
+- message one 
+- message two 
+- (for bonus points) how to create instances.
+
+   One simple example is simply gorgeous.
+ 
+Internal Representation and Key Implementation Points.
+
+    Instance Variables
+	playersAndPositions:		<Object>
+
+
+    Implementation Points
+"
 Class {
 	#name : #PlayerPositions,
 	#superclass : #Object,
@@ -12,16 +37,28 @@ PlayerPositions class >> players: playersCollection [
 	^ self new initializeWithPlayers: playersCollection
 ]
 
-{ #category : #asserting }
-PlayerPositions >> assertIsValid: aQuantity [
-	aQuantity < 1
-		ifTrue: [ AssertionFailure signal: 'You cannot move a player a negative quantity' ]
+{ #category : #accesing }
+PlayerPositions >> gamePositionOf: aPlayer [
+	| requestedPlayer |
+	self sortThePlayersInDescendingOrder.
+	requestedPlayer := playersAndPositions detect: [ :each | each player = aPlayer ].
+	^ playersAndPositions indexOf: requestedPlayer
 ]
 
 { #category : #initialization }
 PlayerPositions >> initializeWithPlayers: playersCollection [
-	playersAndPositions := (playersCollection collect: [ :each | PlayerPosition player:each ])
+	playersAndPositions := (playersCollection collect: [ :each | PlayerPositionLap player:each ])
 		asOrderedCollection.
+]
+
+{ #category : #accesing }
+PlayerPositions >> lapsOf: aPlayer [
+	^ (playersAndPositions detect: [ :each | each player = aPlayer ]) lap
+]
+
+{ #category : #accesing }
+PlayerPositions >> players [
+	^ playersAndPositions collect: [ :each | each player ]
 ]
 
 { #category : #accesing }
@@ -29,14 +66,27 @@ PlayerPositions >> positionOf: aPlayer [
 	^ (playersAndPositions detect: [ :each | each player = aPlayer ]) position
 ]
 
+{ #category : #sorting }
+PlayerPositions >> sortThePlayersInDescendingOrder [
+    playersAndPositions sort: [ :a :b | a lap > b lap | ((a position > b position) & (a lap = b lap)) ]
+]
+
 { #category : #accesing }
 PlayerPositions >> topPlayer [
-	playersAndPositions sort:[:a :b | a position > b position].
+	self sortThePlayersInDescendingOrder.
 	^ playersAndPositions first player
 ]
 
 { #category : #updating }
-PlayerPositions >> updatePositionOf: aPlayer by: aQuantity [
-	self assertIsValid: aQuantity.
-	(playersAndPositions detect: [ :each | each player = aPlayer]) updateThePositionBy:aQuantity
+PlayerPositions >> updateAllPlayersToInitialPosition [
+	playersAndPositions do: [ :each | self updatePositionAndLapsOf: each player to: 1 adding: 0 ].
+]
+
+{ #category : #updating }
+PlayerPositions >> updatePositionAndLapsOf: aPlayer to: aPosition adding: laps [
+	playersAndPositions
+		detect: [ :each | each player = aPlayer ]
+		ifFound: [ :player | 
+			player updateThePositionTo: aPosition.
+			player updateLapBy: laps ]
 ]

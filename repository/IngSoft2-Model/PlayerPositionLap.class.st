@@ -7,11 +7,10 @@ For the Responsibility part: Three sentences about my main responsibilities - wh
 
 For the Collaborators Part: State my main collaborators and one line about how I interact with them. 
 
-Public API and Key Messages
+Public API and Key Message
 
-- message one   
-- message two
-
+- message one  
+- message two 
 - (for bonus points) how to create instances.
 
    One simple example is simply gorgeous.
@@ -19,43 +18,58 @@ Public API and Key Messages
 Internal Representation and Key Implementation Points.
 
     Instance Variables
-	name:		<Object>
+	lap:		<Object>
+	player:		<Object>
+	position:		<Object>
 
 
     Implementation Points
 "
 Class {
-	#name : #Player,
+	#name : #PlayerPositionLap,
 	#superclass : #Object,
 	#instVars : [
-		'name'
+		'player',
+		'position',
+		'lap'
 	],
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #asserting }
-Player class >> assertLengthOf: aName [
-	aName size < 2
-		ifTrue: [ AssertionFailure signal: 'Name must have 2 characters or more' ]
-]
-
 { #category : #'instance creation' }
-Player class >> named: aName [
-	self assertLengthOf: aName.
-	^ self new initializeNamed: aName
+PlayerPositionLap class >> player: aPlayer [
+	^self new initializeWithPlayer: aPlayer
 ]
 
 { #category : #initialization }
-Player >> initializeNamed: aName [
-	name := aName
+PlayerPositionLap >> initializeWithPlayer: aPlayer [
+	player := aPlayer.
+	position := 1.
+	lap := 0
 ]
 
-{ #category : #accesing }
-Player >> name [
-	^ name
+{ #category : #accessing }
+PlayerPositionLap >> lap [
+	^ lap
 ]
 
-{ #category : #update }
-Player >> roll: aDiceCollection [
-	^ aDiceCollection sumNumbers:[ :each | each roll ]
+{ #category : #accessing }
+PlayerPositionLap >> player [
+	^ player
+]
+
+{ #category : #accessing }
+PlayerPositionLap >> position [
+	^ position
+]
+
+{ #category : #updating }
+PlayerPositionLap >> updateLapBy: aQuantity [
+	lap := lap + aQuantity.
+
+]
+
+{ #category : #updating }
+PlayerPositionLap >> updateThePositionTo: aValue [
+	position := aValue.
 ]

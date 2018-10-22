@@ -5,33 +5,49 @@ Class {
 }
 
 { #category : #tests }
-PlayerPositionsTests >> testIsNotPosibleToChangeAPlayerPositionIfQuantityIsLessThanOne [
-	| playersCollection playersPosition |
-	playersCollection := #('hector' 'ignacio').
-	playersPosition := PlayerPositions players: playersCollection.
-	self
-		should: [ playersPosition updatePositionOf: 'hector' by: 0 ]
-		raise: AssertionFailure
-		withExceptionDo: [ :signal | self assert: signal messageText equals: 'You cannot move a player a negative quantity' ]
-]
-
-{ #category : #tests }
 PlayerPositionsTests >> testIsPosibleToChangeAPlayerPositionAndUpdates [
 	| playersCollection playersPosition |
 	playersCollection := #('hector' 'ignacio').
 	playersPosition := PlayerPositions players: playersCollection.
-	playersPosition updatePositionOf: 'hector' by: 5.
+	playersPosition updatePositionAndLapsOf: 'hector' to: 5 adding: 0.
 	self deny: playersPosition topPlayer = 'ignacio'.
-	self assert: playersPosition topPlayer equals: 'hector'
+	self assert: playersPosition topPlayer equals: 'hector'.
+	playersPosition updatePositionAndLapsOf: 'ignacio' to: 10 adding: 0.
+	self assert: playersPosition topPlayer equals: 'ignacio'.
+	self deny: playersPosition topPlayer = 'hector'.
 ]
 
 { #category : #tests }
-PlayerPositionsTests >> testWhenCreatedAllPlayersMustHavePositionEqualsToZero [
+PlayerPositionsTests >> testIsPosibleToChangeAllPlayersBoardPositionToTheInitialPosition [
+	| playersCollection playersPosition |
+	playersCollection := #('hector' 'ignacio').
+	playersPosition := PlayerPositions players: playersCollection.
+	playersPosition updatePositionAndLapsOf: 'hector' to: 5 adding: 0.
+	playersPosition updatePositionAndLapsOf: 'ignacio' to: 5 adding: 0.
+	self assert:( playersPosition positionOf: 'hector') equals: 5.
+	self assert:( playersPosition positionOf: 'ignacio') equals: 5.	
+	playersPosition updateAllPlayersToInitialPosition.
+	self assert:( playersPosition positionOf: 'hector') equals: 1.
+	self assert:( playersPosition positionOf: 'ignacio') equals: 1.	
+]
+
+{ #category : #tests }
+PlayerPositionsTests >> testIsPosibleToKnowEachPlayerPosition [
+	| playersCollection playersPosition |
+	playersCollection := #('hector' 'ignacio').
+	playersPosition := PlayerPositions players: playersCollection.
+	playersPosition updatePositionAndLapsOf: 'hector' to: 5 adding: 0.
+	self assert: (playersPosition gamePositionOf: 'hector' ) equals: 1.
+	self assert: (playersPosition gamePositionOf: 'ignacio' ) equals: 2.
+]
+
+{ #category : #tests }
+PlayerPositionsTests >> testWhenCreatedAllPlayersMustHavePositionEqualsToOne [
 	| playersPosition playersCollection|
 	playersCollection  :=  #('hector' 'juan' 'ignacio').
 	playersPosition := PlayerPositions players: playersCollection .
-	self assert: (playersPosition positionOf: 'hector') equals: 0.
-	self assert: (playersPosition positionOf: 'juan') equals: 0.
-	self assert: (playersPosition positionOf: 'ignacio') equals: 0.
+	self assert: (playersPosition positionOf: 'hector') equals: 1.
+	self assert: (playersPosition positionOf: 'juan') equals: 1.
+	self assert: (playersPosition positionOf: 'ignacio') equals: 1.
 	
 ]

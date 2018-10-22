@@ -6,7 +6,6 @@ For the Class part:  State a one line summary. For example, ""I represent a para
 For the Responsibility part: Three sentences about my main responsibilities - what I do, what I know.
 
 For the Collaborators Part: State my main collaborators and one line about how I interact with them. 
-
 Public API and Key Messages
 
 - message one   
@@ -18,45 +17,50 @@ Public API and Key Messages
 Internal Representation and Key Implementation Points.
 
     Instance Variables
-	facesQuantity:		<Object>
+	backwardsValue:		<Object>
 
 
     Implementation Points
 "
 Class {
-	#name : #Dice,
+	#name : #MoonWalkSpace,
 	#superclass : #Object,
 	#instVars : [
-		'type'
+		'backwardsValue'
 	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #asserting }
-Dice class >> assertValidFaces:aQuantity [
-	aQuantity > 24
-		ifTrue: [ AssertionFailure signal: 'Faces must be less than 25' ].
-	aQuantity < 4
-		ifTrue: [ AssertionFailure signal: 'Faces must be more than 3' ].
+MoonWalkSpace class >> assertValidBackwardsValue: aQuantity [
+	((aQuantity < 1)| (aQuantity > 10))
+		ifTrue: [ AssertionFailure signal: 'Bad MoonWalk backwards value' ]
 ]
 
 { #category : #'instance creation' }
-Dice class >> faces: aQuantity [
-	^ self faces: aQuantity ofType: (RandomType rollingUntil: aQuantity)
+MoonWalkSpace class >> backwardsRandom [
+	| aQuantity |
+	aQuantity := self generateValidBackwardsValue.
+	^ self new initializeWithBackwardsValue: aQuantity
 ]
 
 { #category : #'instance creation' }
-Dice class >> faces: aQuantity ofType: aType [ 
-	self assertValidFaces: aQuantity.
-	^ self new initializeWithType: aType
+MoonWalkSpace class >> backwardsValue: aQuantity [ 
+	self assertValidBackwardsValue: aQuantity.
+	^ self new initializeWithBackwardsValue: aQuantity
 ]
 
-{ #category : #initialization }
-Dice >> initializeWithType: aType [
-	type := aType
+{ #category : #generators }
+MoonWalkSpace class >> generateValidBackwardsValue [
+	^ (1 to: 10) atRandom
 ]
 
 { #category : #action }
-Dice >> roll [
-	^ type roll
+MoonWalkSpace >> affect: aPlayer on: board [ 
+   board	moveAllExcept: aPlayer by: backwardsValue negated.
+]
+
+{ #category : #initialization }
+MoonWalkSpace >> initializeWithBackwardsValue: aQuantity [
+	backwardsValue := aQuantity
 ]
