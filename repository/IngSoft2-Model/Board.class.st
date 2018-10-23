@@ -69,15 +69,15 @@ Board class >> playedBy: aPlayersCollection spaces: aQuantity [
 
 { #category : #determine }
 Board >> determinePositionAndLapsToAddOf: aPlayer withARollOf: aQuantity [
-	| positionsCircularCollection playerPositionLap |
-	playerPositionLap := PlayerPositionLap player: aPlayer.
+	| positionsCircularCollection playerPositionLapToAdd |
+	playerPositionLapToAdd := PlayerPositionLap player: aPlayer.
 	positionsCircularCollection := CircularCollection
 		contains: (1 to: spaces size) asOrderedCollection
 		startingAt: (playerPositions positionOf: aPlayer).
 		
-	playerPositionLap updateThePositionTo: (positionsCircularCollection nextBy: aQuantity).
-	playerPositionLap updateLapBy: positionsCircularCollection turns.
-	^ playerPositionLap
+	playerPositionLapToAdd updateThePositionTo: (positionsCircularCollection nextBy: aQuantity).
+	playerPositionLapToAdd updateLapBy: positionsCircularCollection turns.
+	^ playerPositionLapToAdd
 ]
 
 { #category : #initialization }
