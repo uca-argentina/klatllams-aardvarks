@@ -39,10 +39,10 @@ PlayerPositions class >> players: playersCollection [
 
 { #category : #accesing }
 PlayerPositions >> gamePositionOf: aPlayer [
-	| requestedPlayer |
 	self sortThePlayersInDescendingOrder.
-	requestedPlayer := playersAndPositions detect: [ :each | each player = aPlayer ].
-	^ playersAndPositions indexOf: requestedPlayer
+	playersAndPositions
+		detect: [ :each | each player = aPlayer ]
+		ifFound: [ :requestedPlayer | ^ playersAndPositions indexOf: requestedPlayer ]
 ]
 
 { #category : #initialization }
@@ -53,7 +53,9 @@ PlayerPositions >> initializeWithPlayers: playersCollection [
 
 { #category : #accesing }
 PlayerPositions >> lapsOf: aPlayer [
-	^ (playersAndPositions detect: [ :each | each player = aPlayer ]) lap
+	^ playersAndPositions
+		detect: [ :each | each player = aPlayer ]
+		ifFound: [ :player | ^ player lap ]
 ]
 
 { #category : #accesing }
@@ -63,7 +65,9 @@ PlayerPositions >> players [
 
 { #category : #accesing }
 PlayerPositions >> positionOf: aPlayer [
-	^ (playersAndPositions detect: [ :each | each player = aPlayer ]) position
+	^ playersAndPositions
+		detect: [ :each | each player = aPlayer ]
+		ifFound: [ :player | ^ player position ]
 ]
 
 { #category : #sorting }
