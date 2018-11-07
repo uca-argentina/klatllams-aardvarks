@@ -21,11 +21,17 @@ Internal Representation and Key Implementation Points.
 "
 Class {
 	#name : #AtomicBombSpace,
-	#superclass : #Object,
+	#superclass : #Space,
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #action }
-AtomicBombSpace >> affect: aPlayer on: board [ 
-	board moveAllToInitialPosition.
+AtomicBombSpace >> affect: aPlayer on: board [
+	board playerPositions players
+		do: [ :each | 
+			board playerPositions
+				updatePositionAndLapsOf: each
+				to: 1
+				adding: 0 ].
+
 ]

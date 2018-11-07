@@ -24,7 +24,7 @@ Internal Representation and Key Implementation Points.
     Implementation Points
 "
 Class {
-	#name : #CircularCollection,
+	#name : #CircularIterator,
 	#superclass : #Object,
 	#instVars : [
 		'currentPosition',
@@ -35,57 +35,57 @@ Class {
 }
 
 { #category : #asserting }
-CircularCollection class >> assertNotEmpty: aCollection [
+CircularIterator class >> assertNotEmpty: aCollection [
 	aCollection isEmpty
 		ifTrue: [ AssertionFailure signal: 'The collection is empty' ]
 ]
 
 { #category : #'instance creation' }
-CircularCollection class >> contains: aCollection [
+CircularIterator class >> contains: aCollection [
 	self assertNotEmpty: aCollection.
 	^ self new initializeContaining: aCollection initializeStartingAt: 0
 ]
 
 { #category : #'instance creation' }
-CircularCollection class >> contains: aCollection startingAt: aPosition [ 
+CircularIterator class >> contains: aCollection startingAt: aPosition [ 
 	^self new initializeContaining: aCollection initializeStartingAt: aPosition
 ]
 
 { #category : #accessing }
-CircularCollection >> elements [
+CircularIterator >> elements [
 	^ elements
 ]
 
 { #category : #initialization }
-CircularCollection >> initializeContaining: aCollection initializeStartingAt: aPosition [
+CircularIterator >> initializeContaining: aCollection initializeStartingAt: aPosition [
 	elements := aCollection.
 	currentPosition := aPosition.
 	turns := 0
 ]
 
 { #category : #accessing }
-CircularCollection >> nextBy: aQuantity [
+CircularIterator >> nextBy: aQuantity [
 	aQuantity < 0
-		ifTrue: [ aQuantity abs timesRepeat: [ self updateCurrentPositionBackwards ] ]
+		ifTrue: [ aQuantity negated timesRepeat: [ self updateCurrentPositionBackwards ] ]
 		ifFalse: [ aQuantity timesRepeat: [ self updateCurrentPositionForward ] ].
 	^ elements at: currentPosition
 ]
 
 { #category : #accessing }
-CircularCollection >> turns [
+CircularIterator >> turns [
 	^ turns
 ]
 
 { #category : #updating }
-CircularCollection >> updateCurrentPositionBackwards [
-	currentPosition - 1 < 1
-		ifTrue: [ currentPosition := elements size .
-					 turns := turns - 1 ]
+CircularIterator >> updateCurrentPositionBackwards [
+	currentPosition  <  2
+		ifTrue: [ currentPosition := elements size.
+			turns := turns - 1 ]
 		ifFalse: [ currentPosition := currentPosition - 1 ]
 ]
 
 { #category : #updating }
-CircularCollection >> updateCurrentPositionForward [
+CircularIterator >> updateCurrentPositionForward [
 	currentPosition + 1 > elements size
 		ifTrue: [ currentPosition := 1 .
 					 turns := turns + 1 ]

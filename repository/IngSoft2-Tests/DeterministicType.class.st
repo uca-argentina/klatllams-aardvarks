@@ -28,7 +28,7 @@ Class {
 	#instVars : [
 		'rollSequence'
 	],
-	#category : #'IngSoft2-Model'
+	#category : #'IngSoft2-Tests'
 }
 
 { #category : #asserting }

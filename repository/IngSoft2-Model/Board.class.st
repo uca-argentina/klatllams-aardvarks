@@ -70,8 +70,8 @@ Board class >> playedBy: aPlayersCollection spaces: aQuantity [
 { #category : #determine }
 Board >> determinePositionAndLapsToAddOf: aPlayer withARollOf: aQuantity [
 	| positionsCircularCollection playerPositionLapToAdd |
-	playerPositionLapToAdd := PlayerPositionLap player: aPlayer.
-	positionsCircularCollection := CircularCollection
+	playerPositionLapToAdd := PlayerStatus player: aPlayer.
+	positionsCircularCollection := CircularIterator
 		contains: (1 to: spaces size) asOrderedCollection
 		startingAt: (playerPositions positionOf: aPlayer).
 		
@@ -83,7 +83,7 @@ Board >> determinePositionAndLapsToAddOf: aPlayer withARollOf: aQuantity [
 { #category : #initialization }
 Board >> initializePlayedBy: aPlayersCollection initializeComposedBy: aSpacesCollection [
 	spaces := aSpacesCollection.
-	playerPositions := PlayerPositions players: aPlayersCollection
+	playerPositions := GameStatus players: aPlayersCollection
 ]
 
 { #category : #action }
@@ -97,21 +97,11 @@ Board >> move: aPlayer by: aQuantity [
 ]
 
 { #category : #action }
-Board >> moveAllExcept: aPlayer by: aValue [
-	playerPositions players do:[ :each | self move: each by: aValue ] without:aPlayer
-]
-
-{ #category : #action }
-Board >> moveAllToInitialPosition [
-	playerPositions updateAllPlayersToInitialPosition.
-]
-
-{ #category : #action }
 Board >> moveAndAffect: aPlayer by: aValue [
-	| space |
 	self move: aPlayer by: aValue.
-	space := spaces at: (playerPositions positionOf: aPlayer).
-	space affect: aPlayer on: self
+	(spaces at: (playerPositions positionOf: aPlayer))
+		affect: aPlayer
+		on: self
 ]
 
 { #category : #accessing }

@@ -24,7 +24,7 @@ Internal Representation and Key Implementation Points.
 "
 Class {
 	#name : #MoonWalkSpace,
-	#superclass : #Object,
+	#superclass : #Space,
 	#instVars : [
 		'backwardsValue'
 	],
@@ -56,11 +56,11 @@ MoonWalkSpace class >> generateValidBackwardsValue [
 ]
 
 { #category : #action }
-MoonWalkSpace >> affect: aPlayer on: board [ 
-   board	moveAllExcept: aPlayer by: backwardsValue negated.
+MoonWalkSpace >> affect: aPlayer on: board [
+	board playerPositions players do: [ :each | board move: each by: backwardsValue ] without: aPlayer
 ]
 
 { #category : #initialization }
 MoonWalkSpace >> initializeWithBackwardsValue: aQuantity [
-	backwardsValue := aQuantity
+	backwardsValue := aQuantity negated.
 ]

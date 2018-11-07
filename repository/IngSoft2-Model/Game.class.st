@@ -31,7 +31,6 @@ Class {
 	#instVars : [
 		'players',
 		'dices',
-		'hasFinished',
 		'currentPlayer',
 		'board',
 		'laps'
@@ -40,9 +39,9 @@ Class {
 }
 
 { #category : #asserting }
-Game class >> assertMinimumDiceQuantity:aDicesCollection [
+Game class >> assertMinimumDiceQuantity: aDicesCollection [
 	aDicesCollection size < 1
-		ifTrue: [ AssertionFailure signal: 'Dices quantity must be 1 or more' ].
+		ifTrue: [ AssertionFailure signal: 'Dices quantity must be 1 or more' ]
 ]
 
 { #category : #asserting }
@@ -52,31 +51,43 @@ Game class >> assertMinimumLapsQuantity: aLapsQuantity. [
 ]
 
 { #category : #asserting }
-Game class >> assertMinimumPlayersQuantity:aPlayersCollection [
+Game class >> assertMinimumPlayersQuantity: aPlayersCollection [
 	aPlayersCollection size < 2
-		ifTrue: [ AssertionFailure signal: 'Players quantity must be 2 or more' ].
+		ifTrue: [ AssertionFailure signal: 'Players quantity must be 2 or more' ]
 ]
 
 { #category : #'instance creation' }
 Game class >> playedBy: aPlayersCollection throwing: aDicesCollection boardComposedBy: aSpacesCollection totalLaps: aLapsQuantity [
 	| board |
+	board := Board playedBy: aPlayersCollection composedBy: aSpacesCollection.
+	^ self
+		playedBy: aPlayersCollection
+		throwing: aDicesCollection
+		playedOn: board
+		totalLaps: aLapsQuantity
+]
+
+{ #category : #'instance creation' }
+Game class >> playedBy: aPlayersCollection throwing: aDicesCollection playedOn: aBoard totalLaps: aLapsQuantity [
 	self assertMinimumDiceQuantity: aDicesCollection.
 	self assertMinimumPlayersQuantity: aPlayersCollection.
-	self assertMinimumLapsQuantity: aLapsQuantity. 
-	board := Board playedBy:aPlayersCollection composedBy: aSpacesCollection.
-	
-	^ self new initializePlayedBy: aPlayersCollection initializeThrowing: aDicesCollection initializePlayedOn: board initializeWithTotalLaps: aLapsQuantity
+	self assertMinimumLapsQuantity: aLapsQuantity.
+	^ self new
+		initializePlayedBy: aPlayersCollection
+		initializeThrowing: aDicesCollection
+		initializePlayedOn: aBoard
+		initializeWithTotalLaps: aLapsQuantity
 ]
 
 { #category : #'instance creation' }
 Game class >> playedBy: aPlayersCollection throwing: aDicesCollection spaces: aSpacesQuantity totalLaps: aLapsQuantity [
 	| board |
-	self assertMinimumDiceQuantity: aDicesCollection.
-	self assertMinimumPlayersQuantity: aPlayersCollection.
-	self assertMinimumLapsQuantity: aLapsQuantity. 
-	board := Board playedBy:aPlayersCollection spaces: aSpacesQuantity.
-	
-	^ self new initializePlayedBy: aPlayersCollection initializeThrowing: aDicesCollection initializePlayedOn: board initializeWithTotalLaps: aLapsQuantity
+	board := Board playedBy: aPlayersCollection spaces: aSpacesQuantity.
+	^ self
+		playedBy: aPlayersCollection
+		throwing: aDicesCollection
+		playedOn: board
+		totalLaps: aLapsQuantity
 ]
 
 { #category : #asserting }
@@ -91,17 +102,11 @@ Game >> assertPlayersTurn: aPlayer [
 		ifFalse: [ AssertionFailure signal: 'You cannot play now!' ]
 ]
 
-{ #category : #actions }
-Game >> finishGame [
-	hasFinished := true
-]
-
 { #category : #accessing }
 Game >> hasFinished [
 	| theTopPlayer |
-	theTopPlayer:= board playerPositions topPlayer.
-	hasFinished := (board playerPositions lapsOf: theTopPlayer)  >= laps.
-	^ hasFinished
+	theTopPlayer := board playerPositions topPlayer.
+	^ (board playerPositions lapsOf: theTopPlayer) >= laps
 ]
 
 { #category : #accessing }
@@ -111,11 +116,10 @@ Game >> hasTheTurn: aPlayer [
 
 { #category : #initialization }
 Game >> initializePlayedBy: aPlayersCollection initializeThrowing: aDicesCollection initializePlayedOn: aBoard initializeWithTotalLaps: aQuantity [
-	players := CircularCollection contains: aPlayersCollection.
+	players := CircularIterator contains: aPlayersCollection.
 	dices := aDicesCollection.
-	board :=  aBoard.
-	hasFinished := false.
-	currentPlayer := players nextBy:1.
+	board := aBoard.
+	currentPlayer := players nextBy: 1.
 	laps := aQuantity
 ]
 
@@ -125,9 +129,7 @@ Game >> move: aPlayer [
 		assertPlayersTurn: aPlayer;
 		assertGameHasNotFinished.
 	board moveAndAffect: aPlayer by: (aPlayer roll: dices).
-	currentPlayer := players nextBy:1.
-	self hasFinished
-		ifTrue: [ self finishGame ]
+	currentPlayer := players nextBy: 1
 ]
 
 { #category : #accessing }
