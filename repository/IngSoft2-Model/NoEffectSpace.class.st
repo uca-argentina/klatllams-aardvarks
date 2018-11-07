@@ -21,11 +21,11 @@ Internal Representation and Key Implementation Points.
 "
 Class {
 	#name : #NoEffectSpace,
-	#superclass : #Object,
+	#superclass : #Space,
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #action }
 NoEffectSpace >> affect: aPlayer on: board [ 
-	board move: aPlayer by: 0
+
 ]

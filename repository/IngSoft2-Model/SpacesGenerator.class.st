@@ -46,10 +46,7 @@ SpacesGenerator >> generateAtomicBombSpaces [
 
 { #category : #generators }
 SpacesGenerator >> generateMoonWalkSpaces [
- | moonWalkSpaces |
- moonWalkSpaces := OrderedCollection new.
- moonWalkSpaces add:MoonWalkSpace backwardsRandom withOccurrences:(spacesQuantity * 0.1) asFloat floor.
-	^ moonWalkSpaces
+	^ (1 to: 10 / 100 * spacesQuantity) collect: [ :n | MoonWalkSpace backwardsRandom ]
 ]
 
 { #category : #generators }
@@ -62,32 +59,23 @@ SpacesGenerator >> generateNoEffectSpacesWith: spacesRemaining [
 
 { #category : #generators }
 SpacesGenerator >> generateRandomDistributionWith: allSpaces [
-	| randomNumber mixedSpaces |
-	mixedSpaces := OrderedCollection new.
-	[ mixedSpaces size < spacesQuantity ]
-		whileTrue: [ randomNumber := (1 to: allSpaces size) atRandom.
-			(allSpaces at: randomNumber) notEmpty
-				ifTrue: [ mixedSpaces add: (allSpaces at: randomNumber) first.
-					(allSpaces at: randomNumber) removeFirst ] ].
-	^ mixedSpaces
+	^ allSpaces flattened shuffled
 ]
 
 { #category : #generators }
 SpacesGenerator >> generateSpaceDistribution [
-   | noEffectSpaces moonWalkSpaces atomicBombSpaces speedUpSpaces wormHoleSpaces spacesRemaining       	allSpaces |
-	
+	| noEffectSpaces moonWalkSpaces atomicBombSpaces speedUpSpaces wormHoleSpaces spacesRemaining allSpaces |
 	wormHoleSpaces := self generateWormHoleSpaces.
 	atomicBombSpaces := self generateAtomicBombSpaces.
 	moonWalkSpaces := self generateMoonWalkSpaces.
 	speedUpSpaces := self generateSpeedUpSpaces.
-	
-	spacesRemaining := spacesQuantity - wormHoleSpaces size - atomicBombSpaces size - 
-	moonWalkSpaces size - speedUpSpaces size.
-	
+	spacesRemaining := spacesQuantity - wormHoleSpaces size - atomicBombSpaces size - moonWalkSpaces size - speedUpSpaces size.
 	noEffectSpaces := self generateNoEffectSpacesWith: spacesRemaining.
-	
-	allSpaces := {wormHoleSpaces.atomicBombSpaces.moonWalkSpaces.speedUpSpaces.noEffectSpaces}.
-	
+	allSpaces := {wormHoleSpaces.
+	atomicBombSpaces.
+	moonWalkSpaces.
+	speedUpSpaces.
+	noEffectSpaces}.
 	^ self generateRandomDistributionWith: allSpaces asOrderedCollection
 ]
 

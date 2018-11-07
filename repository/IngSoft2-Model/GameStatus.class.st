@@ -24,7 +24,7 @@ Internal Representation and Key Implementation Points.
     Implementation Points
 "
 Class {
-	#name : #PlayerPositions,
+	#name : #GameStatus,
 	#superclass : #Object,
 	#instVars : [
 		'playersAndPositions'
@@ -33,64 +33,54 @@ Class {
 }
 
 { #category : #'instance creation' }
-PlayerPositions class >> players: playersCollection [
+GameStatus class >> players: playersCollection [
 	^ self new initializeWithPlayers: playersCollection
 ]
 
 { #category : #accesing }
-PlayerPositions >> gamePositionOf: aPlayer [
+GameStatus >> gamePositionOf: aPlayer [
 	self sortThePlayersInDescendingOrder.
-	playersAndPositions
-		detect: [ :each | each player = aPlayer ]
-		ifFound: [ :requestedPlayer | ^ playersAndPositions indexOf: requestedPlayer ]
+	^ playersAndPositions detectIndex: [ :each | each player = aPlayer ]
 ]
 
 { #category : #initialization }
-PlayerPositions >> initializeWithPlayers: playersCollection [
-	playersAndPositions := (playersCollection collect: [ :each | PlayerPositionLap player:each ])
+GameStatus >> initializeWithPlayers: playersCollection [
+	playersAndPositions := (playersCollection collect: [ :each | PlayerStatus player:each ])
 		asOrderedCollection.
 ]
 
 { #category : #accesing }
-PlayerPositions >> lapsOf: aPlayer [
-	^ playersAndPositions
-		detect: [ :each | each player = aPlayer ]
-		ifFound: [ :player | ^ player lap ]
+GameStatus >> lapsOf: aPlayer [
+	^ (playersAndPositions detect: [ :each | each player = aPlayer ]) lap
 ]
 
 { #category : #accesing }
-PlayerPositions >> players [
+GameStatus >> players [
 	^ playersAndPositions collect: [ :each | each player ]
 ]
 
 { #category : #accesing }
-PlayerPositions >> positionOf: aPlayer [
-	^ playersAndPositions
-		detect: [ :each | each player = aPlayer ]
-		ifFound: [ :player | ^ player position ]
+GameStatus >> positionOf: aPlayer [
+	^ (playersAndPositions detect: [ :each | each player = aPlayer ]) position 
 ]
 
 { #category : #sorting }
-PlayerPositions >> sortThePlayersInDescendingOrder [
-    playersAndPositions sort: [ :a :b | a lap > b lap | ((a position > b position) & (a lap = b lap)) ]
+GameStatus >> sortThePlayersInDescendingOrder [
+	playersAndPositions sort: #lap descending , #position descending
 ]
 
 { #category : #accesing }
-PlayerPositions >> topPlayer [
+GameStatus >> topPlayer [
 	self sortThePlayersInDescendingOrder.
 	^ playersAndPositions first player
 ]
 
 { #category : #updating }
-PlayerPositions >> updateAllPlayersToInitialPosition [
-	playersAndPositions do: [ :each | self updatePositionAndLapsOf: each player to: 1 adding: 0 ].
-]
-
-{ #category : #updating }
-PlayerPositions >> updatePositionAndLapsOf: aPlayer to: aPosition adding: laps [
+GameStatus >> updatePositionAndLapsOf: aPlayer to: aPosition adding: laps [
 	playersAndPositions
 		detect: [ :each | each player = aPlayer ]
 		ifFound: [ :player | 
 			player updateThePositionTo: aPosition.
 			player updateLapBy: laps ]
+		ifNone: [ Exception signal: 'Player not found' ].
 ]

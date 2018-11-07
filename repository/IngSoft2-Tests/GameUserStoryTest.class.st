@@ -7,8 +7,8 @@ Class {
 { #category : #tests }
 GameUserStoryTest >> testTwoPlayersPlayAndTheFirstOneWins [
 	| game playerOne playerTwo sequenceOne sequenceTwo diceOne diceTwo spaces |
-	sequenceOne := CircularCollection contains: #(1 1 1 2 1 5 3 1 6).
-	sequenceTwo := CircularCollection contains: #(1 1 1 2 2 4 1 1 6).
+	sequenceOne := CircularIterator contains: #(1 1 1 2 1 5 3 1 6).
+	sequenceTwo := CircularIterator contains: #(1 1 1 2 2 4 1 1 6).
 	diceOne := Dice faces: 10 ofType: (DeterministicType rolling: sequenceOne faces: 10).
 	diceTwo := Dice faces: 12 ofType: (DeterministicType rolling: sequenceTwo faces: 12).
 	playerOne := Player named: 'Hector'.

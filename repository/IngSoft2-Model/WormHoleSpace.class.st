@@ -21,7 +21,7 @@ Internal Representation and Key Implementation Points.
 "
 Class {
 	#name : #WormHoleSpace,
-	#superclass : #Object,
+	#superclass : #Space,
 	#category : #'IngSoft2-Model'
 }
 

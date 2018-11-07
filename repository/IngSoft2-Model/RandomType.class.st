@@ -44,5 +44,5 @@ RandomType >> initializeRollingUntil: aValue [
 
 { #category : #action }
 RandomType >> roll [
-	^ (1 to: maxValue) atRandom
+	^ maxValue atRandom
 ]
