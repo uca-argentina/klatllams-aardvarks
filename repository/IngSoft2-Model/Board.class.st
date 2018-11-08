@@ -69,15 +69,16 @@ Board class >> playedBy: aPlayersCollection spaces: aQuantity [
 
 { #category : #determine }
 Board >> determinePositionAndLapsToAddOf: aPlayer withARollOf: aQuantity [
-	| positionsCircularCollection playerPositionLapToAdd |
-	playerPositionLapToAdd := PlayerStatus player: aPlayer.
+	| positionsCircularCollection newPosition newLap |
+	
 	positionsCircularCollection := CircularIterator
 		contains: (1 to: spaces size) asOrderedCollection
 		startingAt: (playerPositions positionOf: aPlayer).
-		
-	playerPositionLapToAdd updateThePositionTo: (positionsCircularCollection nextBy: aQuantity).
-	playerPositionLapToAdd updateLapBy: positionsCircularCollection turns.
-	^ playerPositionLapToAdd
+	
+	newPosition := positionsCircularCollection nextBy: aQuantity.
+	newLap := positionsCircularCollection turns.
+
+	^ PlayerPosition player: aPlayer position: newPosition laps: newLap
 ]
 
 { #category : #initialization }
@@ -91,9 +92,9 @@ Board >> move: aPlayer by: aQuantity [
 	| playerPositionLapToAdd |
 	playerPositionLapToAdd := self determinePositionAndLapsToAddOf: aPlayer withARollOf: aQuantity.
 	playerPositions
-		updatePositionAndLapsOf: playerPositionLapToAdd player
+		updatePositionAndLapsOf: aPlayer
 		to: playerPositionLapToAdd position
-		adding: playerPositionLapToAdd lap
+		adding: (playerPositionLapToAdd lap + (playerPositions lapsOf: aPlayer) )
 ]
 
 { #category : #action }

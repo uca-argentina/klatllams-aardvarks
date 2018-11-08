@@ -45,13 +45,16 @@ GameStatus >> gamePositionOf: aPlayer [
 
 { #category : #initialization }
 GameStatus >> initializeWithPlayers: playersCollection [
-	playersAndPositions := (playersCollection collect: [ :each | PlayerStatus player:each ])
-		asOrderedCollection.
+	| playerStory |
+	playersAndPositions := playersCollection
+		collect: [ :each | 
+			playerStory := PlayerStory player: each.
+			playerStory add: (PlayerPosition player: each position: 1 laps: 0) ]
 ]
 
 { #category : #accesing }
 GameStatus >> lapsOf: aPlayer [
-	^ (playersAndPositions detect: [ :each | each player = aPlayer ]) lap
+	^ (playersAndPositions detect: [ :each | each player = aPlayer ]) playerPositions first lap
 ]
 
 { #category : #accesing }
@@ -61,26 +64,26 @@ GameStatus >> players [
 
 { #category : #accesing }
 GameStatus >> positionOf: aPlayer [
-	^ (playersAndPositions detect: [ :each | each player = aPlayer ]) position 
+	^ (playersAndPositions detect: [ :each | each player = aPlayer ])playerPositions first position 
 ]
 
 { #category : #sorting }
 GameStatus >> sortThePlayersInDescendingOrder [
-	playersAndPositions sort: #lap descending , #position descending
+	^(playersAndPositions collect: [ :each | each playerPositions first ])
+		sort: #lap descending , #position descending
 ]
 
 { #category : #accesing }
 GameStatus >> topPlayer [
-	self sortThePlayersInDescendingOrder.
-	^ playersAndPositions first player
+	^ self sortThePlayersInDescendingOrder first player
 ]
 
 { #category : #updating }
 GameStatus >> updatePositionAndLapsOf: aPlayer to: aPosition adding: laps [
 	playersAndPositions
 		detect: [ :each | each player = aPlayer ]
-		ifFound: [ :player | 
-			player updateThePositionTo: aPosition.
-			player updateLapBy: laps ]
+		ifFound: [ :playerStory | 
+			playerStory add:(PlayerPosition player:aPlayer position:aPosition laps:laps).
+			 ]
 		ifNone: [ Exception signal: 'Player not found' ].
 ]
