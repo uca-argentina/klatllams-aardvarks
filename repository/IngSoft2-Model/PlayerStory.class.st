@@ -39,14 +39,16 @@ PlayerStory class >> player: aPlayer [
 ]
 
 { #category : #adding }
-PlayerStory >> add: aPlayerPosition [
-	playerPositions addFirst: aPlayerPosition
+PlayerStory >> add: newPositionValue withLaps: aQuantity [
+	playerPositions
+		addFirst: (PlayerPosition player: player position: newPositionValue laps: aQuantity)
 ]
 
 { #category : #initialization }
 PlayerStory >> initializeWithPlayer: aPlayer [
 	player := aPlayer.
-	playerPositions := OrderedCollection new
+	playerPositions := OrderedCollection new.
+	
 ]
 
 { #category : #accessing }
@@ -55,6 +57,6 @@ PlayerStory >> player [
 ]
 
 { #category : #accessing }
-PlayerStory >> playerPositions [
+PlayerStory >> storyElements [
 	^ playerPositions
 ]

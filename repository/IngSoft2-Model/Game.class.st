@@ -105,8 +105,8 @@ Game >> assertPlayersTurn: aPlayer [
 { #category : #accessing }
 Game >> hasFinished [
 	| theTopPlayer |
-	theTopPlayer := board playerPositions topPlayer.
-	^ (board playerPositions lapsOf: theTopPlayer) >= laps
+	theTopPlayer := board storyElements topPlayer.
+	^ (board storyElements lapsOf: theTopPlayer) >= laps
 ]
 
 { #category : #accessing }
@@ -133,6 +133,6 @@ Game >> move: aPlayer [
 ]
 
 { #category : #accessing }
-Game >> playerPositions [
-	^ board playerPositions.
+Game >> storyElements [
+	^ board storyElements.
 ]

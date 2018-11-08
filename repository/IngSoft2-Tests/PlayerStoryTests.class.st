@@ -6,10 +6,9 @@ Class {
 
 { #category : #tests }
 PlayerStoryTests >> testAPlayerStoryCanStorageACollectionOfPlayerPosition [
-	| playerStory playerPosition |
-	playerPosition := PlayerPosition player:'hector' position: 5 laps:1.
+	| playerStory |
 	playerStory := PlayerStory player: 'hector'.
-	playerStory add: playerPosition.
-	playerStory add: playerPosition.
+	playerStory add: 5 withLaps:1. 
+	playerStory add: 5 withLaps: 1.
 	
 ]

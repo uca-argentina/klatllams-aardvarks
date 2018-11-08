@@ -34,34 +34,34 @@ GameUserStoryTest >> testTwoPlayersPlayAndTheFirstOneWins [
 		boardComposedBy: spaces
 		totalLaps: 2.
 	"The game starts"
-	self assert: (game playerPositions positionOf: playerOne) equals: 1.
-	self assert: (game playerPositions positionOf: playerOne) equals: 1.
+	self assert: (game storyElements positionOf: playerOne) equals: 1.
+	self assert: (game storyElements positionOf: playerOne) equals: 1.
 	self assert: (game hasTheTurn: playerOne).
 	game move: playerOne.
-	self assert: (game playerPositions positionOf: playerOne) equals: 3.
+	self assert: (game storyElements positionOf: playerOne) equals: 3.
 	self assert: (game hasTheTurn: playerTwo).
 	game move: playerTwo.
-	self assert: (game playerPositions positionOf: playerTwo) equals: 3.
+	self assert: (game storyElements positionOf: playerTwo) equals: 3.
 	self assert: (game hasTheTurn: playerOne).
 	game move: playerOne.
-	self assert: (game playerPositions positionOf: playerOne) equals: 9.
+	self assert: (game storyElements positionOf: playerOne) equals: 9.
 	self assert: (game hasTheTurn: playerTwo).
 	game move: playerTwo.
-	self assert: (game playerPositions positionOf: playerTwo) equals: 7.
-	self assert: (game playerPositions positionOf: playerOne) equals: 6.
+	self assert: (game storyElements positionOf: playerTwo) equals: 7.
+	self assert: (game storyElements positionOf: playerOne) equals: 6.
 	game move: playerOne.
-	self assert: (game playerPositions positionOf: playerOne) equals: 1.
-	self assert: (game playerPositions positionOf: playerTwo) equals: 1.		
+	self assert: (game storyElements positionOf: playerOne) equals: 1.
+	self assert: (game storyElements positionOf: playerTwo) equals: 1.		
 	game move: playerTwo.
-	self assert: (game playerPositions positionOf: playerTwo) equals: 6.
+	self assert: (game storyElements positionOf: playerTwo) equals: 6.
 	game move: playerOne.
-	self assert: (game playerPositions positionOf: playerOne) equals: 9.
+	self assert: (game storyElements positionOf: playerOne) equals: 9.
 	game move: playerTwo.
-	self assert: (game playerPositions positionOf: playerTwo) equals: 8.
+	self assert: (game storyElements positionOf: playerTwo) equals: 8.
 	game move: playerOne.
-	self assert: (game playerPositions positionOf: playerOne) equals: 1.
+	self assert: (game storyElements positionOf: playerOne) equals: 1.
 	
 	self assert: game hasFinished ;
-		  assert: (game playerPositions gamePositionOf: playerOne) equals:1;
-		  assert: (game playerPositions gamePositionOf: playerTwo) equals:2.
+		  assert: (game storyElements gamePositionOf: playerOne) equals:1;
+		  assert: (game storyElements gamePositionOf: playerTwo) equals:2.
 ]

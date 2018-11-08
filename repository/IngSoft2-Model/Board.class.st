@@ -106,6 +106,6 @@ Board >> moveAndAffect: aPlayer by: aValue [
 ]
 
 { #category : #accessing }
-Board >> playerPositions [
+Board >> storyElements [
 	^ playerPositions
 ]
