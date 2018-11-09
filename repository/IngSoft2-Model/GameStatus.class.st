@@ -48,7 +48,7 @@ GameStatus >> initializeWithPlayers: playersCollection [
 	| playerStory |
 	playersStories := playersCollection
 		collect: [ :each | playerStory := PlayerStory player: each.
-								playerStory add:1 withLaps: 0 ]
+								playerStory updatePlayerTo:1 withLaps: 0 ]
 ]
 
 { #category : #accesing }
@@ -81,6 +81,6 @@ GameStatus >> topPlayer [
 GameStatus >> updatePositionAndLapsOf: aPlayer to: aPosition adding: laps [
 	playersStories
 		detect: [ :playerStory | playerStory player = aPlayer ]
-		ifFound: [ :playerStory | playerStory add: aPosition withLaps: laps ]
+		ifFound: [ :playerStory | playerStory updatePlayerTo: aPosition withLaps: laps ]
 		ifNone: [ Exception signal: 'Player not found' ]
 ]

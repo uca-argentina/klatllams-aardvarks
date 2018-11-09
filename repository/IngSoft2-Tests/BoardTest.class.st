@@ -31,9 +31,9 @@ BoardTest >> testABoardCannotBeComposedByLessThanSixSpaces [
 BoardTest >> testABoardCannotBeCreatedWithAnInvalidQuantityOfSpaces [
 	| board |
 	self
-		should: [ board := Board playedBy: #('hector' 'ignacio') spaces: 101 ]
+		should: [ board := Board playedBy: #('hector' 'ignacio') spaces: 9 ]
 		raise: AssertionFailure
-		withExceptionDo:[ :signal | self assert: signal messageText equals: 'Spaces Quantity must be a multiple of 100' ]
+		withExceptionDo:[ :signal | self assert: signal messageText equals: 'You need more spaces' ]
 	
 ]
 

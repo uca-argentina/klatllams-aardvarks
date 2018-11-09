@@ -28,8 +28,8 @@ Class {
 	#name : #Board,
 	#superclass : #Object,
 	#instVars : [
-		'playerPositions',
-		'spaces'
+		'spaces',
+		'gameStatus'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -42,15 +42,32 @@ Board class >> assertMinimumQuantityOf: aSpacesCollection [
 
 { #category : #'instance creation' }
 Board class >> assertValidSpacesQuantity: aQuantity [
-	(aQuantity rem: 100) = 0
-		ifFalse: [ AssertionFailure signal: 'Spaces Quantity must be a multiple of 100' ]
+	aQuantity < 10
+		ifTrue: [ AssertionFailure signal: 'You need more spaces' ]
 ]
 
 { #category : #generators }
-Board class >> generateRandomSpaceDistributionWithSpacesQuantity:aQuantity [
-	| generator |
-	generator := SpacesGenerator spacesQuantity: aQuantity.
-	^ generator generateSpaceDistribution
+Board class >> generateDistribution [
+	| distribution |
+	distribution := OrderedCollection new.
+	distribution add: AtomicBombSpace new withOccurrences: 2 asFloat floor.
+	distribution addAll: ((1 to: 10) collect: [ :n | MoonWalkSpace backwardsRandom ]).
+	distribution add: NoEffectSpace new withOccurrences: 48.
+	distribution add: SpeedUpSpace new withOccurrences: 20.
+	distribution add: WormHoleSpace new withOccurrences: 20.
+	distribution shuffled.
+	^ distribution
+]
+
+{ #category : #generators }
+Board class >> generateRandomSpaceDistributionWith: aQuantity [
+	| distribution randomDistribution randomSpace |
+	distribution := self generateDistribution.
+	randomDistribution := OrderedCollection new.
+	aQuantity
+		timesRepeat: [ randomSpace := distribution at: 100 atRandom.
+			randomDistribution add: randomSpace ].
+	^ randomDistribution
 ]
 
 { #category : #'instance creation' }
@@ -63,49 +80,35 @@ Board class >> playedBy: aPlayersCollection composedBy: aSpacesCollection [
 Board class >> playedBy: aPlayersCollection spaces: aQuantity [
 	| spacesCollection |
 	self assertValidSpacesQuantity: aQuantity.
-	spacesCollection := self generateRandomSpaceDistributionWithSpacesQuantity: aQuantity.
+	spacesCollection := self generateRandomSpaceDistributionWith: aQuantity.
 	^ self new initializePlayedBy: aPlayersCollection initializeComposedBy: spacesCollection
-]
-
-{ #category : #determine }
-Board >> determinePositionAndLapsToAddOf: aPlayer withARollOf: aQuantity [
-	| positionsCircularCollection newPosition newLap |
-	
-	positionsCircularCollection := CircularIterator
-		contains: (1 to: spaces size) asOrderedCollection
-		startingAt: (playerPositions positionOf: aPlayer).
-	
-	newPosition := positionsCircularCollection nextBy: aQuantity.
-	newLap := positionsCircularCollection turns.
-
-	^ PlayerPosition player: aPlayer position: newPosition laps: newLap
 ]
 
 { #category : #initialization }
 Board >> initializePlayedBy: aPlayersCollection initializeComposedBy: aSpacesCollection [
 	spaces := aSpacesCollection.
-	playerPositions := GameStatus players: aPlayersCollection
+	gameStatus := GameStatus players: aPlayersCollection
 ]
 
 { #category : #action }
 Board >> move: aPlayer by: aQuantity [
-	| playerPositionLapToAdd |
-	playerPositionLapToAdd := self determinePositionAndLapsToAddOf: aPlayer withARollOf: aQuantity.
-	playerPositions
+	| positionsCircularIterator |
+	positionsCircularIterator := CircularIterator
+		contains: (1 to: spaces size) asOrderedCollection
+		startingAt: (gameStatus positionOf: aPlayer).
+	gameStatus
 		updatePositionAndLapsOf: aPlayer
-		to: playerPositionLapToAdd position
-		adding: (playerPositionLapToAdd lap + (playerPositions lapsOf: aPlayer) )
+		to: (positionsCircularIterator nextBy: aQuantity)
+		adding: positionsCircularIterator turns + (gameStatus lapsOf: aPlayer)
 ]
 
 { #category : #action }
 Board >> moveAndAffect: aPlayer by: aValue [
 	self move: aPlayer by: aValue.
-	(spaces at: (playerPositions positionOf: aPlayer))
-		affect: aPlayer
-		on: self
+	(spaces at: (gameStatus positionOf: aPlayer)) affect: aPlayer on: self
 ]
 
 { #category : #accessing }
 Board >> storyElements [
-	^ playerPositions
+	^ gameStatus
 ]

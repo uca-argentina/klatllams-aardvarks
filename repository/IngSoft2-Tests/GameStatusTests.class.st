@@ -1,11 +1,11 @@
 Class {
-	#name : #PlayerPositionsTests,
+	#name : #GameStatusTests,
 	#superclass : #TestCase,
 	#category : #'IngSoft2-Tests'
 }
 
 { #category : #tests }
-PlayerPositionsTests >> testIsPosibleToChangeAPlayerPositionAndUpdates [
+GameStatusTests >> testIsPosibleToChangeAPlayerPositionAndUpdates [
 	| playersCollection playersPosition |
 	playersCollection := #('hector' 'ignacio').
 	playersPosition := GameStatus players: playersCollection.
@@ -18,7 +18,7 @@ PlayerPositionsTests >> testIsPosibleToChangeAPlayerPositionAndUpdates [
 ]
 
 { #category : #tests }
-PlayerPositionsTests >> testIsPosibleToKnowEachPlayerPosition [
+GameStatusTests >> testIsPosibleToKnowEachPlayerPosition [
 	| playersCollection playersPosition |
 	playersCollection := #('hector' 'ignacio').
 	playersPosition := GameStatus players: playersCollection.
@@ -28,7 +28,7 @@ PlayerPositionsTests >> testIsPosibleToKnowEachPlayerPosition [
 ]
 
 { #category : #tests }
-PlayerPositionsTests >> testWhenCreatedAllPlayersMustHavePositionEqualsToOne [
+GameStatusTests >> testWhenCreatedAllPlayersMustHavePositionEqualsToOne [
 	| playersPosition playersCollection|
 	playersCollection  :=  #('hector' 'juan' 'ignacio').
 	playersPosition := GameStatus players: playersCollection .

@@ -5,10 +5,12 @@ Class {
 }
 
 { #category : #tests }
-PlayerStoryTests >> testAPlayerStoryCanStorageACollectionOfPlayerPosition [
+PlayerStoryTests >> testAPlayerStoryCanHaveACollectionOfPlayerPosition [
 	| playerStory |
 	playerStory := PlayerStory player: 'hector'.
-	playerStory add: 5 withLaps:1. 
-	playerStory add: 5 withLaps: 1.
+	playerStory updatePlayerTo: 5 withLaps:1. 
+	playerStory updatePlayerTo: 5 withLaps: 1.
+	self assert: playerStory player equals: 'hector';
+		  assert: playerStory storyElements size equals: 2
 	
 ]
