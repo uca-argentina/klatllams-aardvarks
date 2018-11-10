@@ -29,7 +29,10 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'spaces',
-		'gameStatus'
+		'gameStatus',
+		'inactiveCards',
+		'activeCards',
+		'usedCards'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -51,10 +54,12 @@ Board class >> generateDistribution [
 	| distribution |
 	distribution := OrderedCollection new.
 	distribution add: AtomicBombSpace new withOccurrences: 2 asFloat floor.
-	distribution addAll: ((1 to: 10) collect: [ :n | MoonWalkSpace backwardsRandom ]).
-	distribution add: NoEffectSpace new withOccurrences: 48.
+	distribution
+		addAll: ((1 to: 10) collect: [ :n | MoonWalkSpace backwardsRandom ]).
+	distribution add: NoEffectSpace new withOccurrences: 38.
 	distribution add: SpeedUpSpace new withOccurrences: 20.
 	distribution add: WormHoleSpace new withOccurrences: 20.
+	distribution add: CardSpace new withOccurrences: 10.
 	distribution shuffled.
 	^ distribution
 ]
@@ -84,10 +89,29 @@ Board class >> playedBy: aPlayersCollection spaces: aQuantity [
 	^ self new initializePlayedBy: aPlayersCollection initializeComposedBy: spacesCollection
 ]
 
+{ #category : #accessing }
+Board >> activeCards [
+	^activeCards 
+]
+
+{ #category : #accessing }
+Board >> cardsOf: aPlayer [
+	inactiveCards select: [ :card | card ownedBy == aPlayer ]
+]
+
+{ #category : #accessing }
+Board >> inactiveCards [
+	^ inactiveCards
+]
+
 { #category : #initialization }
 Board >> initializePlayedBy: aPlayersCollection initializeComposedBy: aSpacesCollection [
 	spaces := aSpacesCollection.
-	gameStatus := GameStatus players: aPlayersCollection
+	gameStatus := GameStatus players: aPlayersCollection.
+	inactiveCards := OrderedCollection new.
+	activeCards := OrderedCollection new.
+	usedCards := OrderedCollection new.
+	
 ]
 
 { #category : #action }
@@ -111,4 +135,9 @@ Board >> moveAndAffect: aPlayer by: aValue [
 { #category : #accessing }
 Board >> storyElements [
 	^ gameStatus
+]
+
+{ #category : #'as yet unclassified' }
+Board >> updatePlayersInfo [
+	(self storyElements players) do: [ :player | player updateCardsWith: activeCards  andPlayersToAffectWith: (self storyElements players) ]
 ]

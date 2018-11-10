@@ -7,7 +7,7 @@ Class {
 { #category : #tests }
 PlayerStoryTests >> testAPlayerStoryCanHaveACollectionOfPlayerPosition [
 	| playerStory |
-	playerStory := PlayerStory player: 'hector'.
+	playerStory := PlayerHistory player: 'hector'.
 	playerStory updatePlayerTo: 5 withLaps:1. 
 	playerStory updatePlayerTo: 5 withLaps: 1.
 	self assert: playerStory player equals: 'hector';

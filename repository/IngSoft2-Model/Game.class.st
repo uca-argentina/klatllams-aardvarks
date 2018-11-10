@@ -97,6 +97,18 @@ Game >> assertGameHasNotFinished [
 ]
 
 { #category : #asserting }
+Game >> assertPlayer: aPlayer canPlayTheseCards: aCardsInfoCollection [
+	| cardsToPlay |
+	cardsToPlay := aCardsInfoCollection
+		select:
+			[ :cardInfo | (board inactiveCards contains: cardInfo card) & (cardInfo card ownedBy == aPlayer) ].
+	cardsToPlay size < aCardsInfoCollection size
+		ifTrue: [ AssertionFailure signal: 'Tried to play ilegal cards' ]
+		ifFalse: [ (board activeCards) addAll: cardsToPlay.
+			board inactiveCards removeAll: cardsToPlay ]
+]
+
+{ #category : #asserting }
 Game >> assertPlayersTurn: aPlayer [
 	(self hasTheTurn: aPlayer)
 		ifFalse: [ AssertionFailure signal: 'You cannot play now!' ]
@@ -125,11 +137,14 @@ Game >> initializePlayedBy: aPlayersCollection initializeThrowing: aDicesCollect
 
 { #category : #actions }
 Game >> move: aPlayer [
+	(board storyElements players) do: [:player | self assertPlayer: player canPlayTheseCards: (player playCards) ].
 	self
 		assertPlayersTurn: aPlayer;
 		assertGameHasNotFinished.
 	board moveAndAffect: aPlayer by: (aPlayer roll: dices).
+	board updatePlayersInfo.
 	currentPlayer := players nextBy: 1
+	
 ]
 
 { #category : #accessing }

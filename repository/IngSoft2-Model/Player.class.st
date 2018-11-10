@@ -28,7 +28,10 @@ Class {
 	#name : #Player,
 	#superclass : #Object,
 	#instVars : [
-		'name'
+		'name',
+		'cards',
+		'nextCardsToPlay',
+		'playersToAffect'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -45,9 +48,18 @@ Player class >> named: aName [
 	^ self new initializeNamed: aName
 ]
 
+{ #category : #update }
+Player >> addNextCardToPlay: aCard affecting: aPlayer [
+	nextCardsToPlay add: (CardInfo with: aCard affecting: aPlayer)
+]
+
 { #category : #initialization }
 Player >> initializeNamed: aName [
-	name := aName
+	name := aName.
+	cards := OrderedCollection new.
+	players := OrderedCollection new.
+	nextCardsToPlay := OrderedCollection new.
+	
 ]
 
 { #category : #accesing }
@@ -56,6 +68,20 @@ Player >> name [
 ]
 
 { #category : #update }
+Player >> playCards [
+	| cardsToPlay |
+	cardsToPlay := OrderedCollection withAll: nextCardsToPlay . 
+	nextCardsToPlay removeAll.
+	^ cardsToPlay
+]
+
+{ #category : #update }
 Player >> roll: aDiceCollection [
 	^ aDiceCollection sumNumbers:[ :each | each roll ]
+]
+
+{ #category : #update }
+Player >> updateCardsWith: aCardsCollection andPlayersToAffectWith: aPlayersCollection [
+	cards := aCardsCollection .
+	playersToAffect := aPlayersCollection. 
 ]

@@ -47,7 +47,7 @@ GameStatus >> gamePositionOf: aPlayer [
 GameStatus >> initializeWithPlayers: playersCollection [
 	| playerStory |
 	playersStories := playersCollection
-		collect: [ :each | playerStory := PlayerStory player: each.
+		collect: [ :each | playerStory := PlayerHistory player: each.
 								playerStory updatePlayerTo:1 withLaps: 0 ]
 ]
 

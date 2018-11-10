@@ -58,6 +58,22 @@ BoardSpacesTest >> testAtomicBombSpaceAndMoveEveryOneToInitialPosition [
 ]
 
 { #category : #tests }
+BoardSpacesTest >> testCardSpaceAssignsACardToAPlayer [
+	| spaces players board card |
+	spaces := {CardSpace new.
+	CardSpace new.
+	CardSpace new.
+	CardSpace new.
+	CardSpace new.
+	CardSpace new} asOrderedCollection.
+	players := {Player named: 'Carrot' . Player named: 'Nacho'} asOrderedCollection .
+	board := Board playedBy: players composedBy: spaces.
+	(spaces first) affect: players first on: board.
+	card := board inactiveCards first.
+	self assert: (card ownedBy) equals: (players first)
+]
+
+{ #category : #tests }
 BoardSpacesTest >> testSpeedUpHoleSpaceAndMoveAPlayerForwardsBy4 [
 	| board spaces |
 	spaces := {NoEffectSpace new.
