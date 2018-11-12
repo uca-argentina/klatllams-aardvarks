@@ -13,7 +13,12 @@ CancellationCard class >> ownedBy: aPlayer [
 ]
 
 { #category : #affecting }
-CancellationCard >> affect: aPlayer [
+CancellationCard >> affect: aCard on: aBoard [
+	aBoard remove: aCard
+]
+
+{ #category : #asserting }
+CancellationCard >> assertCancellingProperty [
 ]
 
 { #category : #initialization }

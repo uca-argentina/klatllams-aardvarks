@@ -13,7 +13,19 @@ AccelerationCard class >> ownedBy: aPlayer [
 ]
 
 { #category : #affecting }
-AccelerationCard >> affect: aPlayer [
+AccelerationCard >> affect [
+	^ 1
+]
+
+{ #category : #asserting }
+AccelerationCard >> assertAffectsSinglePlayer [
+	AssertionFailure signal:'This card affects all the players'
+	
+]
+
+{ #category : #asserting }
+AccelerationCard >> assertCardAffectAllThePlayers [
+	
 ]
 
 { #category : #initialization }

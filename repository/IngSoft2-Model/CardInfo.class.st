@@ -8,28 +8,23 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'as yet unclassified' }
-CardInfo class >> with: aCard affecting: aPlayer [
-	^ self new initializeWith: aCard affecting: aPlayer
-]
-
-{ #category : #initialization }
-CardInfo >> affect [
-	card affect: affectedPlayer .
+{ #category : #'instance creation' }
+CardInfo class >> with: aCard affecting: aPlayerCollection [
+	^ self new initializeWith: aCard affecting: aPlayerCollection
 ]
 
 { #category : #accessing }
-CardInfo >> affectedPlayer [
-	^affectedPlayer 
+CardInfo >> affectedPlayer: aPlayer [
+	^ affectedPlayer contains: aPlayer
 ]
 
 { #category : #accessing }
 CardInfo >> card [
-	^card.
+	^ card
 ]
 
 { #category : #initialization }
-CardInfo >> initializeWith: aCard affecting: aPlayer [
+CardInfo >> initializeWith: aCard affecting: aPlayerCollection [
 	card := aCard.
-	affectedPlayer := aPlayer
+	affectedPlayer := aPlayerCollection
 ]

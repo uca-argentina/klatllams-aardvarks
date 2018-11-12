@@ -13,7 +13,8 @@ OverloadCard class >> ownedBy: aPlayer [
 ]
 
 { #category : #affecting }
-OverloadCard >> affect: aPlayer [
+OverloadCard >> affect [
+	^ 2 negated
 ]
 
 { #category : #initialization }

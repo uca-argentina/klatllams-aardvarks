@@ -33,7 +33,8 @@ Class {
 		'dices',
 		'currentPlayer',
 		'board',
-		'laps'
+		'laps',
+		'cardsHistory'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -90,22 +91,34 @@ Game class >> playedBy: aPlayersCollection throwing: aDicesCollection spaces: aS
 		totalLaps: aLapsQuantity
 ]
 
+{ #category : #actions }
+Game >> add: aCard [
+	[ aCard assertCardAffectAllThePlayers ]
+		on: AssertionFailure
+		do: [ :ex | aCard assertRepeatCard ].
+	board addCard: (CardInfo with: aCard affecting: players elements).
+	cardsHistory add: aCard
+]
+
+{ #category : #adding }
+Game >> add: aCard affecting: aPlayer [
+	aCard assertAffectsSinglePlayer.
+	board addCard: (CardInfo with: aCard affecting: aPlayer asOrderedCollection).
+	cardsHistory add: aCard.
+]
+
+{ #category : #adding }
+Game >> add: aCard affectingCard: anotherCard [
+	aCard assertCancellingProperty.
+	board assertNotEmptyActiveCards.
+	aCard affect: anotherCard on: board.
+	cardsHistory add: aCard
+]
+
 { #category : #asserting }
 Game >> assertGameHasNotFinished [
 	self hasFinished
 		ifTrue: [ AssertionFailure signal: 'The game has finished' ]
-]
-
-{ #category : #asserting }
-Game >> assertPlayer: aPlayer canPlayTheseCards: aCardsInfoCollection [
-	| cardsToPlay |
-	cardsToPlay := aCardsInfoCollection
-		select:
-			[ :cardInfo | (board inactiveCards contains: cardInfo card) & (cardInfo card ownedBy == aPlayer) ].
-	cardsToPlay size < aCardsInfoCollection size
-		ifTrue: [ AssertionFailure signal: 'Tried to play ilegal cards' ]
-		ifFalse: [ (board activeCards) addAll: cardsToPlay.
-			board inactiveCards removeAll: cardsToPlay ]
 ]
 
 { #category : #asserting }
@@ -137,14 +150,10 @@ Game >> initializePlayedBy: aPlayersCollection initializeThrowing: aDicesCollect
 
 { #category : #actions }
 Game >> move: aPlayer [
-	(board storyElements players) do: [:player | self assertPlayer: player canPlayTheseCards: (player playCards) ].
-	self
-		assertPlayersTurn: aPlayer;
-		assertGameHasNotFinished.
+	self assertPlayersTurn: aPlayer;
+		  assertGameHasNotFinished.
 	board moveAndAffect: aPlayer by: (aPlayer roll: dices).
-	board updatePlayersInfo.
 	currentPlayer := players nextBy: 1
-	
 ]
 
 { #category : #accessing }

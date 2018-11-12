@@ -13,7 +13,8 @@ SpeedCard class >> ownedBy: aPlayer [
 ]
 
 { #category : #affecting }
-SpeedCard >> affect: aPlayer [
+SpeedCard >> affect [
+	^ 1
 ]
 
 { #category : #initialization }

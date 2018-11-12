@@ -30,9 +30,8 @@ Class {
 	#instVars : [
 		'spaces',
 		'gameStatus',
-		'inactiveCards',
-		'activeCards',
-		'usedCards'
+		'landingPlayerPositions',
+		'activeCardsInfo'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -89,29 +88,22 @@ Board class >> playedBy: aPlayersCollection spaces: aQuantity [
 	^ self new initializePlayedBy: aPlayersCollection initializeComposedBy: spacesCollection
 ]
 
-{ #category : #accessing }
-Board >> activeCards [
-	^activeCards 
-]
-
-{ #category : #accessing }
-Board >> cardsOf: aPlayer [
-	inactiveCards select: [ :card | card ownedBy == aPlayer ]
-]
-
-{ #category : #accessing }
-Board >> inactiveCards [
-	^ inactiveCards
+{ #category : #asserting }
+Board >> assertNotEmptyActiveCards [
+	^ activeCardsInfo notEmpty
 ]
 
 { #category : #initialization }
 Board >> initializePlayedBy: aPlayersCollection initializeComposedBy: aSpacesCollection [
 	spaces := aSpacesCollection.
 	gameStatus := GameStatus players: aPlayersCollection.
-	inactiveCards := OrderedCollection new.
-	activeCards := OrderedCollection new.
-	usedCards := OrderedCollection new.
-	
+	activeCardsInfo := OrderedCollection new.
+	landingPlayerPositions := OrderedCollection new.
+]
+
+{ #category : #action }
+Board >> lastLandingPosition: aPosition playedBy: aPlayer [
+	landingPlayerPositions add: (LandingPosition player: aPlayer position: aPosition)
 ]
 
 { #category : #action }
@@ -128,16 +120,22 @@ Board >> move: aPlayer by: aQuantity [
 
 { #category : #action }
 Board >> moveAndAffect: aPlayer by: aValue [
-	self move: aPlayer by: aValue.
+	| cardsAffecting afterCardsResult |
+	cardsAffecting := activeCardsInfo select: [ :cardInfo | cardInfo playerAffected: aPlayer ].
+	afterCardsResult := aValue	+ (cardsAffecting sumNumbers: [ :cardInfo | cardInfo card affect ]).
+	self move: aPlayer by: afterCardsResult.
+	self lastLandingPosition: (gameStatus positionOf: aPlayer) playedBy: aPlayer.
 	(spaces at: (gameStatus positionOf: aPlayer)) affect: aPlayer on: self
+]
+
+{ #category : #removing }
+Board >> remove: aCard [
+	activeCardsInfo
+		detect: [ :cardInfo | cardInfo card = aCard ]
+		ifFound: [ :cardInfo | activeCardsInfo remove: cardInfo ]
 ]
 
 { #category : #accessing }
 Board >> storyElements [
 	^ gameStatus
-]
-
-{ #category : #'as yet unclassified' }
-Board >> updatePlayersInfo [
-	(self storyElements players) do: [ :player | player updateCardsWith: activeCards  andPlayersToAffectWith: (self storyElements players) ]
 ]
