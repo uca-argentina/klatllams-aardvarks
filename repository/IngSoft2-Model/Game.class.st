@@ -34,8 +34,7 @@ Class {
 		'currentPlayer',
 		'board',
 		'laps',
-		'cardsHistory',
-		'lastCardPlayed'
+		'cardsHistory'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -94,22 +93,29 @@ Game class >> playedBy: aPlayersCollection throwing: aDicesCollection spaces: aS
 
 { #category : #adding }
 Game >> add: aCard [
+	aCard assertCardNeedsLastCard & cardsHistory notEmpty
+		ifTrue: [ aCard lastCardPlayed: cardsHistory first.
+			cardsHistory addFirst: aCard.
+			board addAnActive: (CardInfo withCard: aCard affecting: players elements) ].
+	aCard assertIsATransientCard
+		ifTrue: [ ^ self ].
 	cardsHistory add: aCard.
-	" aca falta pensarla bien porque caen redo y repeat "
+	board addAnActive: (CardInfo withCard: aCard affecting: players elements)
 ]
 
 { #category : #adding }
 Game >> add: aCard affecting: aPlayer [
-	" aca las agrego nomas en cardsHistory y como active, porque van a actuar sobre las tiradas asique no hay mucho mas para hacer "
-	cardsHistory add: aCard.
+	cardsHistory addFirst: aCard.
+	board addAnActive: (CardInfo withCard: aCard affecting: aPlayer).
 	aCard assertIsATransientCard
-		ifTrue: [board addAnActive: (CardInfo withCard: aCard affecting: aPlayer )]
+		ifTrue: [ aCard affect: aPlayer on: board ]
 ]
 
 { #category : #adding }
 Game >> add: aCard cancelling: anotherCard [
-	" mepa que habria que hacer un assert antes para que cuando llegue a esta instancia estemos seguro que sea una cancelling card "
-	cardsHistory add: aCard.
+	self assertPlayerCanUseA:aCard.
+	aCard assertCanCancelAnotherCard.
+	cardsHistory addFirst: aCard.
 	aCard affect: anotherCard on: board.
 ]
 
@@ -117,6 +123,11 @@ Game >> add: aCard cancelling: anotherCard [
 Game >> assertGameHasNotFinished [
 	self hasFinished
 		ifTrue: [ AssertionFailure signal: 'The game has finished' ]
+]
+
+{ #category : #asserting }
+Game >> assertPlayerCanUseA: aCard [
+	^ aCard assertIsATransientCard not & (self hasTheTurn: aCard owner)
 ]
 
 { #category : #asserting }
@@ -144,7 +155,7 @@ Game >> initializePlayedBy: aPlayersCollection initializeThrowing: aDicesCollect
 	board := aBoard.
 	currentPlayer := players nextBy: 1.
 	laps := aQuantity.
-	lastCardPlayed:=OrderedCollection new.
+	cardsHistory :=OrderedCollection new.
 ]
 
 { #category : #actions }

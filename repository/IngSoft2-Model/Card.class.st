@@ -22,5 +22,43 @@ Internal Representation and Key Implementation Points.
 Class {
 	#name : #Card,
 	#superclass : #Object,
+	#instVars : [
+		'owner'
+	],
 	#category : #'IngSoft2-Model'
 }
+
+{ #category : #affecting }
+Card >> affect: arg1 on: aBoard [
+	^ self subclassResponsibility
+]
+
+{ #category : #asserting }
+Card >> assertCanCancelAnotherCard [
+	AssertionFailure signal: 'This card cannot cancel another card'
+]
+
+{ #category : #asserting }
+Card >> assertCardAffectsAllThePlayers [
+	^false
+]
+
+{ #category : #asserting }
+Card >> assertCardNeedsLastCard [
+	^false
+]
+
+{ #category : #asserting }
+Card >> assertIsATransientCard [
+	^ self subclassResponsibility
+]
+
+{ #category : #initialization }
+Card >> initializeOwnedBy: aPlayer [
+	owner := aPlayer
+]
+
+{ #category : #accessing }
+Card >> owner [
+	^ owner
+]
