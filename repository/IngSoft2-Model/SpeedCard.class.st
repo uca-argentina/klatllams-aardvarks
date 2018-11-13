@@ -1,29 +1,15 @@
 Class {
 	#name : #SpeedCard,
 	#superclass : #Card,
-	#instVars : [
-		'ownedBy'
-	],
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'instance creation' }
-SpeedCard class >> ownedBy: aPlayer [
-	^self new initializeOwnedBy: aPlayer
-]
-
 { #category : #affecting }
-SpeedCard >> affect [
-	^ 1
+SpeedCard >> affect: aPlayer on: aBoard [
+	aBoard move: aPlayer by: 1
 ]
 
-{ #category : #initialization }
-SpeedCard >> initializeOwnedBy: aPlayer [ 
-	ownedBy := aPlayer.
-	
-]
-
-{ #category : #accessing }
-SpeedCard >> ownedBy [
-	^ ownedBy
+{ #category : #asserting }
+SpeedCard >> assertIsATransientCard [
+	^ true
 ]

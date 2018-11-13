@@ -88,22 +88,25 @@ Board class >> playedBy: aPlayersCollection spaces: aQuantity [
 	^ self new initializePlayedBy: aPlayersCollection initializeComposedBy: spacesCollection
 ]
 
-{ #category : #asserting }
-Board >> assertNotEmptyActiveCards [
-	^ activeCardsInfo notEmpty
+{ #category : #adding }
+Board >> addAnActive: cardInfo [
+	activeCardsInfo add: cardInfo 
 ]
 
 { #category : #initialization }
 Board >> initializePlayedBy: aPlayersCollection initializeComposedBy: aSpacesCollection [
 	spaces := aSpacesCollection.
 	gameStatus := GameStatus players: aPlayersCollection.
-	activeCardsInfo := OrderedCollection new.
 	landingPlayerPositions := OrderedCollection new.
+	activeCardsInfo := OrderedCollection new.
 ]
 
-{ #category : #action }
-Board >> lastLandingPosition: aPosition playedBy: aPlayer [
-	landingPlayerPositions add: (LandingPosition player: aPlayer position: aPosition)
+{ #category : #accessing }
+Board >> lastLandingPositionOf: aPlayer [
+	landingPlayerPositions
+		detect: [ :landingPosition | landingPosition player = aPlayer ]
+		ifFound: [ :landingPosition | ^ landingPosition position ]
+		ifNone: [ ^0 ]
 ]
 
 { #category : #action }
@@ -120,22 +123,32 @@ Board >> move: aPlayer by: aQuantity [
 
 { #category : #action }
 Board >> moveAndAffect: aPlayer by: aValue [
-	| cardsAffecting afterCardsResult |
-	cardsAffecting := activeCardsInfo select: [ :cardInfo | cardInfo playerAffected: aPlayer ].
-	afterCardsResult := aValue	+ (cardsAffecting sumNumbers: [ :cardInfo | cardInfo card affect ]).
-	self move: aPlayer by: afterCardsResult.
-	self lastLandingPosition: (gameStatus positionOf: aPlayer) playedBy: aPlayer.
+	activeCardsInfo
+		select: [ :cardInfo | cardInfo affected: aPlayer ]
+		thenDo: [ :cardInfo | cardInfo card affect: aPlayer on: self ].
+	self move: aPlayer by: aValue.
+	self updateLastLandingTo: (gameStatus positionOf: aPlayer) of: aPlayer.
 	(spaces at: (gameStatus positionOf: aPlayer)) affect: aPlayer on: self
 ]
 
 { #category : #removing }
-Board >> remove: aCard [
+Board >> removeAnActive: card [
 	activeCardsInfo
-		detect: [ :cardInfo | cardInfo card = aCard ]
+		detect: [ :cardInfo | cardInfo card = card ]
 		ifFound: [ :cardInfo | activeCardsInfo remove: cardInfo ]
+]
+
+{ #category : #accessing }
+Board >> spaces [
+	^ spaces
 ]
 
 { #category : #accessing }
 Board >> storyElements [
 	^ gameStatus
+]
+
+{ #category : #updating }
+Board >> updateLastLandingTo: aPosition of: aPlayer [
+	landingPlayerPositions addFirst: (LandingPosition player: aPlayer on: aPosition)
 ]

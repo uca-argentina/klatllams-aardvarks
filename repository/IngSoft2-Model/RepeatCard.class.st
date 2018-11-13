@@ -1,28 +1,18 @@
 Class {
 	#name : #RepeatCard,
 	#superclass : #Card,
-	#instVars : [
-		'ownedBy'
-	],
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'instance creation' }
-RepeatCard class >> ownedBy: aPlayer [
-	^self new initializeOwnedBy: aPlayer
-]
-
 { #category : #affecting }
-RepeatCard >> affect: aPlayer [
+RepeatCard >> affect: aPlayer on: aBoard [
+	| aPosition |
+	aPosition := aBoard lastLandingPositionOf: aPlayer.
+	aPosition ~= 0
+		ifTrue: [ (aBoard spaces at: aPosition) affect: aPlayer on: aBoard ]
 ]
 
-{ #category : #initialization }
-RepeatCard >> initializeOwnedBy: aPlayer [ 
-	ownedBy := aPlayer.
-	
-]
-
-{ #category : #accessing }
-RepeatCard >> ownedBy [
-	^ ownedBy
+{ #category : #asserting }
+RepeatCard >> assertIsATransientCard [
+	^ true
 ]

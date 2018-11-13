@@ -34,7 +34,8 @@ Class {
 		'currentPlayer',
 		'board',
 		'laps',
-		'cardsHistory'
+		'cardsHistory',
+		'lastCardPlayed'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -91,30 +92,6 @@ Game class >> playedBy: aPlayersCollection throwing: aDicesCollection spaces: aS
 		totalLaps: aLapsQuantity
 ]
 
-{ #category : #actions }
-Game >> add: aCard [
-	[ aCard assertCardAffectAllThePlayers ]
-		on: AssertionFailure
-		do: [ :ex | aCard assertRepeatCard ].
-	board addCard: (CardInfo with: aCard affecting: players elements).
-	cardsHistory add: aCard
-]
-
-{ #category : #adding }
-Game >> add: aCard affecting: aPlayer [
-	aCard assertAffectsSinglePlayer.
-	board addCard: (CardInfo with: aCard affecting: aPlayer asOrderedCollection).
-	cardsHistory add: aCard.
-]
-
-{ #category : #adding }
-Game >> add: aCard affectingCard: anotherCard [
-	aCard assertCancellingProperty.
-	board assertNotEmptyActiveCards.
-	aCard affect: anotherCard on: board.
-	cardsHistory add: aCard
-]
-
 { #category : #asserting }
 Game >> assertGameHasNotFinished [
 	self hasFinished
@@ -145,7 +122,8 @@ Game >> initializePlayedBy: aPlayersCollection initializeThrowing: aDicesCollect
 	dices := aDicesCollection.
 	board := aBoard.
 	currentPlayer := players nextBy: 1.
-	laps := aQuantity
+	laps := aQuantity.
+	lastCardPlayed:=OrderedCollection new.
 ]
 
 { #category : #actions }

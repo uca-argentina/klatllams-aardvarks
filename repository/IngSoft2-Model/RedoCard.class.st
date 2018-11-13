@@ -2,27 +2,22 @@ Class {
 	#name : #RedoCard,
 	#superclass : #Card,
 	#instVars : [
-		'ownedBy'
+		'lastCard'
 	],
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'instance creation' }
-RedoCard class >> ownedBy: aPlayer [
-	^self new initializeOwnedBy: aPlayer
-]
-
 { #category : #affecting }
-RedoCard >> affect: aPlayer [
+RedoCard >> affect: aPlayer on: aBoard [
+	lastCard affect: aPlayer on: aBoard
 ]
 
-{ #category : #initialization }
-RedoCard >> initializeOwnedBy: aPlayer [ 
-	ownedBy := aPlayer.
-	
+{ #category : #asserting }
+RedoCard >> assertIsATransientCard [
+	^ true
 ]
 
-{ #category : #accessing }
-RedoCard >> ownedBy [
-	^ ownedBy
+{ #category : #updating }
+RedoCard >> lastCardPlayed: aCard [
+	lastCard := aCard 
 ]
