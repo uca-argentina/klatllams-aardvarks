@@ -11,5 +11,5 @@ CancellationCard >> affect: card on: aBoard [
 
 { #category : #asserting }
 CancellationCard >> assertIsATransientCard [
-	^ false
+	^ true
 ]

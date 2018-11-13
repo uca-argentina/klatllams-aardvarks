@@ -92,6 +92,27 @@ Game class >> playedBy: aPlayersCollection throwing: aDicesCollection spaces: aS
 		totalLaps: aLapsQuantity
 ]
 
+{ #category : #adding }
+Game >> add: aCard [
+	cardsHistory add: aCard.
+	" aca falta pensarla bien porque caen redo y repeat "
+]
+
+{ #category : #adding }
+Game >> add: aCard affecting: aPlayer [
+	" aca las agrego nomas en cardsHistory y como active, porque van a actuar sobre las tiradas asique no hay mucho mas para hacer "
+	cardsHistory add: aCard.
+	aCard assertIsATransientCard
+		ifTrue: [board addAnActive: (CardInfo withCard: aCard affecting: aPlayer )]
+]
+
+{ #category : #adding }
+Game >> add: aCard cancelling: anotherCard [
+	" mepa que habria que hacer un assert antes para que cuando llegue a esta instancia estemos seguro que sea una cancelling card "
+	cardsHistory add: aCard.
+	aCard affect: anotherCard on: board.
+]
+
 { #category : #asserting }
 Game >> assertGameHasNotFinished [
 	self hasFinished

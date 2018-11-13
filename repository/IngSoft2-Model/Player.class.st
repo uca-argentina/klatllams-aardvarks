@@ -83,8 +83,11 @@ Player >> play: aCard in: aGame affecting: aPlayer [
 
 { #category : #action }
 Player >> play: aCard in: aGame cancelling: anotherCard [
-	aGame add: aCard affectingCard: anotherCard.
-	myCards remove: aCard
+	myCards
+		detect: [ :each | aCard = each ]
+		ifFound: [ aGame add: aCard affectingCard: anotherCard.
+			myCards remove: aCard ]
+		ifNone: [ AssertionFailure signal: 'Wrong card' ]
 ]
 
 { #category : #action }
