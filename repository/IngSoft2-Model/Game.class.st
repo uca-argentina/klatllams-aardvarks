@@ -96,43 +96,39 @@ Game >> activeCardsInfo [
 	^ board activeCardsInfo
 ]
 
-{ #category : #adding }
+{ #category : #actions }
 Game >> add: aCard [
 	self assertPlayerCanUseA: aCard.
-	aCard assertCardNeedsLastCard & cardsHistory notEmpty
-		ifTrue: [ aCard lastCardPlayed: cardsHistory first ].
-	aCard assertIsCardATransientCard
-		ifTrue: [ ^ self ].
-	cardsHistory add: aCard.
-	board addAnActive: (CardInfo withCard: aCard affecting: players elements)
+	aCard assertCardNeedsLastCard: cardsHistory.
+	aCard assertCardIsPermanent
+		ifTrue: [ cardsHistory add: aCard.
+			board addAnActive: (CardInfo withCard: aCard affecting: players elements) ]
 ]
 
-{ #category : #adding }
+{ #category : #actions }
 Game >> add: aCard affecting: aPlayer [
 	self assertPlayerCanUseA: aCard.
-	aCard assertCardNeedsLastCard & cardsHistory notEmpty
-		ifTrue: [ aCard lastCardPlayed: cardsHistory first ].
+	aCard assertCardNeedsLastCard: cardsHistory.
 	cardsHistory addFirst: aCard.
 	board addAnActive: (CardInfo withCard: aCard affecting: {aPlayer} asOrderedCollection).
-	aCard assertIsCardATransientCard
+	aCard assertCardIsTransient
 		ifTrue: [ aCard affect: aPlayer on: board ]
 ]
 
-{ #category : #adding }
+{ #category : #actions }
 Game >> add: aCard cancelling: anotherCard [
+	aCard assertCardNeedsLastCard: cardsHistory.
 	self assertCancellingCanBeDoneBy: aCard.
-	aCard assertCardNeedsLastCard & cardsHistory notEmpty
-		ifTrue: [ aCard lastCardPlayed: cardsHistory first ].
-	aCard assertCanCancelAnotherCard.
 	cardsHistory addFirst: aCard.
 	aCard affect: anotherCard on: board
 ]
 
-{ #category : #adding }
+{ #category : #asserting }
 Game >> assertCancellingCanBeDoneBy: aCard [
 	board activeCardsInfo isEmpty
 		ifTrue: [ aCard owner addNewCard: aCard.
-			AssertionFailure signal: 'You cannot play a canceling card when there are no active cards.' ]
+			AssertionFailure signal: 'You cannot play a canceling card when there are no active cards.' ].
+	aCard assertCanCancelAnotherCard
 ]
 
 { #category : #asserting }
@@ -143,7 +139,7 @@ Game >> assertGameHasNotFinished [
 
 { #category : #asserting }
 Game >> assertPlayerCanUseA: aCard [
-	aCard assertCardIsAPermanentCard & (self hasTheTurn: aCard owner) | aCard assertIsCardATransientCard
+	aCard assertCardIsPermanent & (self hasTheTurn: aCard owner) | aCard assertCardIsTransient
 		ifTrue: [ ^ self ].
 	aCard owner addNewCard: aCard.
 	AssertionFailure signal: 'You cannot play a permanent card right now'

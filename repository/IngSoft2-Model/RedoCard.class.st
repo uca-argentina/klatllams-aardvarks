@@ -33,9 +33,10 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'instance creation' }
-RedoCard class >> ownedBy: aPlayer [
-	^ self new initializeOwnedBy: aPlayer.
+{ #category : #updating }
+RedoCard >> addLastCard: aCard [
+	lastCard := aCard.
+	lastCardIsSet := true
 ]
 
 { #category : #affecting }
@@ -52,25 +53,20 @@ RedoCard >> assertCanCancelAnotherCard [
 ]
 
 { #category : #asserting }
-RedoCard >> assertCardNeedsLastCard [
-	^true
+RedoCard >> assertCardIsTransient [
+	lastCardIsSet
+		ifTrue: [ ^ lastCard assertCardIsTransient ].
+	^ true
 ]
 
 { #category : #asserting }
-RedoCard >> assertIsCardATransientCard [
-	lastCardIsSet
-		ifTrue: [ ^ lastCard assertIsCardATransientCard ].
-	^ true
+RedoCard >> assertCardNeedsLastCard: aCardsCollection [
+	aCardsCollection notEmpty 
+		ifTrue: [ self addLastCard: aCardsCollection first ]
 ]
 
 { #category : #initialization }
 RedoCard >> initializeOwnedBy: aPlayer [
 	owner := aPlayer.
 	lastCardIsSet := false
-]
-
-{ #category : #updating }
-RedoCard >> lastCardPlayed: aCard [
-	lastCard := aCard.
-	lastCardIsSet := true
 ]

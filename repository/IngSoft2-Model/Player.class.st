@@ -46,7 +46,7 @@ Player class >> named: aName [
 	^ self new initializeNamed: aName
 ]
 
-{ #category : #action }
+{ #category : #updating }
 Player >> addNewCard: aCard [
 	myCards addFirst: aCard
 ]
@@ -63,7 +63,7 @@ Player >> myCards [
 	^ myCards
 ]
 
-{ #category : #accesing }
+{ #category : #accessing }
 Player >> name [
 	^ name
 ]

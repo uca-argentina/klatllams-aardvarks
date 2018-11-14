@@ -28,6 +28,11 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #'instance creation' }
+Card class >> ownedBy: aPlayer [
+	^ self new initializeOwnedBy: aPlayer.
+]
+
 { #category : #affecting }
 Card >> affect: arg1 on: aBoard [
 	^ self subclassResponsibility
@@ -39,18 +44,18 @@ Card >> assertCanCancelAnotherCard [
 ]
 
 { #category : #asserting }
-Card >> assertCardIsAPermanentCard [
-	^ self assertIsCardATransientCard not
+Card >> assertCardIsPermanent [
+	^ self assertCardIsTransient not
 ]
 
 { #category : #asserting }
-Card >> assertCardNeedsLastCard [
-	^false
-]
-
-{ #category : #asserting }
-Card >> assertIsCardATransientCard [
+Card >> assertCardIsTransient [
 	^ self subclassResponsibility
+]
+
+{ #category : #asserting }
+Card >> assertCardNeedsLastCard: aCardsCollection [
+	
 ]
 
 { #category : #initialization }

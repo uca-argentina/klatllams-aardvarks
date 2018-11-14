@@ -28,17 +28,12 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'instance creation' }
-OverloadCard class >> ownedBy: aPlayer [
-	^ self new initializeOwnedBy: aPlayer.
-]
-
 { #category : #affecting }
 OverloadCard >> affect: aPlayer on: aBoard [
 	aBoard move: aPlayer by: 2 negated
 ]
 
 { #category : #asserting }
-OverloadCard >> assertIsCardATransientCard [
+OverloadCard >> assertCardIsTransient [
 	^ false
 ]

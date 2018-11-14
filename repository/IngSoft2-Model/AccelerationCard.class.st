@@ -28,17 +28,12 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'instance creation' }
-AccelerationCard class >> ownedBy: aPlayer [
-	^ self new initializeOwnedBy: aPlayer.
-]
-
 { #category : #affecting }
 AccelerationCard >> affect: aPlayer on: aBoard [
 	aBoard move: aPlayer by: 1
 ]
 
 { #category : #asserting }
-AccelerationCard >> assertIsCardATransientCard [
+AccelerationCard >> assertCardIsTransient [
 	^ false
 ]

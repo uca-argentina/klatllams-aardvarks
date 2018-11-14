@@ -32,11 +32,6 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'instance creation' }
-RepeatCard class >> ownedBy: aPlayer [
-	^ self new initializeOwnedBy: aPlayer.
-]
-
 { #category : #affecting }
 RepeatCard >> affect: aPlayer on: aBoard [
 	| aPosition |
@@ -46,13 +41,13 @@ RepeatCard >> affect: aPlayer on: aBoard [
 	notUsedCard := false
 ]
 
-{ #category : #affecting }
+{ #category : #asserting }
 RepeatCard >> assertCanMoveTo: aPosition [
 	^ aPosition ~= 0 & notUsedCard
 ]
 
 { #category : #asserting }
-RepeatCard >> assertIsCardATransientCard [
+RepeatCard >> assertCardIsTransient [
 	^ true
 ]
 

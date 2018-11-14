@@ -28,11 +28,6 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'instance creation' }
-CancellationCard class >> ownedBy: aPlayer [
-	^ self new initializeOwnedBy: aPlayer.
-]
-
 { #category : #affecting }
 CancellationCard >> affect: card on: aBoard [
 	aBoard removeAnActive: card
@@ -43,6 +38,6 @@ CancellationCard >> assertCanCancelAnotherCard [
 ]
 
 { #category : #asserting }
-CancellationCard >> assertIsCardATransientCard [
+CancellationCard >> assertCardIsTransient [
 	^ true
 ]

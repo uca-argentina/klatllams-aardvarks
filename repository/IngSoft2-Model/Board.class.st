@@ -93,7 +93,7 @@ Board >> activeCardsInfo [
 	^ activeCardsInfo
 ]
 
-{ #category : #adding }
+{ #category : #updating }
 Board >> addAnActive: cardInfo [
 	activeCardsInfo add: cardInfo 
 ]
@@ -141,7 +141,7 @@ Board >> moveAndAffect: aPlayer by: aValue [
 	(spaces at: (gameStatus positionOf: aPlayer)) affect: aPlayer on: self
 ]
 
-{ #category : #removing }
+{ #category : #updating }
 Board >> removeAnActive: card [
 	activeCardsInfo
 		detect: [ :cardInfo | cardInfo card = card ]

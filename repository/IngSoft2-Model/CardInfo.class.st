@@ -50,7 +50,7 @@ CardInfo >> card [
 ]
 
 { #category : #initialization }
-CardInfo >> initializeWithCard: aCard affecting: aPlayerCollection [
+CardInfo >> initializeWithCard: aCard affecting: aPlayersCollection [
 	card := aCard.
-	affectedPlayer := aPlayerCollection 
+	affectedPlayer := aPlayersCollection 
 ]

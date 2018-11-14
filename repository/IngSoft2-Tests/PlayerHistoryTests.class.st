@@ -1,11 +1,11 @@
 Class {
-	#name : #PlayerStoryTests,
+	#name : #PlayerHistoryTests,
 	#superclass : #TestCase,
 	#category : #'IngSoft2-Tests'
 }
 
 { #category : #tests }
-PlayerStoryTests >> testAPlayerStoryCanHaveACollectionOfPlayerPosition [
+PlayerHistoryTests >> testAPlayerStoryCanHaveACollectionOfPlayerPosition [
 	| playerStory |
 	playerStory := PlayerHistory player: 'hector'.
 	playerStory updatePlayerTo: 5 withLaps:1. 
