@@ -31,9 +31,9 @@ BoardTest >> testABoardCannotBeComposedByLessThanSixSpaces [
 BoardTest >> testABoardCannotBeCreatedWithAnInvalidQuantityOfSpaces [
 	| board |
 	self
-		should: [ board := Board playedBy: #('hector' 'ignacio') spaces: 101 ]
+		should: [ board := Board playedBy: #('hector' 'ignacio') spaces: 9 ]
 		raise: AssertionFailure
-		withExceptionDo:[ :signal | self assert: signal messageText equals: 'Spaces Quantity must be a multiple of 100' ]
+		withExceptionDo:[ :signal | self assert: signal messageText equals: 'You need more spaces' ]
 	
 ]
 
@@ -43,8 +43,8 @@ BoardTest >> testAPlayerCanMoveOnTheBoardAndIsTheTopPlayer [
 	spaces := BoardTest createNoEffectSpacesCollection.	
 	board := Board playedBy: #('hector' 'ignacio') composedBy: spaces.
 	board move: 'hector' by: 5.
-	self assert: board playerPositions topPlayer equals: 'hector'.
-	self assert:( board playerPositions positionOf: 'hector') equals: 6
+	self assert: board gameStatus topPlayer equals: 'hector'.
+	self assert:( board gameStatus positionOf: 'hector') equals: 6
 ]
 
 { #category : #tests }
@@ -53,14 +53,14 @@ BoardTest >> testAPlayerCanMoveToANegativeLapAndMoreThanOneLap [
 	spaces := BoardTest createNoEffectSpacesCollection.	
 	self assert: spaces size equals: 8.
 	board := Board playedBy: #('hector' 'ignacio') composedBy: spaces.
-	self assert: (board playerPositions positionOf: 'hector') equals: 1 .
+	self assert: (board gameStatus positionOf: 'hector') equals: 1 .
 	board move: 'hector' by: -1.
-	self assert:( board playerPositions positionOf: 'hector') equals: 8;
-		  assert:( board playerPositions lapsOf: 'hector') equals: -1.
+	self assert:( board gameStatus positionOf: 'hector') equals: 8;
+		  assert:( board gameStatus lapsOf: 'hector') equals: -1.
 	board move: 'hector' by: 8.
-	self assert:( board playerPositions positionOf: 'hector') equals: 8;
-	     assert:( board playerPositions lapsOf: 'hector') equals: 0.
+	self assert:( board gameStatus positionOf: 'hector') equals: 8;
+	     assert:( board gameStatus lapsOf: 'hector') equals: 0.
 	board move: 'hector'  by: 10.
-	self assert:( board playerPositions positionOf: 'hector') equals: 2;
-	     assert:( board playerPositions lapsOf: 'hector') equals: 2.
+	self assert:( board gameStatus positionOf: 'hector') equals: 2;
+	     assert:( board gameStatus lapsOf: 'hector') equals: 2.
 ]

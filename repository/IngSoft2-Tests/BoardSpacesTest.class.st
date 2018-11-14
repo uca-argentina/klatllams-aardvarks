@@ -28,7 +28,7 @@ BoardSpacesTest >> testAMoonWalkSpaceWithBackwardsValue4MovesPlayerBackwardsBy4 
 	board := Board playedBy: #('hector' 'ignacio') composedBy: spaces.
 	board moveAndAffect: 'hector' by: 4.
 	board moveAndAffect: 'ignacio' by: 5.
-	self assert: (board playerPositions positionOf: 'hector') equals: 1.
+	self assert: (board gameStatus positionOf: 'hector') equals: 1.
 ]
 
 { #category : #tests }
@@ -37,7 +37,7 @@ BoardSpacesTest >> testANoEffectSpaceCannotChangeAPlayerPosition [
 	spaces := BoardTest createNoEffectSpacesCollection  	.
 	board := Board playedBy: #('hector' 'ignacio') composedBy: spaces.
 	board moveAndAffect: 'hector' by: 5.
-   self assert: (board playerPositions positionOf: 'hector') equals: 6
+   self assert: (board gameStatus positionOf: 'hector') equals: 6
 ]
 
 { #category : #tests }
@@ -53,8 +53,25 @@ BoardSpacesTest >> testAtomicBombSpaceAndMoveEveryOneToInitialPosition [
 	board moveAndAffect: 'hector' by: 4.
 	board moveAndAffect: 'ignacio' by: 5.
 	self
-		assert: (board playerPositions positionOf: 'hector') equals: 1;
-		assert: (board playerPositions positionOf: 'ignacio') equals: 1
+		assert: (board gameStatus positionOf: 'hector') equals: 1;
+		assert: (board gameStatus positionOf: 'ignacio') equals: 1
+]
+
+{ #category : #tests }
+BoardSpacesTest >> testCardSpaceAssignsACardToAPlayer [
+	| spaces players board card |
+	spaces := {CardSpace new.
+	CardSpace new.
+	CardSpace new.
+	CardSpace new.
+	CardSpace new.
+	CardSpace new} asOrderedCollection.
+	players := {Player named: 'Carrot' . Player named: 'Nacho'} asOrderedCollection .
+	board := Board playedBy: players composedBy: spaces.
+	(spaces first) affect: players first on: board.
+	card := (players first) myCards first.
+	self assert: (card owner) equals: (players first)
+	
 ]
 
 { #category : #tests }
@@ -70,8 +87,8 @@ BoardSpacesTest >> testSpeedUpHoleSpaceAndMoveAPlayerForwardsBy4 [
 	board moveAndAffect: 'hector' by: 4.
 	board moveAndAffect: 'ignacio' by: 5.
 	self
-		assert: (board playerPositions positionOf: 'hector') equals: 5;
-		assert: (board playerPositions positionOf: 'ignacio') equals: 4
+		assert: (board gameStatus positionOf: 'hector') equals: 5;
+		assert: (board gameStatus positionOf: 'ignacio') equals: 4
 ]
 
 { #category : #tests }
@@ -87,6 +104,6 @@ BoardSpacesTest >> testWarmHoleSpaceAndMoveAPlayerBackwardsBy4 [
 	board moveAndAffect: 'hector' by: 4.
 	board moveAndAffect: 'ignacio' by: 5.
 	self
-		assert: (board playerPositions positionOf: 'hector') equals: 5;
-		assert: (board playerPositions positionOf: 'ignacio') equals: 2
+		assert: (board gameStatus positionOf: 'hector') equals: 5;
+		assert: (board gameStatus positionOf: 'ignacio') equals: 2
 ]

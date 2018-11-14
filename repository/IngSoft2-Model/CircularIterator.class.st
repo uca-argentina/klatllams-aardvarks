@@ -65,9 +65,9 @@ CircularIterator >> initializeContaining: aCollection initializeStartingAt: aPos
 
 { #category : #accessing }
 CircularIterator >> nextBy: aQuantity [
-	aQuantity < 0
-		ifTrue: [ aQuantity negated timesRepeat: [ self updateCurrentPositionBackwards ] ]
-		ifFalse: [ aQuantity timesRepeat: [ self updateCurrentPositionForward ] ].
+	aQuantity > 0
+		ifTrue: [ aQuantity timesRepeat: [ self updateCurrentPositionForward ] ]
+		ifFalse: [ aQuantity negated timesRepeat: [ self updateCurrentPositionBackwards ] ].
 	^ elements at: currentPosition
 ]
 

@@ -28,7 +28,8 @@ Class {
 	#name : #Player,
 	#superclass : #Object,
 	#instVars : [
-		'name'
+		'name',
+		'myCards'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -45,17 +46,56 @@ Player class >> named: aName [
 	^ self new initializeNamed: aName
 ]
 
-{ #category : #initialization }
-Player >> initializeNamed: aName [
-	name := aName
+{ #category : #updating }
+Player >> addNewCard: aCard [
+	myCards addFirst: aCard
 ]
 
-{ #category : #accesing }
+{ #category : #initialization }
+Player >> initializeNamed: aName [
+	name := aName.
+	myCards := OrderedCollection new.
+	
+]
+
+{ #category : #accessing }
+Player >> myCards [
+	^ myCards
+]
+
+{ #category : #accessing }
 Player >> name [
 	^ name
 ]
 
-{ #category : #update }
+{ #category : #action }
+Player >> play: aCard in: aGame [
+	myCards
+		detect: [ :each | aCard = each ]
+		ifFound: [ aGame add: aCard.
+			myCards remove: aCard ]
+		ifNone: [ AssertionFailure signal: 'Wrong card' ]
+]
+
+{ #category : #action }
+Player >> play: aCard in: aGame affecting: aPlayer [
+	myCards
+		detect: [ :each | aCard = each ]
+		ifFound: [ aGame add: aCard affecting: aPlayer.
+			myCards remove: aCard ]
+		ifNone: [ AssertionFailure signal: 'Wrong card' ]
+]
+
+{ #category : #action }
+Player >> play: aCard in: aGame cancelling: anotherCard [
+	myCards
+		detect: [ :each | aCard = each ]
+		ifFound: [ aGame add: aCard cancelling: anotherCard.
+			myCards remove: aCard ]
+		ifNone: [ AssertionFailure signal: 'Wrong card' ]
+]
+
+{ #category : #action }
 Player >> roll: aDiceCollection [
 	^ aDiceCollection sumNumbers:[ :each | each roll ]
 ]

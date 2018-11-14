@@ -27,7 +27,7 @@ Class {
 	#name : #GameStatus,
 	#superclass : #Object,
 	#instVars : [
-		'playersAndPositions'
+		'playersHistories'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -40,47 +40,47 @@ GameStatus class >> players: playersCollection [
 { #category : #accesing }
 GameStatus >> gamePositionOf: aPlayer [
 	self sortThePlayersInDescendingOrder.
-	^ playersAndPositions detectIndex: [ :each | each player = aPlayer ]
+	^ playersHistories detectIndex: [ :each | each player = aPlayer ]
 ]
 
 { #category : #initialization }
 GameStatus >> initializeWithPlayers: playersCollection [
-	playersAndPositions := (playersCollection collect: [ :each | PlayerStatus player:each ])
-		asOrderedCollection.
+	| playerHistory |
+	playersHistories := playersCollection
+		collect: [ :each | playerHistory := PlayerHistory player: each.
+								playerHistory updatePlayerTo:1 withLaps: 0 ]
 ]
 
 { #category : #accesing }
 GameStatus >> lapsOf: aPlayer [
-	^ (playersAndPositions detect: [ :each | each player = aPlayer ]) lap
+	^ (playersHistories detect: [ :playerStory | playerStory player = aPlayer ]) gameStatus first lap
 ]
 
 { #category : #accesing }
 GameStatus >> players [
-	^ playersAndPositions collect: [ :each | each player ]
+	^ playersHistories collect: [ :playerStory | playerStory player ]
 ]
 
 { #category : #accesing }
 GameStatus >> positionOf: aPlayer [
-	^ (playersAndPositions detect: [ :each | each player = aPlayer ]) position 
+ ^ (playersHistories detect: [ :playerStory | playerStory player = aPlayer ])gameStatus first position
 ]
 
 { #category : #sorting }
 GameStatus >> sortThePlayersInDescendingOrder [
-	playersAndPositions sort: #lap descending , #position descending
+	^ (playersHistories collect: [ :playerStory | playerStory gameStatus first ])
+		sort: #lap descending , #position descending
 ]
 
 { #category : #accesing }
 GameStatus >> topPlayer [
-	self sortThePlayersInDescendingOrder.
-	^ playersAndPositions first player
+	^ self sortThePlayersInDescendingOrder first player
 ]
 
 { #category : #updating }
 GameStatus >> updatePositionAndLapsOf: aPlayer to: aPosition adding: laps [
-	playersAndPositions
-		detect: [ :each | each player = aPlayer ]
-		ifFound: [ :player | 
-			player updateThePositionTo: aPosition.
-			player updateLapBy: laps ]
-		ifNone: [ Exception signal: 'Player not found' ].
+	playersHistories
+		detect: [ :playerStory | playerStory player = aPlayer ]
+		ifFound: [ :playerStory | playerStory updatePlayerTo: aPosition withLaps: laps ]
+		ifNone: [ Exception signal: 'Player not found' ]
 ]

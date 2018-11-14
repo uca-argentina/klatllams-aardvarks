@@ -8,8 +8,7 @@ For the Responsibility part: Three sentences about my main responsibilities - wh
 For the Collaborators Part: State my main collaborators and one line about how I interact with them. 
 
 Public API and Key Messages
-
-- message one
+- message one   
 - message two 
 - (for bonus points) how to create instances.
 
@@ -18,31 +17,40 @@ Public API and Key Messages
 Internal Representation and Key Implementation Points.
 
     Instance Variables
-	maxValue:		<Object>
+	affectedPlayer:		<Object>
+	card:		<Object>
 
 
     Implementation Points
 "
 Class {
-	#name : #RandomType,
+	#name : #CardInfo,
 	#superclass : #Object,
 	#instVars : [
-		'maxValue'
+		'card',
+		'affectedPlayer'
 	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'instance creation' }
-RandomType class >> rollingUntil: aValue [
-	^ self new initializeRollingUntil: aValue
+CardInfo class >> withCard: aCard affecting: aPlayerCollection [
+	^ self new initializeWithCard: aCard affecting: aPlayerCollection
+]
+
+{ #category : #accessing }
+CardInfo >> affected: aPlayer [
+	affectedPlayer detect: [ :player | aPlayer = player ] ifFound: [ ^ true ].
+	^ false
+]
+
+{ #category : #accessing }
+CardInfo >> card [
+	^ card
 ]
 
 { #category : #initialization }
-RandomType >> initializeRollingUntil: aValue [
-	maxValue := aValue
-]
-
-{ #category : #action }
-RandomType >> roll [
-	^ maxValue atRandom
+CardInfo >> initializeWithCard: aCard affecting: aPlayersCollection [
+	card := aCard.
+	affectedPlayer := aPlayersCollection 
 ]
