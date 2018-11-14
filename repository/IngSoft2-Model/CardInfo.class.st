@@ -40,7 +40,8 @@ CardInfo class >> withCard: aCard affecting: aPlayerCollection [
 
 { #category : #accessing }
 CardInfo >> affected: aPlayer [
-	^ affectedPlayer contains: aPlayer
+	affectedPlayer detect: [ :player | aPlayer = player ] ifFound: [ ^ true ].
+	^ false
 ]
 
 { #category : #accessing }
@@ -51,5 +52,5 @@ CardInfo >> card [
 { #category : #initialization }
 CardInfo >> initializeWithCard: aCard affecting: aPlayerCollection [
 	card := aCard.
-	affectedPlayer := aPlayerCollection
+	affectedPlayer := aPlayerCollection 
 ]

@@ -39,11 +39,6 @@ AccelerationCard >> affect: aPlayer on: aBoard [
 ]
 
 { #category : #asserting }
-AccelerationCard >> assertCardAffectsAllThePlayers [
-	^true
-]
-
-{ #category : #asserting }
-AccelerationCard >> assertIsATransientCard [
+AccelerationCard >> assertIsCardATransientCard [
 	^ false
 ]

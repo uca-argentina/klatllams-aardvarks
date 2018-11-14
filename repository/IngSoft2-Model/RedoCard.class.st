@@ -27,7 +27,8 @@ Class {
 	#name : #RedoCard,
 	#superclass : #Card,
 	#instVars : [
-		'lastCard'
+		'lastCard',
+		'lastCardIsSet'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -40,11 +41,14 @@ RedoCard class >> ownedBy: aPlayer [
 { #category : #affecting }
 RedoCard >> affect: aPlayer on: aBoard [
 	lastCard affect: aPlayer on: aBoard
+
 ]
 
 { #category : #asserting }
-RedoCard >> assertCardAffectsAllThePlayers [
-	^ lastCard assertCardAffectsAllThePlayers
+RedoCard >> assertCanCancelAnotherCard [
+	lastCardIsSet
+		ifTrue: [ ^ lastCard assertCanCancelAnotherCard ].
+	AssertionFailure signal: 'This card cannot cancel another card'
 ]
 
 { #category : #asserting }
@@ -53,11 +57,20 @@ RedoCard >> assertCardNeedsLastCard [
 ]
 
 { #category : #asserting }
-RedoCard >> assertIsATransientCard [
+RedoCard >> assertIsCardATransientCard [
+	lastCardIsSet
+		ifTrue: [ ^ lastCard assertIsCardATransientCard ].
 	^ true
+]
+
+{ #category : #initialization }
+RedoCard >> initializeOwnedBy: aPlayer [
+	owner := aPlayer.
+	lastCardIsSet := false
 ]
 
 { #category : #updating }
 RedoCard >> lastCardPlayed: aCard [
-	lastCard := aCard 
+	lastCard := aCard.
+	lastCardIsSet := true
 ]

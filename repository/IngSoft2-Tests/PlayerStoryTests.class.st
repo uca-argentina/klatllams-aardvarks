@@ -11,6 +11,6 @@ PlayerStoryTests >> testAPlayerStoryCanHaveACollectionOfPlayerPosition [
 	playerStory updatePlayerTo: 5 withLaps:1. 
 	playerStory updatePlayerTo: 5 withLaps: 1.
 	self assert: playerStory player equals: 'hector';
-		  assert: playerStory storyElements size equals: 2
+		  assert: playerStory gameStatus size equals: 2
 	
 ]

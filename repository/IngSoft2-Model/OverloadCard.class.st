@@ -39,6 +39,6 @@ OverloadCard >> affect: aPlayer on: aBoard [
 ]
 
 { #category : #asserting }
-OverloadCard >> assertIsATransientCard [
+OverloadCard >> assertIsCardATransientCard [
 	^ false
 ]

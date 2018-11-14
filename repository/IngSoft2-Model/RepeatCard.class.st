@@ -52,7 +52,7 @@ RepeatCard >> assertCanMoveTo: aPosition [
 ]
 
 { #category : #asserting }
-RepeatCard >> assertIsATransientCard [
+RepeatCard >> assertIsCardATransientCard [
 	^ true
 ]
 

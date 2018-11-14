@@ -39,8 +39,8 @@ Card >> assertCanCancelAnotherCard [
 ]
 
 { #category : #asserting }
-Card >> assertCardAffectsAllThePlayers [
-	^false
+Card >> assertCardIsAPermanentCard [
+	^ self assertIsCardATransientCard not
 ]
 
 { #category : #asserting }
@@ -49,7 +49,7 @@ Card >> assertCardNeedsLastCard [
 ]
 
 { #category : #asserting }
-Card >> assertIsATransientCard [
+Card >> assertIsCardATransientCard [
 	^ self subclassResponsibility
 ]
 

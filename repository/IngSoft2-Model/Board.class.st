@@ -88,9 +88,19 @@ Board class >> playedBy: aPlayersCollection spaces: aQuantity [
 	^ self new initializePlayedBy: aPlayersCollection initializeComposedBy: spacesCollection
 ]
 
+{ #category : #accessing }
+Board >> activeCardsInfo [
+	^ activeCardsInfo
+]
+
 { #category : #adding }
 Board >> addAnActive: cardInfo [
 	activeCardsInfo add: cardInfo 
+]
+
+{ #category : #accessing }
+Board >> gameStatus [
+	^ gameStatus
 ]
 
 { #category : #initialization }
@@ -141,11 +151,6 @@ Board >> removeAnActive: card [
 { #category : #accessing }
 Board >> spaces [
 	^ spaces
-]
-
-{ #category : #accessing }
-Board >> storyElements [
-	^ gameStatus
 ]
 
 { #category : #updating }

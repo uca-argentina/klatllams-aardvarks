@@ -38,6 +38,11 @@ PlayerHistory class >> player: aPlayer [
 	^self new initializeWithPlayer: aPlayer
 ]
 
+{ #category : #accessing }
+PlayerHistory >> gameStatus [
+	^ playerPositions
+]
+
 { #category : #initialization }
 PlayerHistory >> initializeWithPlayer: aPlayer [
 	player := aPlayer.
@@ -48,11 +53,6 @@ PlayerHistory >> initializeWithPlayer: aPlayer [
 { #category : #accessing }
 PlayerHistory >> player [
 	^ player
-]
-
-{ #category : #accessing }
-PlayerHistory >> storyElements [
-	^ playerPositions
 ]
 
 { #category : #adding }

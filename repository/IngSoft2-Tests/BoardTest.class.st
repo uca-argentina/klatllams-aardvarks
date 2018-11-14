@@ -43,8 +43,8 @@ BoardTest >> testAPlayerCanMoveOnTheBoardAndIsTheTopPlayer [
 	spaces := BoardTest createNoEffectSpacesCollection.	
 	board := Board playedBy: #('hector' 'ignacio') composedBy: spaces.
 	board move: 'hector' by: 5.
-	self assert: board storyElements topPlayer equals: 'hector'.
-	self assert:( board storyElements positionOf: 'hector') equals: 6
+	self assert: board gameStatus topPlayer equals: 'hector'.
+	self assert:( board gameStatus positionOf: 'hector') equals: 6
 ]
 
 { #category : #tests }
@@ -53,14 +53,14 @@ BoardTest >> testAPlayerCanMoveToANegativeLapAndMoreThanOneLap [
 	spaces := BoardTest createNoEffectSpacesCollection.	
 	self assert: spaces size equals: 8.
 	board := Board playedBy: #('hector' 'ignacio') composedBy: spaces.
-	self assert: (board storyElements positionOf: 'hector') equals: 1 .
+	self assert: (board gameStatus positionOf: 'hector') equals: 1 .
 	board move: 'hector' by: -1.
-	self assert:( board storyElements positionOf: 'hector') equals: 8;
-		  assert:( board storyElements lapsOf: 'hector') equals: -1.
+	self assert:( board gameStatus positionOf: 'hector') equals: 8;
+		  assert:( board gameStatus lapsOf: 'hector') equals: -1.
 	board move: 'hector' by: 8.
-	self assert:( board storyElements positionOf: 'hector') equals: 8;
-	     assert:( board storyElements lapsOf: 'hector') equals: 0.
+	self assert:( board gameStatus positionOf: 'hector') equals: 8;
+	     assert:( board gameStatus lapsOf: 'hector') equals: 0.
 	board move: 'hector'  by: 10.
-	self assert:( board storyElements positionOf: 'hector') equals: 2;
-	     assert:( board storyElements lapsOf: 'hector') equals: 2.
+	self assert:( board gameStatus positionOf: 'hector') equals: 2;
+	     assert:( board gameStatus lapsOf: 'hector') equals: 2.
 ]

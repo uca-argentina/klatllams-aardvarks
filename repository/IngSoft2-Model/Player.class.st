@@ -48,7 +48,7 @@ Player class >> named: aName [
 
 { #category : #action }
 Player >> addNewCard: aCard [
-	myCards add: aCard
+	myCards addFirst: aCard
 ]
 
 { #category : #initialization }
@@ -56,6 +56,11 @@ Player >> initializeNamed: aName [
 	name := aName.
 	myCards := OrderedCollection new.
 	
+]
+
+{ #category : #accessing }
+Player >> myCards [
+	^ myCards
 ]
 
 { #category : #accesing }
@@ -77,7 +82,7 @@ Player >> play: aCard in: aGame affecting: aPlayer [
 	myCards
 		detect: [ :each | aCard = each ]
 		ifFound: [ aGame add: aCard affecting: aPlayer.
-					  myCards remove: aCard ]
+			myCards remove: aCard ]
 		ifNone: [ AssertionFailure signal: 'Wrong card' ]
 ]
 
@@ -85,7 +90,7 @@ Player >> play: aCard in: aGame affecting: aPlayer [
 Player >> play: aCard in: aGame cancelling: anotherCard [
 	myCards
 		detect: [ :each | aCard = each ]
-		ifFound: [ aGame add: aCard affectingCard: anotherCard.
+		ifFound: [ aGame add: aCard cancelling: anotherCard.
 					  myCards remove: aCard ]
 		ifNone: [ AssertionFailure signal: 'Wrong card' ]
 ]

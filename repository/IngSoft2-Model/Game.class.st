@@ -91,13 +91,17 @@ Game class >> playedBy: aPlayersCollection throwing: aDicesCollection spaces: aS
 		totalLaps: aLapsQuantity
 ]
 
+{ #category : #accessing }
+Game >> activeCardsInfo [
+	^ board activeCardsInfo
+]
+
 { #category : #adding }
 Game >> add: aCard [
+	self assertPlayerCanUseA: aCard.
 	aCard assertCardNeedsLastCard & cardsHistory notEmpty
-		ifTrue: [ aCard lastCardPlayed: cardsHistory first.
-			cardsHistory addFirst: aCard.
-			board addAnActive: (CardInfo withCard: aCard affecting: players elements) ].
-	aCard assertIsATransientCard
+		ifTrue: [ aCard lastCardPlayed: cardsHistory first ].
+	aCard assertIsCardATransientCard
 		ifTrue: [ ^ self ].
 	cardsHistory add: aCard.
 	board addAnActive: (CardInfo withCard: aCard affecting: players elements)
@@ -105,18 +109,30 @@ Game >> add: aCard [
 
 { #category : #adding }
 Game >> add: aCard affecting: aPlayer [
+	self assertPlayerCanUseA: aCard.
+	aCard assertCardNeedsLastCard & cardsHistory notEmpty
+		ifTrue: [ aCard lastCardPlayed: cardsHistory first ].
 	cardsHistory addFirst: aCard.
-	board addAnActive: (CardInfo withCard: aCard affecting: aPlayer).
-	aCard assertIsATransientCard
+	board addAnActive: (CardInfo withCard: aCard affecting: {aPlayer} asOrderedCollection).
+	aCard assertIsCardATransientCard
 		ifTrue: [ aCard affect: aPlayer on: board ]
 ]
 
 { #category : #adding }
 Game >> add: aCard cancelling: anotherCard [
-	self assertPlayerCanUseA:aCard.
+	self assertCancellingCanBeDoneBy: aCard.
+	aCard assertCardNeedsLastCard & cardsHistory notEmpty
+		ifTrue: [ aCard lastCardPlayed: cardsHistory first ].
 	aCard assertCanCancelAnotherCard.
 	cardsHistory addFirst: aCard.
-	aCard affect: anotherCard on: board.
+	aCard affect: anotherCard on: board
+]
+
+{ #category : #adding }
+Game >> assertCancellingCanBeDoneBy: aCard [
+	board activeCardsInfo isEmpty
+		ifTrue: [ aCard owner addNewCard: aCard.
+			AssertionFailure signal: 'You cannot play a canceling card when there are no active cards.' ]
 ]
 
 { #category : #asserting }
@@ -127,7 +143,10 @@ Game >> assertGameHasNotFinished [
 
 { #category : #asserting }
 Game >> assertPlayerCanUseA: aCard [
-	^ aCard assertIsATransientCard not & (self hasTheTurn: aCard owner)
+	aCard assertCardIsAPermanentCard & (self hasTheTurn: aCard owner) | aCard assertIsCardATransientCard
+		ifTrue: [ ^ self ].
+	aCard owner addNewCard: aCard.
+	AssertionFailure signal: 'You cannot play a permanent card right now'
 ]
 
 { #category : #asserting }
@@ -137,10 +156,15 @@ Game >> assertPlayersTurn: aPlayer [
 ]
 
 { #category : #accessing }
+Game >> gameStatus [
+	^ board gameStatus.
+]
+
+{ #category : #accessing }
 Game >> hasFinished [
 	| theTopPlayer |
-	theTopPlayer := board storyElements topPlayer.
-	^ (board storyElements lapsOf: theTopPlayer) >= laps
+	theTopPlayer := board gameStatus topPlayer.
+	^ (board gameStatus lapsOf: theTopPlayer) >= laps
 ]
 
 { #category : #accessing }
@@ -155,7 +179,18 @@ Game >> initializePlayedBy: aPlayersCollection initializeThrowing: aDicesCollect
 	board := aBoard.
 	currentPlayer := players nextBy: 1.
 	laps := aQuantity.
-	cardsHistory :=OrderedCollection new.
+	cardsHistory := OrderedCollection new.
+	aPlayersCollection
+		do: [ :player | 
+			2
+				timesRepeat: [ player
+						addNewCard:
+							({AccelerationCard.
+							CancellationCard.
+							OverloadCard.
+							RedoCard.
+							RepeatCard.
+							SpeedCard} atRandom ownedBy: player) ] ]
 ]
 
 { #category : #actions }
@@ -164,9 +199,4 @@ Game >> move: aPlayer [
 		  assertGameHasNotFinished.
 	board moveAndAffect: aPlayer by: (aPlayer roll: dices).
 	currentPlayer := players nextBy: 1
-]
-
-{ #category : #accessing }
-Game >> storyElements [
-	^ board storyElements.
 ]

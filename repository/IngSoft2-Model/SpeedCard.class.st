@@ -39,6 +39,6 @@ SpeedCard >> affect: aPlayer on: aBoard [
 ]
 
 { #category : #asserting }
-SpeedCard >> assertIsATransientCard [
+SpeedCard >> assertIsCardATransientCard [
 	^ false
 ]

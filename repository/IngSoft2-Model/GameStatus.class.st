@@ -53,7 +53,7 @@ GameStatus >> initializeWithPlayers: playersCollection [
 
 { #category : #accesing }
 GameStatus >> lapsOf: aPlayer [
-	^ (playersHistories detect: [ :playerStory | playerStory player = aPlayer ]) storyElements first lap
+	^ (playersHistories detect: [ :playerStory | playerStory player = aPlayer ]) gameStatus first lap
 ]
 
 { #category : #accesing }
@@ -63,12 +63,12 @@ GameStatus >> players [
 
 { #category : #accesing }
 GameStatus >> positionOf: aPlayer [
- ^ (playersHistories detect: [ :playerStory | playerStory player = aPlayer ])storyElements first position
+ ^ (playersHistories detect: [ :playerStory | playerStory player = aPlayer ])gameStatus first position
 ]
 
 { #category : #sorting }
 GameStatus >> sortThePlayersInDescendingOrder [
-	^ (playersHistories collect: [ :playerStory | playerStory storyElements first ])
+	^ (playersHistories collect: [ :playerStory | playerStory gameStatus first ])
 		sort: #lap descending , #position descending
 ]
 

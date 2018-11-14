@@ -27,9 +27,9 @@ Class {
 
 { #category : #action }
 AtomicBombSpace >> affect: aPlayer on: board [
-	board storyElements players
+	board gameStatus players
 		do: [ :each | 
-			board storyElements
+			board gameStatus
 				updatePositionAndLapsOf: each
 				to: 1
 				adding: 0 ].
