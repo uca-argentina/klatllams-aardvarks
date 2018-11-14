@@ -61,8 +61,9 @@ RedoCard >> assertCardIsTransient [
 
 { #category : #asserting }
 RedoCard >> assertCardNeedsLastCard: aCardsCollection [
-	aCardsCollection notEmpty 
+	aCardsCollection notEmpty
 		ifTrue: [ self addLastCard: aCardsCollection first ]
+		ifFalse: [ AssertionFailure signal: 'Redo can be used if a Card was Used' ]
 ]
 
 { #category : #initialization }

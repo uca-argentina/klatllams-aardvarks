@@ -38,6 +38,52 @@ CardsTests >> testAccelerationCardAffectsAllPlayers [
 ]
 
 { #category : #tests }
+CardsTests >> testCancellationCanBeDoneIfAtLeast1PermanentCardIsActive [
+	| game playerOne playerTwo sequenceOne sequenceTwo diceOne diceTwo spaces card cancellationCard |
+	sequenceOne := CircularIterator contains: #(1 1 1 2 1 5 3 1 6).
+	sequenceTwo := CircularIterator contains: #(1 1 1 2 2 4 1 1 6).
+	diceOne := Dice faces: 10 ofType: (DeterministicType rolling: sequenceOne faces: 10).
+	diceTwo := Dice faces: 12 ofType: (DeterministicType rolling: sequenceTwo faces: 12).
+	playerOne := Player named: 'Carrot'.
+	playerTwo := Player named: 'Nacho'.
+	spaces := BoardTest createNoEffectSpacesCollection.
+	game := Game
+		playedBy:
+			{playerOne.
+			playerTwo}
+		throwing:
+			{diceOne.
+			diceTwo}
+		boardComposedBy: spaces
+		totalLaps: 2.
+	card := SpeedCard ownedBy: playerOne.
+	cancellationCard := CancellationCard ownedBy: playerTwo.
+	playerOne addNewCard: card.
+	playerTwo addNewCard: cancellationCard.
+	self
+		should: [ playerTwo play: cancellationCard in: game cancelling: card ]
+			raise: AssertionFailure
+			withExceptionDo: [ :signal | 
+			self
+				assert: signal messageText
+				equals: 'You cannot play a canceling card when there are no active cards.' ];
+		assert: (game hasTheTurn: playerOne).
+	game move: playerOne.
+	self assert: (game gameStatus positionOf: playerOne) equals: 3.
+	self assert: (game hasTheTurn: playerTwo).
+	game move: playerTwo.
+	self assert: (game gameStatus positionOf: playerTwo) equals: 3.
+	self assert: (game hasTheTurn: playerOne).
+	playerOne play: card in: game affecting: playerTwo.
+	playerTwo play: cancellationCard in: game cancelling: card.
+	game move: playerOne.
+	self assert: (game gameStatus positionOf: playerOne) equals: 5.
+	self assert: (game hasTheTurn: playerTwo).
+	game move: playerTwo.
+	self assert: (game gameStatus positionOf: playerTwo) equals: 7
+]
+
+{ #category : #tests }
 CardsTests >> testCancellationCanBeDoneOnlyWithTheRightCard [
 	| game playerOne playerTwo sequenceOne sequenceTwo diceOne diceTwo spaces acellerationCard speedUpCard |
 	sequenceOne := CircularIterator contains: #(1 1 1 2 1 5 3 1 6).
@@ -292,6 +338,34 @@ CardsTests >> testRedoCancellationCard [
 ]
 
 { #category : #tests }
+CardsTests >> testRedoOnlyCanBeUsedIfAnotherCardWasPlayed [
+	| game playerOne playerTwo sequenceOne sequenceTwo diceOne diceTwo spaces redoCard |
+	sequenceOne := CircularIterator contains: #(1 1 1 2 1 5 3 1 6).
+	sequenceTwo := CircularIterator contains: #(1 1 1 2 2 4 1 1 6).
+	diceOne := Dice faces: 10 ofType: (DeterministicType rolling: sequenceOne faces: 10).
+	diceTwo := Dice faces: 12 ofType: (DeterministicType rolling: sequenceTwo faces: 12).
+	playerOne := Player named: 'Carrot'.
+	playerTwo := Player named: 'Nacho'.
+	spaces := BoardTest createNoEffectSpacesCollection.
+	game := Game
+		playedBy:
+			{playerOne.
+			playerTwo}
+		throwing:
+			{diceOne.
+			diceTwo}
+		boardComposedBy: spaces
+		totalLaps: 2.
+	redoCard := RedoCard ownedBy: playerOne.
+	playerOne addNewCard: redoCard.
+	self
+		should: [ playerOne play: redoCard in: game affecting: playerTwo ]
+		raise: AssertionFailure
+		withExceptionDo:
+			[ :signal | self assert: signal messageText equals: 'Redo can be used if a Card was Used' ]
+]
+
+{ #category : #tests }
 CardsTests >> testRedoOveloadCard [
 	| game playerOne playerTwo sequenceOne sequenceTwo diceOne diceTwo spaces card redoCard |
 	sequenceOne := CircularIterator contains: #(1 1 1 2 1 5 3 1 6).
@@ -412,13 +486,73 @@ CardsTests >> testRedoSpeedCard [
 { #category : #tests }
 CardsTests >> testRepeatCardAffectsAPlayer [
 	| game playerOne playerTwo sequenceOne sequenceTwo diceOne diceTwo spaces card |
+	sequenceOne := CircularIterator contains: #(7 1 1 2 1 5 3 1 6).
+	sequenceTwo := CircularIterator contains: #(1 1 1 2 2 4 1 1 6).
+	diceOne := Dice faces: 10 ofType: (DeterministicType rolling: sequenceOne faces: 10).
+	diceTwo := Dice faces: 12 ofType: (DeterministicType rolling: sequenceTwo faces: 12).
+	playerOne := Player named: 'Carrot'.
+	playerTwo := Player named: 'Nacho'.
+	spaces := {BoardTest createNoEffectSpacesCollection.
+	SpeedUpSpace new} flattened.
+	game := Game
+		playedBy:
+			{playerOne.
+			playerTwo}
+		throwing:
+			{diceOne.
+			diceTwo}
+		boardComposedBy: spaces
+		totalLaps: 2.
+	card := RepeatCard ownedBy: playerTwo.
+	playerTwo addNewCard: card.
+	self assert: (game hasTheTurn: playerOne).
+	game move: playerOne.
+	self assert: (game gameStatus positionOf: playerOne) equals: 4.
+	playerTwo play: card in: game affecting: playerOne.
+	self assert: (game gameStatus positionOf: playerOne) equals: 8
+]
+
+{ #category : #tests }
+CardsTests >> testRepeatCardAffectsAPlayerOnlyIfSpaceHasAnEffect [
+	| game playerOne playerTwo sequenceOne sequenceTwo diceOne diceTwo spaces card |
 	sequenceOne := CircularIterator contains: #(1 1 1 2 1 5 3 1 6).
 	sequenceTwo := CircularIterator contains: #(1 1 1 2 2 4 1 1 6).
 	diceOne := Dice faces: 10 ofType: (DeterministicType rolling: sequenceOne faces: 10).
 	diceTwo := Dice faces: 12 ofType: (DeterministicType rolling: sequenceTwo faces: 12).
 	playerOne := Player named: 'Carrot'.
 	playerTwo := Player named: 'Nacho'.
-	spaces := BoardTest createNoEffectSpacesCollection.
+	spaces := {BoardTest createNoEffectSpacesCollection.
+	SpeedUpSpace new} flattened.
+	game := Game
+		playedBy:
+			{playerOne.
+			playerTwo}
+		throwing:
+			{diceOne.
+			diceTwo}
+		boardComposedBy: spaces
+		totalLaps: 2.
+	card := RepeatCard ownedBy: playerTwo.
+	playerTwo addNewCard: card.
+	self assert: (game hasTheTurn: playerOne).
+	game move: playerOne.
+	self assert: (game gameStatus positionOf: playerOne) equals: 3.
+	playerTwo play: card in: game affecting: playerOne.
+	self assert: (game gameStatus positionOf: playerOne) equals: 3
+	
+]
+
+{ #category : #tests }
+CardsTests >> testRepeatCardOnlyAffectsAPlayerIfDicesWereRolled [
+	| game playerOne playerTwo sequenceOne sequenceTwo diceOne diceTwo spaces card |
+	sequenceOne := CircularIterator contains: #(7 1 1 2 1 5 3 1 6).
+	sequenceTwo := CircularIterator contains: #(1 1 1 2 2 4 1 1 6).
+	diceOne := Dice faces: 10 ofType: (DeterministicType rolling: sequenceOne faces: 10).
+	diceTwo := Dice faces: 12 ofType: (DeterministicType rolling: sequenceTwo faces: 12).
+	playerOne := Player named: 'Carrot'.
+	playerTwo := Player named: 'Nacho'.
+	spaces := {BoardTest createNoEffectSpacesCollection.
+	SpeedUpSpace new} flattened.
 	game := Game
 		playedBy:
 			{playerOne.
@@ -430,16 +564,14 @@ CardsTests >> testRepeatCardAffectsAPlayer [
 		totalLaps: 2.
 	card := RepeatCard ownedBy: playerOne.
 	playerOne addNewCard: card.
+	
 	self assert: (game hasTheTurn: playerOne).
 	game move: playerOne.
-	self assert: (game gameStatus positionOf: playerOne) equals: 3.
+	self assert: (game gameStatus positionOf: playerOne) equals: 4.
+	playerOne play: card in: game affecting: playerTwo.
 	self assert: (game hasTheTurn: playerTwo).
 	game move: playerTwo.
-	self assert: (game gameStatus positionOf: playerTwo) equals: 3.
-	self assert: (game hasTheTurn: playerOne).
-	playerOne play: playerOne myCards first in: game affecting: playerTwo.
-	game move: playerOne.
-	self assert: (game gameStatus positionOf: playerOne) equals: 5
+	self assert: (game gameStatus positionOf: playerTwo) equals: 3
 ]
 
 { #category : #tests }

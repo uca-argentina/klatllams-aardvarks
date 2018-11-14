@@ -110,9 +110,9 @@ Game >> add: aCard affecting: aPlayer [
 	self assertPlayerCanUseA: aCard.
 	aCard assertCardNeedsLastCard: cardsHistory.
 	cardsHistory addFirst: aCard.
-	board addAnActive: (CardInfo withCard: aCard affecting: {aPlayer} asOrderedCollection).
 	aCard assertCardIsTransient
 		ifTrue: [ aCard affect: aPlayer on: board ]
+		ifFalse:[ board addAnActive: (CardInfo withCard: aCard affecting: {aPlayer} asOrderedCollection)]
 ]
 
 { #category : #actions }
