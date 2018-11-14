@@ -91,7 +91,7 @@ Player >> play: aCard in: aGame cancelling: anotherCard [
 	myCards
 		detect: [ :each | aCard = each ]
 		ifFound: [ aGame add: aCard cancelling: anotherCard.
-					  myCards remove: aCard ]
+			myCards remove: aCard ]
 		ifNone: [ AssertionFailure signal: 'Wrong card' ]
 ]
 

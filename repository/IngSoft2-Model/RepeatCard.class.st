@@ -36,23 +36,11 @@ Class {
 RepeatCard >> affect: aPlayer on: aBoard [
 	| aPosition |
 	aPosition := aBoard lastLandingPositionOf: aPlayer.
-	(self assertCanMoveTo: aPosition)
+	aPosition ~= 0
 		ifTrue: [ (aBoard spaces at: aPosition) affect: aPlayer on: aBoard ].
-	notUsedCard := false
-]
-
-{ #category : #asserting }
-RepeatCard >> assertCanMoveTo: aPosition [
-	^ aPosition ~= 0 & notUsedCard
 ]
 
 { #category : #asserting }
 RepeatCard >> assertCardIsTransient [
 	^ true
-]
-
-{ #category : #initialization }
-RepeatCard >> initializeOwnedBy: aPlayer [
-	owner := aPlayer.
-	notUsedCard := true
 ]

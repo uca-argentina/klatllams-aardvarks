@@ -405,6 +405,79 @@ CardsTests >> testRedoOveloadCard [
 ]
 
 { #category : #tests }
+CardsTests >> testRedoRedoAccelerationCard [
+	| game playerOne playerTwo sequenceOne sequenceTwo diceOne diceTwo spaces card redoCard anotherRedo |
+	sequenceOne := CircularIterator contains: #(1 1 1 2 1 5 3 1 6).
+	sequenceTwo := CircularIterator contains: #(1 1 1 2 2 4 1 1 6).
+	diceOne := Dice faces: 10 ofType: (DeterministicType rolling: sequenceOne faces: 10).
+	diceTwo := Dice faces: 12 ofType: (DeterministicType rolling: sequenceTwo faces: 12).
+	playerOne := Player named: 'Carrot'.
+	playerTwo := Player named: 'Nacho'.
+	spaces := BoardTest createNoEffectSpacesCollection.
+	game := Game
+		playedBy:
+			{playerOne.
+			playerTwo}
+		throwing:
+			{diceOne.
+			diceTwo}
+		boardComposedBy: spaces
+		totalLaps: 2.
+	redoCard := RedoCard ownedBy: playerOne.
+	anotherRedo := RedoCard ownedBy: playerOne.
+	playerOne addNewCard: redoCard.
+	playerOne addNewCard: anotherRedo.
+	card := AccelerationCard ownedBy: playerOne.
+	playerOne addNewCard: card.
+	self assert: (game hasTheTurn: playerOne).
+	playerOne play: card in: game.
+	playerOne play: redoCard  in:  game.
+	playerOne play: anotherRedo in: game.
+	game move: playerOne.
+	self assert: (game gameStatus positionOf: playerOne) equals: 6.
+	
+]
+
+{ #category : #tests }
+CardsTests >> testRedoRedoRepeatCard [
+	| game playerOne playerTwo sequenceOne sequenceTwo diceOne diceTwo spaces card redoCard anotherRedoCard|
+	sequenceOne := CircularIterator contains: #(7 1 1 2 1 5 3 1 6).
+	sequenceTwo := CircularIterator contains: #(1 1 1 2 2 4 1 1 6).
+	diceOne := Dice faces: 10 ofType: (DeterministicType rolling: sequenceOne faces: 10).
+	diceTwo := Dice faces: 12 ofType: (DeterministicType rolling: sequenceTwo faces: 12).
+	playerOne := Player named: 'Carrot'.
+	playerTwo := Player named: 'Nacho'.
+	spaces := {BoardTest createNoEffectSpacesCollection.
+	SpeedUpSpace new} flattened.
+	game := Game
+		playedBy:
+			{playerOne.
+			playerTwo}
+		throwing:
+			{diceOne.
+			diceTwo}
+		boardComposedBy: spaces
+		totalLaps: 2.
+	redoCard := RedoCard ownedBy: playerOne.
+	anotherRedoCard := RedoCard ownedBy: playerOne.
+	playerOne addNewCard: redoCard.
+	playerOne addNewCard: anotherRedoCard.
+	card := RepeatCard ownedBy: playerOne.
+	playerOne addNewCard: card.
+	
+	self assert: (game hasTheTurn: playerOne).
+	game move: playerOne.
+	self assert: (game gameStatus positionOf: playerOne) equals: 4.
+	playerOne play: card in: game affecting: playerOne.
+	self assert: (game gameStatus positionOf: playerOne) equals: 8.
+	playerOne play: redoCard in: game affecting: playerOne.
+	self assert: (game gameStatus positionOf: playerOne) equals: 3.
+	playerOne play:anotherRedoCard in:game affecting: playerOne .
+	self assert: (game gameStatus positionOf: playerOne) equals: 7.
+	
+]
+
+{ #category : #tests }
 CardsTests >> testRedoRepeatCard [
 	| game playerOne playerTwo sequenceOne sequenceTwo diceOne diceTwo spaces card redoCard |
 	sequenceOne := CircularIterator contains: #(7 1 1 2 1 5 3 1 6).
@@ -431,17 +504,11 @@ CardsTests >> testRedoRepeatCard [
 	self assert: (game hasTheTurn: playerOne).
 	game move: playerOne.
 	self assert: (game gameStatus positionOf: playerOne) equals: 4.
-	self assert: (game hasTheTurn: playerTwo).
-	game move: playerTwo.
-	self assert: (game gameStatus positionOf: playerTwo) equals: 3.
-	self assert: (game hasTheTurn: playerOne).
-	playerOne play: playerOne myCards first in: game affecting: playerTwo.
-	game move: playerOne.
-	playerOne play: playerOne myCards first in: game affecting: playerTwo.
-	self assert: (game gameStatus positionOf: playerOne) equals: 6.
-	self assert: (game hasTheTurn: playerTwo).
-	game move: playerTwo.
-	self assert: (game gameStatus positionOf: playerTwo) equals: 7
+	playerOne play: card in: game affecting: playerOne.
+	self assert: (game gameStatus positionOf: playerOne) equals: 8.
+	playerOne play: redoCard in: game affecting: playerOne.
+	self assert: (game gameStatus positionOf: playerOne) equals: 3.
+	
 ]
 
 { #category : #tests }
