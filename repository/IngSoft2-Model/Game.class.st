@@ -100,7 +100,7 @@ Game >> activeCardsInfo [
 Game >> add: aCard [
 	self assertPlayerCanUseA: aCard.
 	aCard assertCardNeedsLastCard: cardsHistory.
-	aCard assertCardIsPermanent
+	aCard isPermanent
 		ifTrue: [ cardsHistory add: aCard.
 			board addAnActive: (CardInfo withCard: aCard affecting: players elements) ]
 ]
@@ -110,7 +110,7 @@ Game >> add: aCard affecting: aPlayer [
 	self assertPlayerCanUseA: aCard.
 	aCard assertCardNeedsLastCard: cardsHistory.
 	cardsHistory addFirst: aCard.
-	aCard assertCardIsTransient
+	aCard isTransient
 		ifTrue: [ aCard affect: aPlayer on: board ]
 		ifFalse:[ board addAnActive: (CardInfo withCard: aCard affecting: {aPlayer} asOrderedCollection)]
 ]
@@ -139,7 +139,7 @@ Game >> assertGameHasNotFinished [
 
 { #category : #asserting }
 Game >> assertPlayerCanUseA: aCard [
-	aCard assertCardIsPermanent & (self hasTheTurn: aCard owner) | aCard assertCardIsTransient
+	aCard isPermanent & (self hasTheTurn: aCard owner) | aCard isTransient
 		ifTrue: [ ^ self ].
 	aCard owner addNewCard: aCard.
 	AssertionFailure signal: 'You cannot play a permanent card right now'
