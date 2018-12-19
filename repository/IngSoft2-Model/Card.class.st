@@ -44,16 +44,6 @@ Card >> assertCanCancelAnotherCard [
 ]
 
 { #category : #asserting }
-Card >> assertCardIsPermanent [
-	^ self assertCardIsTransient not
-]
-
-{ #category : #asserting }
-Card >> assertCardIsTransient [
-	^ self subclassResponsibility
-]
-
-{ #category : #asserting }
 Card >> assertCardNeedsLastCard: aCardsCollection [
 	
 ]
@@ -61,6 +51,16 @@ Card >> assertCardNeedsLastCard: aCardsCollection [
 { #category : #initialization }
 Card >> initializeOwnedBy: aPlayer [
 	owner := aPlayer
+]
+
+{ #category : #asserting }
+Card >> isPermanent [
+	^ self isTransient not
+]
+
+{ #category : #asserting }
+Card >> isTransient [
+	^ self subclassResponsibility
 ]
 
 { #category : #accessing }

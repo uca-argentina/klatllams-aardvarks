@@ -41,6 +41,6 @@ RepeatCard >> affect: aPlayer on: aBoard [
 ]
 
 { #category : #asserting }
-RepeatCard >> assertCardIsTransient [
+RepeatCard >> isTransient [
 	^ true
 ]

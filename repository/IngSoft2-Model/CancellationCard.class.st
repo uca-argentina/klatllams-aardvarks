@@ -38,6 +38,6 @@ CancellationCard >> assertCanCancelAnotherCard [
 ]
 
 { #category : #asserting }
-CancellationCard >> assertCardIsTransient [
+CancellationCard >> isTransient [
 	^ true
 ]

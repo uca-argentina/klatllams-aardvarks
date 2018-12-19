@@ -53,13 +53,6 @@ RedoCard >> assertCanCancelAnotherCard [
 ]
 
 { #category : #asserting }
-RedoCard >> assertCardIsTransient [
-	lastCardIsSet
-		ifTrue: [ ^ lastCard assertCardIsTransient ].
-	^ true
-]
-
-{ #category : #asserting }
 RedoCard >> assertCardNeedsLastCard: aCardsCollection [
 	aCardsCollection notEmpty
 		ifTrue: [ self addLastCard: aCardsCollection first ]
@@ -70,4 +63,11 @@ RedoCard >> assertCardNeedsLastCard: aCardsCollection [
 RedoCard >> initializeOwnedBy: aPlayer [
 	owner := aPlayer.
 	lastCardIsSet := false
+]
+
+{ #category : #asserting }
+RedoCard >> isTransient [
+	lastCardIsSet
+		ifTrue: [ ^ lastCard isTransient ].
+	^ true
 ]
