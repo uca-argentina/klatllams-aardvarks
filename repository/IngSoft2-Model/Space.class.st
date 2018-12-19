@@ -24,3 +24,8 @@ Class {
 	#superclass : #Object,
 	#category : #'IngSoft2-Model'
 }
+
+{ #category : #action }
+Space >> affect: aPlayer on: aBoard [
+	 ^ self subclassResponsibility
+]
