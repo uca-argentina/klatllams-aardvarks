@@ -24,7 +24,7 @@ Internal Representation and Key Implementation Points.
     Implementation Points
 "
 Class {
-	#name : #CardInfo,
+	#name : #CardPlayerAffected,
 	#superclass : #Object,
 	#instVars : [
 		'card',
@@ -34,23 +34,23 @@ Class {
 }
 
 { #category : #'instance creation' }
-CardInfo class >> withCard: aCard affecting: aPlayerCollection [
+CardPlayerAffected class >> withCard: aCard affecting: aPlayerCollection [
 	^ self new initializeWithCard: aCard affecting: aPlayerCollection
 ]
 
 { #category : #accessing }
-CardInfo >> affected: aPlayer [
+CardPlayerAffected >> affected: aPlayer [
 	affectedPlayer detect: [ :player | aPlayer = player ] ifFound: [ ^ true ].
 	^ false
 ]
 
 { #category : #accessing }
-CardInfo >> card [
+CardPlayerAffected >> card [
 	^ card
 ]
 
 { #category : #initialization }
-CardInfo >> initializeWithCard: aCard affecting: aPlayersCollection [
+CardPlayerAffected >> initializeWithCard: aCard affecting: aPlayersCollection [
 	card := aCard.
 	affectedPlayer := aPlayersCollection 
 ]

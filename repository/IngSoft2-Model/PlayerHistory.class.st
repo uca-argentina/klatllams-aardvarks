@@ -38,16 +38,16 @@ PlayerHistory class >> player: aPlayer [
 	^self new initializeWithPlayer: aPlayer
 ]
 
-{ #category : #accessing }
-PlayerHistory >> gameStatus [
-	^ playerPositions
-]
-
 { #category : #initialization }
 PlayerHistory >> initializeWithPlayer: aPlayer [
 	player := aPlayer.
 	playerPositions := OrderedCollection new.
 	
+]
+
+{ #category : #accessing }
+PlayerHistory >> lastPlayerPosition [
+	^ playerPositions first
 ]
 
 { #category : #accessing }

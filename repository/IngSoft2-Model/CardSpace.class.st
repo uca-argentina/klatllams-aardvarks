@@ -37,11 +37,6 @@ Class {
 { #category : #action }
 CardSpace >> affect: aPlayer on: aBoard [
 	| aCard |
-	aCard := {AccelerationCard.
-	CancellationCard.
-	OverloadCard.
-	RedoCard.
-	RepeatCard.
-	SpeedCard} atRandom ownedBy: aPlayer.
+	aCard := Card subclasses atRandom ownedBy: aPlayer.
 	aPlayer addNewCard: aCard
 ]

@@ -75,9 +75,9 @@ Game class >> playedBy: aPlayersCollection throwing: aDicesCollection playedOn: 
 	self assertMinimumLapsQuantity: aLapsQuantity.
 	^ self new
 		initializePlayedBy: aPlayersCollection
-		initializeThrowing: aDicesCollection
-		initializePlayedOn: aBoard
-		initializeWithTotalLaps: aLapsQuantity
+		throwing: aDicesCollection
+		playedOn: aBoard
+		withTotalLaps: aLapsQuantity
 ]
 
 { #category : #'instance creation' }
@@ -102,7 +102,7 @@ Game >> add: aCard [
 	aCard assertCardNeedsLastCard: cardsHistory.
 	aCard isPermanent
 		ifTrue: [ cardsHistory add: aCard.
-			board addAnActive: (CardInfo withCard: aCard affecting: players elements) ]
+			board addAnActive: (CardPlayerAffected withCard: aCard affecting: players elements) ]
 ]
 
 { #category : #actions }
@@ -112,7 +112,7 @@ Game >> add: aCard affecting: aPlayer [
 	cardsHistory addFirst: aCard.
 	aCard isTransient
 		ifTrue: [ aCard affect: aPlayer on: board ]
-		ifFalse:[ board addAnActive: (CardInfo withCard: aCard affecting: {aPlayer} asOrderedCollection)]
+		ifFalse:[ board addAnActive: (CardPlayerAffected withCard: aCard affecting: {aPlayer} asOrderedCollection)]
 ]
 
 { #category : #actions }
@@ -169,24 +169,17 @@ Game >> hasTheTurn: aPlayer [
 ]
 
 { #category : #initialization }
-Game >> initializePlayedBy: aPlayersCollection initializeThrowing: aDicesCollection initializePlayedOn: aBoard initializeWithTotalLaps: aQuantity [
+Game >> initializePlayedBy: aPlayersCollection throwing: aDicesCollection playedOn: aBoard withTotalLaps: aQuantity [
+	| aCardSpace |
 	players := CircularIterator contains: aPlayersCollection.
 	dices := aDicesCollection.
 	board := aBoard.
 	currentPlayer := players nextBy: 1.
 	laps := aQuantity.
 	cardsHistory := OrderedCollection new.
+	aCardSpace := CardSpace new.
 	aPlayersCollection
-		do: [ :player | 
-			2
-				timesRepeat: [ player
-						addNewCard:
-							({AccelerationCard.
-							CancellationCard.
-							OverloadCard.
-							RedoCard.
-							RepeatCard.
-							SpeedCard} atRandom ownedBy: player) ] ]
+		do: [ :player | 2 timesRepeat: [ aCardSpace affect: player on: board ] ]
 ]
 
 { #category : #actions }

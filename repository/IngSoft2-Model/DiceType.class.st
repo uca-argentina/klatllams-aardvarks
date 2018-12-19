@@ -9,40 +9,22 @@ For the Collaborators Part: State my main collaborators and one line about how I
 
 Public API and Key Messages
 
-- message one
+- message one   
 - message two 
 - (for bonus points) how to create instances.
 
    One simple example is simply gorgeous.
  
 Internal Representation and Key Implementation Points.
-
-    Instance Variables
-	maxValue:		<Object>
-
-
     Implementation Points
 "
 Class {
-	#name : #RandomType,
-	#superclass : #DiceType,
-	#instVars : [
-		'maxValue'
-	],
+	#name : #DiceType,
+	#superclass : #Object,
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'instance creation' }
-RandomType class >> rollingUntil: aValue [
-	^ self new initializeRollingUntil: aValue
-]
-
-{ #category : #initialization }
-RandomType >> initializeRollingUntil: aValue [
-	maxValue := aValue
-]
-
 { #category : #action }
-RandomType >> roll [
-	^ maxValue atRandom
+DiceType >> roll [
+	^ self subclassResponsibility
 ]
