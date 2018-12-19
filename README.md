@@ -1,5 +1,4 @@
-# Ingenieria del Software II - Template
-
+# Ingenieria del Software II 
 [![Build Status](https://travis-ci.org/hectorbm/klatllams-aardvarks.svg?branch=master)](https://travis-ci.org/hectorbm/klatllams-aardvarks)
 [![Coverage Status](https://coveralls.io/repos/github/hectorbm/klatllams-aardvarks/badge.svg)](https://coveralls.io/github/hectorbm/klatllams-aardvarks)
 
