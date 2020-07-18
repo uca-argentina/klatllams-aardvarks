@@ -39,6 +39,11 @@ PlayerHistory class >> player: aPlayer [
 ]
 
 { #category : #accessing }
+PlayerHistory >> currentStatus [
+	^ self gameStatus first.
+]
+
+{ #category : #accessing }
 PlayerHistory >> gameStatus [
 	^ playerPositions
 ]

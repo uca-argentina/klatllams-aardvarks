@@ -75,9 +75,9 @@ Game class >> playedBy: aPlayersCollection throwing: aDicesCollection playedOn: 
 	self assertMinimumLapsQuantity: aLapsQuantity.
 	^ self new
 		initializePlayedBy: aPlayersCollection
-		initializeThrowing: aDicesCollection
-		initializePlayedOn: aBoard
-		initializeWithTotalLaps: aLapsQuantity
+		throwing: aDicesCollection
+		playedOn: aBoard
+		withTotalLaps: aLapsQuantity
 ]
 
 { #category : #'instance creation' }
@@ -169,7 +169,7 @@ Game >> hasTheTurn: aPlayer [
 ]
 
 { #category : #initialization }
-Game >> initializePlayedBy: aPlayersCollection initializeThrowing: aDicesCollection initializePlayedOn: aBoard initializeWithTotalLaps: aQuantity [
+Game >> initializePlayedBy: aPlayersCollection throwing: aDicesCollection playedOn: aBoard withTotalLaps: aQuantity [
 	players := CircularIterator contains: aPlayersCollection.
 	dices := aDicesCollection.
 	board := aBoard.
@@ -181,12 +181,7 @@ Game >> initializePlayedBy: aPlayersCollection initializeThrowing: aDicesCollect
 			2
 				timesRepeat: [ player
 						addNewCard:
-							({AccelerationCard.
-							CancellationCard.
-							OverloadCard.
-							RedoCard.
-							RepeatCard.
-							SpeedCard} atRandom ownedBy: player) ] ]
+							(RandomCardGenerator randomCardOwnedBy: player ) ] ]
 ]
 
 { #category : #actions }

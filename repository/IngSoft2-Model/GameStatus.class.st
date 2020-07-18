@@ -39,7 +39,7 @@ GameStatus class >> players: playersCollection [
 
 { #category : #accesing }
 GameStatus >> gamePositionOf: aPlayer [
-	self sortThePlayersInDescendingOrder.
+	self sortPlayersInDescendingOrder.
 	^ playersHistories detectIndex: [ :each | each player = aPlayer ]
 ]
 
@@ -67,14 +67,14 @@ GameStatus >> positionOf: aPlayer [
 ]
 
 { #category : #sorting }
-GameStatus >> sortThePlayersInDescendingOrder [
-	^ (playersHistories collect: [ :playerStory | playerStory gameStatus first ])
+GameStatus >> sortPlayersInDescendingOrder [
+	^ (playersHistories collect: [ :playerHistory | playerHistory currentStatus ])
 		sort: #lap descending , #position descending
 ]
 
 { #category : #accesing }
 GameStatus >> topPlayer [
-	^ self sortThePlayersInDescendingOrder first player
+	^ self sortPlayersInDescendingOrder first player
 ]
 
 { #category : #updating }
