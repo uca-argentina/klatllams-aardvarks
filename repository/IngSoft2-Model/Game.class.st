@@ -46,7 +46,7 @@ Game class >> assertMinimumDiceQuantity: aDicesCollection [
 ]
 
 { #category : #asserting }
-Game class >> assertMinimumLapsQuantity: aLapsQuantity. [ 
+Game class >> assertMinimumLapsQuantity: aLapsQuantity [. 
 	aLapsQuantity < 1
 		ifTrue: [ AssertionFailure signal: 'Laps must be 1 or more' ].
 ]

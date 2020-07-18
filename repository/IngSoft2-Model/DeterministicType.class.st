@@ -24,11 +24,11 @@ Internal Representation and Key Implementation Points.
 "
 Class {
 	#name : #DeterministicType,
-	#superclass : #Object,
+	#superclass : #DiceType,
 	#instVars : [
 		'rollSequence'
 	],
-	#category : #'IngSoft2-Tests'
+	#category : #'IngSoft2-Model'
 }
 
 { #category : #asserting }

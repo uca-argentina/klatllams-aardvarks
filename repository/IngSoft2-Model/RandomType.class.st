@@ -25,7 +25,7 @@ Internal Representation and Key Implementation Points.
 "
 Class {
 	#name : #RandomType,
-	#superclass : #Object,
+	#superclass : #DiceType,
 	#instVars : [
 		'maxValue'
 	],
