@@ -29,11 +29,24 @@ Class {
 }
 
 { #category : #affecting }
+AccelerationCard >> addACardOn: aBoard affecting: aPlayerCollection [
+	self assertAffectsAllPlayers: aPlayerCollection on: aBoard .
+	aBoard add: (ActiveCard withCard: self affecting: aPlayerCollection)
+]
+
+{ #category : #affecting }
 AccelerationCard >> affect: aPlayer on: aBoard [
 	aBoard move: aPlayer by: 1
 ]
 
 { #category : #asserting }
-AccelerationCard >> assertCardIsTransient [
+AccelerationCard >> assertAffectsAllPlayers: aPlayerCollection on: aBoard [
+	aPlayerCollection size == aBoard players size
+		ifFalse: [ ^ AssertionFailure
+				signal: ' This card should affect every player on the board' ]
+]
+
+{ #category : #asserting }
+AccelerationCard >> isTransient [
 	^ false
 ]

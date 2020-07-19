@@ -33,6 +33,11 @@ Class {
 }
 
 { #category : #affecting }
+RepeatCard >> addACardOn: aBoard affecting: aPlayer [
+	self affect: aPlayer on: aBoard.
+]
+
+{ #category : #affecting }
 RepeatCard >> affect: aPlayer on: aBoard [
 	| aPosition |
 	aPosition := aBoard lastLandingPositionOf: aPlayer.
@@ -41,6 +46,6 @@ RepeatCard >> affect: aPlayer on: aBoard [
 ]
 
 { #category : #asserting }
-RepeatCard >> assertCardIsTransient [
+RepeatCard >> isTransient [
 	^ true
 ]

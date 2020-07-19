@@ -31,7 +31,7 @@ Class {
 		'spaces',
 		'gameStatus',
 		'landingPlayerPositions',
-		'activeCardsInfo'
+		'activeCards'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -90,12 +90,12 @@ Board class >> playedBy: aPlayersCollection spaces: aQuantity [
 
 { #category : #accessing }
 Board >> activeCardsInfo [
-	^ activeCardsInfo
+	^ activeCards
 ]
 
 { #category : #updating }
-Board >> addAnActive: cardInfo [
-	activeCardsInfo add: cardInfo 
+Board >> add: anActiveCard [
+	activeCards add: anActiveCard 
 ]
 
 { #category : #accessing }
@@ -108,7 +108,7 @@ Board >> initializePlayedBy: aPlayersCollection initializeComposedBy: aSpacesCol
 	spaces := aSpacesCollection.
 	gameStatus := GameStatus players: aPlayersCollection.
 	landingPlayerPositions := OrderedCollection new.
-	activeCardsInfo := OrderedCollection new.
+	activeCards := OrderedCollection new.
 ]
 
 { #category : #accessing }
@@ -133,19 +133,24 @@ Board >> move: aPlayer by: aQuantity [
 
 { #category : #action }
 Board >> moveAndAffect: aPlayer by: aValue [
-	activeCardsInfo
-		select: [ :cardInfo | cardInfo affected: aPlayer ]
-		thenDo: [ :cardInfo | cardInfo card affect: aPlayer on: self ].
+	activeCards
+		select: [ :activeCard | activeCard affects: aPlayer ]
+		thenDo: [ :activeCard | activeCard card affect: aPlayer on: self ].
 	self move: aPlayer by: aValue.
 	self updateLastLandingTo: (gameStatus positionOf: aPlayer) of: aPlayer.
 	(spaces at: (gameStatus positionOf: aPlayer)) affect: aPlayer on: self
 ]
 
+{ #category : #accessing }
+Board >> players [
+	^ gameStatus players.
+]
+
 { #category : #updating }
 Board >> removeAnActive: card [
-	activeCardsInfo
+	activeCards
 		detect: [ :cardInfo | cardInfo card = card ]
-		ifFound: [ :cardInfo | activeCardsInfo remove: cardInfo ]
+		ifFound: [ :cardInfo | activeCards remove: cardInfo ]
 ]
 
 { #category : #accessing }

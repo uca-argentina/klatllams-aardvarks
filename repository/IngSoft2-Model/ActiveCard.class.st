@@ -24,33 +24,33 @@ Internal Representation and Key Implementation Points.
     Implementation Points
 "
 Class {
-	#name : #CardInfo,
+	#name : #ActiveCard,
 	#superclass : #Object,
 	#instVars : [
 		'card',
-		'affectedPlayer'
+		'affectedPlayers'
 	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'instance creation' }
-CardInfo class >> withCard: aCard affecting: aPlayerCollection [
-	^ self new initializeWithCard: aCard affecting: aPlayerCollection
+ActiveCard class >> withCard: aCard affecting: aPlayerCollection [
+	^ self new initializeWithCard: aCard affecting: aPlayerCollection asOrderedCollection
 ]
 
 { #category : #accessing }
-CardInfo >> affected: aPlayer [
-	affectedPlayer detect: [ :player | aPlayer = player ] ifFound: [ ^ true ].
+ActiveCard >> affects: aPlayer [
+	affectedPlayers detect: [ :player | aPlayer = player ] ifFound: [ ^ true ].
 	^ false
 ]
 
 { #category : #accessing }
-CardInfo >> card [
+ActiveCard >> card [
 	^ card
 ]
 
 { #category : #initialization }
-CardInfo >> initializeWithCard: aCard affecting: aPlayersCollection [
+ActiveCard >> initializeWithCard: aCard affecting: aPlayersCollection [
 	card := aCard.
-	affectedPlayer := aPlayersCollection 
+	affectedPlayers := aPlayersCollection.
 ]

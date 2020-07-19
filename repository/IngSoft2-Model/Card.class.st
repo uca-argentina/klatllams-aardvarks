@@ -34,8 +34,20 @@ Card class >> ownedBy: aPlayer [
 ]
 
 { #category : #affecting }
+Card >> addACardOn: aBoard affecting: aPlayerOrCard [
+	^ self subclassResponsibility .
+]
+
+{ #category : #affecting }
 Card >> affect: arg1 on: aBoard [
 	^ self subclassResponsibility
+]
+
+{ #category : #accessing }
+Card >> assertAffectsOnePlayer: aPlayerCollection [
+	aPlayerCollection asOrderedCollection size == 1
+		ifFalse: [ ^ AssertionFailure
+				signal: ' This card should affect only One Player' ]
 ]
 
 { #category : #asserting }
@@ -44,23 +56,28 @@ Card >> assertCanCancelAnotherCard [
 ]
 
 { #category : #asserting }
-Card >> assertCardIsPermanent [
-	^ self assertCardIsTransient not
-]
-
-{ #category : #asserting }
-Card >> assertCardIsTransient [
-	^ self subclassResponsibility
-]
-
-{ #category : #asserting }
 Card >> assertCardNeedsLastCard: aCardsCollection [
 	
+]
+
+{ #category : #affecting }
+Card >> cancel: arg1 on: aBoard [
+	^ AssertionFailure signal: 'This card cannot cancel another card'
 ]
 
 { #category : #initialization }
 Card >> initializeOwnedBy: aPlayer [
 	owner := aPlayer
+]
+
+{ #category : #asserting }
+Card >> isPermanent [
+	^ self isTransient not
+]
+
+{ #category : #asserting }
+Card >> isTransient [
+	^ self subclassResponsibility
 ]
 
 { #category : #accessing }

@@ -29,15 +29,25 @@ Class {
 }
 
 { #category : #affecting }
+CancellationCard >> addACardOn: aBoard affecting: aCard [ 
+	^ self affect: aCard on: aBoard.
+]
+
+{ #category : #affecting }
 CancellationCard >> affect: card on: aBoard [
-	aBoard removeAnActive: card
+	self cancel: card on: aBoard.
 ]
 
 { #category : #asserting }
 CancellationCard >> assertCanCancelAnotherCard [
 ]
 
+{ #category : #affecting }
+CancellationCard >> cancel: card on: aBoard [
+	aBoard removeAnActive: card
+]
+
 { #category : #asserting }
-CancellationCard >> assertCardIsTransient [
+CancellationCard >> isTransient [
 	^ true
 ]

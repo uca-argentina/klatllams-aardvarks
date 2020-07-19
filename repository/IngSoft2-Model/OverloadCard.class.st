@@ -29,11 +29,24 @@ Class {
 }
 
 { #category : #affecting }
+OverloadCard >> addACardOn: aBoard affecting: aPlayer [
+	self assertAffectsOnePlayer: aPlayer asOrderedCollection .
+	aBoard add: (ActiveCard withCard: self affecting: aPlayer).
+]
+
+{ #category : #affecting }
 OverloadCard >> affect: aPlayer on: aBoard [
 	aBoard move: aPlayer by: 2 negated
 ]
 
 { #category : #asserting }
-OverloadCard >> assertCardIsTransient [
+OverloadCard >> assertAffectsOnePlayer: aPlayerCollection [
+	aPlayerCollection size == 1
+		ifFalse: [ ^ AssertionFailure
+				signal: ' This card should affect only One Player' ]
+]
+
+{ #category : #asserting }
+OverloadCard >> isTransient [
 	^ false
 ]

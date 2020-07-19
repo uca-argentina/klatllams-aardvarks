@@ -29,11 +29,17 @@ Class {
 }
 
 { #category : #affecting }
+SpeedCard >> addACardOn: aBoard affecting: aPlayer [
+	self assertAffectsOnePlayer: aPlayer asOrderedCollection .
+	aBoard add: (ActiveCard withCard: self affecting: aPlayer).
+]
+
+{ #category : #affecting }
 SpeedCard >> affect: aPlayer on: aBoard [
 	aBoard move: aPlayer by: 1
 ]
 
 { #category : #asserting }
-SpeedCard >> assertCardIsTransient [
+SpeedCard >> isTransient [
 	^ false
 ]
