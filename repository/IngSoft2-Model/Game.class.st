@@ -181,10 +181,27 @@ Game >> initializePlayedBy: aPlayersCollection throwing: aDicesCollection played
 							(RandomCardGenerator randomCardOwnedBy: player ) ] ]
 ]
 
+{ #category : #accessing }
+Game >> maxRoll [
+	| sum |
+	sum := 0.
+	dices do: [ :dice | sum := sum + dice maxValue ].
+	^ sum.
+]
+
 { #category : #actions }
 Game >> move: aPlayer [
+	| currentRoll |
 	self assertPlayersTurn: aPlayer;
 		  assertGameHasNotFinished.
-	board moveAndAffect: aPlayer by: (aPlayer roll: dices).
+	currentRoll := aPlayer roll: dices.
+	self releaseFromJail: aPlayer assertingMaxRoll: currentRoll.
+	board moveAndAffect: aPlayer by: currentRoll.
 	currentPlayer := players nextBy: 1
+]
+
+{ #category : #accessing }
+Game >> releaseFromJail: aPlayer assertingMaxRoll: currentRoll [
+	currentRoll = self maxRoll
+		ifTrue: [ board releaseFromJail: aPlayer ].
 ]

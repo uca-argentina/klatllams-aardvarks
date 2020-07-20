@@ -41,7 +41,7 @@ AccelerationCard >> affect: aPlayer on: aBoard [
 
 { #category : #asserting }
 AccelerationCard >> assertAffectsAllPlayers: aPlayerCollection on: aBoard [
-	aPlayerCollection size == aBoard players size
+	aPlayerCollection size = aBoard players size
 		ifFalse: [ ^ AssertionFailure
 				signal: ' This card should affect every player on the board' ]
 ]

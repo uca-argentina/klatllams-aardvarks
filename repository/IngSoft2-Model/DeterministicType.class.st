@@ -26,7 +26,8 @@ Class {
 	#name : #DeterministicType,
 	#superclass : #DiceType,
 	#instVars : [
-		'rollSequence'
+		'rollSequence',
+		'maxValue'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -41,12 +42,18 @@ DeterministicType class >> assertIsValid: aNumberSequence withDiceFaces: aQuanti
 { #category : #'instance creation' }
 DeterministicType class >> rolling: aNumberSequence faces: aQuantity [
      self assertIsValid: aNumberSequence withDiceFaces: aQuantity .
-	^ self new initializeRolling: aNumberSequence
+	^ self new initializeRolling: aNumberSequence withMax: aQuantity.
 ]
 
 { #category : #initialization }
-DeterministicType >> initializeRolling: aNumberSequence [
-	rollSequence:= aNumberSequence
+DeterministicType >> initializeRolling: aNumberSequence withMax: aQuantity [
+	rollSequence:= aNumberSequence.
+	maxValue := aQuantity.
+]
+
+{ #category : #action }
+DeterministicType >> maxValue [
+	^ maxValue.
 ]
 
 { #category : #action }

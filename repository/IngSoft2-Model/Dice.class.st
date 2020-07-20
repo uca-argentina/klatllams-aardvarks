@@ -57,6 +57,11 @@ Dice >> initializeWithType: aType [
 ]
 
 { #category : #action }
+Dice >> maxValue [
+	^ type maxValue
+]
+
+{ #category : #action }
 Dice >> roll [
 	^ type roll
 ]

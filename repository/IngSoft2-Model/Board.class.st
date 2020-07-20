@@ -31,7 +31,8 @@ Class {
 		'spaces',
 		'gameStatus',
 		'landingPlayerPositions',
-		'activeCards'
+		'activeCards',
+		'playersInJail'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -98,6 +99,12 @@ Board >> add: anActiveCard [
 	activeCards add: anActiveCard 
 ]
 
+{ #category : #updating }
+Board >> assertPlayerInJail: aPlayer [
+	(self playerIsInJail: aPlayer)
+	ifFalse: [ ^self ].
+]
+
 { #category : #accessing }
 Board >> gameStatus [
 	^ gameStatus
@@ -109,6 +116,7 @@ Board >> initializePlayedBy: aPlayersCollection initializeComposedBy: aSpacesCol
 	gameStatus := GameStatus players: aPlayersCollection.
 	landingPlayerPositions := OrderedCollection new.
 	activeCards := OrderedCollection new.
+	playersInJail := OrderedCollection new.
 ]
 
 { #category : #accessing }
@@ -133,17 +141,40 @@ Board >> move: aPlayer by: aQuantity [
 
 { #category : #action }
 Board >> moveAndAffect: aPlayer by: aValue [
+	(self playerIsInJail: aPlayer)
+		ifTrue: [ ^ self ].
 	activeCards
 		select: [ :activeCard | activeCard affects: aPlayer ]
 		thenDo: [ :activeCard | activeCard card affect: aPlayer on: self ].
 	self move: aPlayer by: aValue.
-	self updateLastLandingTo: (gameStatus positionOf: aPlayer) of: aPlayer.
-	(spaces at: (gameStatus positionOf: aPlayer)) affect: aPlayer on: self
+	self
+		updateLastLandingTo: (gameStatus positionOf: aPlayer)
+		of: aPlayer.
+	(spaces at: (gameStatus positionOf: aPlayer))
+		affect: aPlayer
+		on: self
+]
+
+{ #category : #accessing }
+Board >> playerIsInJail: aPlayer [ 
+	^ playersInJail includes: aPlayer.
+
 ]
 
 { #category : #accessing }
 Board >> players [
 	^ gameStatus players.
+]
+
+{ #category : #updating }
+Board >> putInJail: aPlayer [
+	playersInJail add: aPlayer.
+]
+
+{ #category : #updating }
+Board >> releaseFromJail: aPlayer [ 
+	self assertPlayerInJail: aPlayer.
+	playersInJail remove: aPlayer.
 ]
 
 { #category : #updating }
